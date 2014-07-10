@@ -16,5 +16,23 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    <style name="appThemeFullScreen" parent="AppBaseThemeFullScreen">
+        
+    </style>
+    
+    <style name="AppBaseThemeFullScreen" parent="Theme.AppCompat.Light">
+       <item name="android:windowNoTitle">true</item> <!-- Hides the Action Bar -->
+       <item name="android:windowFullscreen">false</item> <!-- Hides the status bar -->
+    </style>
+    
+    <style name="appThemeFullScreenWithStatusBar" parent="AppBaseThemeFullScreenStatusBar">
+        
+    </style>
+    
+    <style name="AppBaseThemeFullScreenStatusBar" parent="Theme.AppCompat.Light">
+       <item name="android:windowNoTitle">true</item> <!-- Hides the Action Bar -->
+       <item name="android:windowFullscreen">false</item> <!-- Hides the status bar -->
+    </style>
 
 </resources>
