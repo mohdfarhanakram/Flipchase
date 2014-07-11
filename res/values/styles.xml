@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -34,5 +34,20 @@
        <item name="android:windowNoTitle">true</item> <!-- Hides the Action Bar -->
        <item name="android:windowFullscreen">false</item> <!-- Hides the status bar -->
     </style>
+    
+    
+    <style name="ActionBarTabStyle.Custom" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/apptheme_tab_indicator_holo</item>
+    </style>
+    
+    <style name="TabTextAppTheme">
+	  <item name="android:textColor">#000000</item>
+      <item name="android:textSize">12sp</item>
+      <item name="android:textStyle">bold</item>
+      <!-- v14 <item name="android:textAllCaps">true</item> -->
+      <item name="android:ellipsize">marquee</item>
+      <item name="android:maxLines">2</item>
+      <item name="android:maxWidth">180dip</item>
+  </style>
 
 </resources>

@@ -1,0 +1,11 @@
+1. Set server user id & password : 
+
+  Package : package com.flipchase.android.network.volley.toolbox
+  Class Name : HttpClientStack 
+  Method Name : performRequest
+
+2. Set Deafault Header :
+   
+    Package : com.flipchase.android.network;
+    Class Name : VolleyGenericRequest 
+    Method Name : getHeaders()
