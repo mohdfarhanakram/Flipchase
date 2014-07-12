@@ -5,16 +5,17 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+        <!-- Support library compatibility -->
+        
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.Custom</item>
+
+        
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        
     </style>
     
     <style name="appThemeFullScreen" parent="AppBaseThemeFullScreen">
@@ -39,6 +40,7 @@
     <style name="ActionBarTabStyle.Custom" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
         <item name="android:background">@drawable/apptheme_tab_indicator_holo</item>
     </style>
+    
     
     <style name="TabTextAppTheme">
 	  <item name="android:textColor">#000000</item>

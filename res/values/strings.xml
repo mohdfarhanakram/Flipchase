@@ -4,5 +4,12 @@
     <string name="app_name">Flipchase</string>
     <string name="hello_world">Farhan</string>
     <string name="action_settings">Settings</string>
+    
+    <string-array name="home_tabs">
+        <item>Deals</item>
+        <item>Store</item>
+        <item>List</item>
+        <item>Coupons</item>
+    </string-array>
 
 </resources>
