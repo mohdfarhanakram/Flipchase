@@ -4,7 +4,7 @@
 package com.flipchase.android.parser;
 
 /**
- * @author TP150
+ * @author m.farhan
  *
  */
 public class BaseParser {

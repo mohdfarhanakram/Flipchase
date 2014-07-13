@@ -11,5 +11,7 @@
         <item>List</item>
         <item>Coupons</item>
     </string-array>
+    
+    <string name="search">Search</string>
 
 </resources>

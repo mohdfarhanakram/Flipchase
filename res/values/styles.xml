@@ -8,6 +8,7 @@
         <!-- Support library compatibility -->
         
         <item name="actionBarTabStyle">@style/ActionBarTabStyle.Custom</item>
+        <item name="actionBarTabTextStyle">@style/CustomActionBarTabText</item>
 
         
     </style>
@@ -36,9 +37,15 @@
        <item name="android:windowFullscreen">false</item> <!-- Hides the status bar -->
     </style>
     
-    
+    <!-- ActionBar tabs styles -->
     <style name="ActionBarTabStyle.Custom" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
         <item name="android:background">@drawable/apptheme_tab_indicator_holo</item>
+    </style>
+    
+    <!-- ActionBar tabs text styles -->
+    <style name="CustomActionBarTabText"
+           parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@drawable/tab_selector_theme</item>
     </style>
     
     

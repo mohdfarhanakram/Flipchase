@@ -8,6 +8,7 @@
         <!-- API 11 theme customizations can go here. -->
         
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Custom</item>
+        <item name="android:actionBarTabTextStyle">@style/CustomActionBarTabText</item>
     </style>
 
 </resources>
