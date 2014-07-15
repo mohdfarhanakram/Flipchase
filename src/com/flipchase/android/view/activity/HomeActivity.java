@@ -3,20 +3,25 @@
  */
 package com.flipchase.android.view.activity;
 
-import com.flipchase.android.R;
-import com.flipchase.android.view.adapter.HomeFragmentAdapter;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+
+import com.flipchase.android.R;
+import com.flipchase.android.view.adapter.HomeFragmentAdapter;
 
 /**
  * @author m.farhan
  *
  */
-public class HomeActivity extends BaseActivity implements ActionBar.TabListener{
+public class HomeActivity extends BaseActivity implements ActionBar.TabListener ,OnClickListener,SearchView.OnQueryTextListener, SearchView.OnSuggestionListener {
 	
 	private ActionBar mBar;
 	private ViewPager mHomeViewPager;
@@ -29,6 +34,19 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener{
 		mBar = getSupportActionBar();
 		createActionTabBar();
 		createScreenSliderView();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		mMenu = menu;
+		mMenu.clear();
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home_action_bar_menu, menu);
+		
+		buildSearchView(R.id.flipchase_action_search, mMenu, this, this, true);
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	
@@ -87,5 +105,26 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean onSuggestionClick(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSuggestionSelect(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

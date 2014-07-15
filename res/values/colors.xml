@@ -2,5 +2,7 @@
 <resources>
     <color name="app_theme_color">#da4241</color>
     <color name="black">#000000</color>
+    <color name="hint_text_color">#999999</color>
+    <color name="search_txt_color">#666666</color>
     
 </resources>

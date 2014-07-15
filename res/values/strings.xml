@@ -13,5 +13,7 @@
     </string-array>
     
     <string name="search">Search</string>
-
+    <string name="sort">Sorting</string>
+    <string name="setting">Settings</string>
+    <string name="search_hint_text">Search on Flipchase</string>
 </resources>

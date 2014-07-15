@@ -1,8 +1,23 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/action_search"
-          android:icon="@drawable/ic_action_search"
-          android:title="@string/search"/>
-    <item android:id="@+id/action_overflow"
-          android:icon="@drawable/ic_action_overflow"
-          android:title="Overflow" />
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.flipchase.android.HomeActivity" >
+
+    <item
+        android:id="@+id/flipchase_action_search"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/search"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/flipchase_sorting"
+        android:icon="@drawable/ic_action_sort_by_size"
+        android:title="@string/sort"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/flipchase_setting"
+        android:icon="@drawable/ic_action_settings"
+        android:title="@string/setting"
+        app:showAsAction="always"/>
+    
 </menu>
