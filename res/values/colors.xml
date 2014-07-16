@@ -4,5 +4,7 @@
     <color name="black">#000000</color>
     <color name="hint_text_color">#999999</color>
     <color name="search_txt_color">#666666</color>
+    <color name="catalog_text_color">#000000</color>
+    <color name="catalog_expiry_color">#6c6c6c</color>
     
 </resources>

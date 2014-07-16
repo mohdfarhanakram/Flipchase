@@ -3,11 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
+
+    <GridView
+        android:id="@+id/catalog_grid_view"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Deals" />
+        android:numColumns="2" >
+    </GridView>
 
 </RelativeLayout>

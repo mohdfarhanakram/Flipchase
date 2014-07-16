@@ -7,19 +7,19 @@ import com.flipchase.android.domain.Catalogue;
 
 public class DummyData {
 
-	public static List<Catalogue> getDummyCatalogues() {
-		List<Catalogue> catalogueList = new ArrayList<Catalogue>();
+	public static ArrayList<Catalogue> getDummyCatalogues() {
+		ArrayList<Catalogue> catalogueList = new ArrayList<Catalogue>();
 		
 		/** Clothing */
 		Catalogue c1 = new Catalogue();
 		c1.setDisplayName("T-shirt");
 		c1.setExpiryDate("12/07/2014");
-		c1.setPhotoThumbPath("http://www.google.co.in/imgres?imgurl=http%3A%2F%2Fww3.hdnux.com%2Fphotos%2F16%2F23%2F34%2F3749642%2F5%2Fgallery_thumb.jpg&imgrefurl=http%3A%2F%2Fwww.sfgate.com%2Fstyle%2Fpocketsquare%2Farticle%2FStandard-amp-Strange-cycling-wear-in-Oakland-4058768.php&h=64&w=64&tbnid=xHc2oNTc3-T47M%3A&zoom=1&docid=2xny-nFTefogSM&ei=nRXBU_ifJc_68QWW2YH4Cw&tbm=isch&ved=0CCkQMygPMA8&iact=rc&uact=3&dur=237&page=1&start=0&ndsp=42");
+		c1.setPhotoThumbPath("http://api.androidhive.info/music/images/adele.png");
 		
 		Catalogue c2 = new Catalogue();
 		c2.setDisplayName("Trouser");
 		c2.setExpiryDate("13/07/2014");
-		c2.setPhotoThumbPath("http://www.google.co.in/imgres?imgurl=http%3A%2F%2Fww1.hdnux.com%2Fphotos%2F16%2F23%2F34%2F3749644%2F3%2Fgallery_thumb.jpg&imgrefurl=http%3A%2F%2Fwww.sfgate.com%2Fstyle%2Fpocketsquare%2Farticle%2FStandard-amp-Strange-cycling-wear-in-Oakland-4058768.php&h=64&w=64&tbnid=rNXlIQOhMTx6aM%3A&zoom=1&docid=2xny-nFTefogSM&ei=nRXBU_ifJc_68QWW2YH4Cw&tbm=isch&ved=0CCwQMygSMBI&iact=rc&uact=3&dur=877&page=1&start=0&ndsp=42");
+		c2.setPhotoThumbPath("http://ww1.hdnux.com/photos/16/23/34/3749644/3/gallery_thumb.jpg");
 		
 
 		Catalogue c3 = new Catalogue();
