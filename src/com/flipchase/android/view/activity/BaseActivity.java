@@ -3,6 +3,7 @@
  */
 package com.flipchase.android.view.activity;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -39,6 +40,7 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 	
 	/**
