@@ -2,49 +2,44 @@ package com.flipchase.android.repository.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 
+import com.flipchase.android.domain.AlertForm;
+import com.flipchase.android.domain.AlertView;
 import com.flipchase.android.domain.Category;
 import com.flipchase.android.repository.CategoryRepository;
 import com.flipchase.android.util.ServiceHandler;
 
-public class CategoryRepositoryImpl implements CategoryRepository {
-
-	private ServiceHandler serviceHandler;
-	private ObjectMapper objectMapper = null;
-	private JsonFactory jsonFactory = null;
-	private JsonParser jp = null;
-	    
-	public CategoryRepositoryImpl() {
-		serviceHandler = new ServiceHandler();
-		objectMapper = new ObjectMapper();
-        jsonFactory = new JsonFactory();
-	}
-	
-	@Override
-	public List<Category> getAllCategory(String url) {
-		String jsonStr = serviceHandler.makeServiceCall(url, ServiceHandler.GET);
-        Category[] categories = null;
-        try {
-			jp = jsonFactory.createJsonParser(jsonStr);
-			categories = objectMapper.readValue(jp, Category[].class);
-		} catch (JsonParseException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-        return new ArrayList<Category>(Arrays.asList(categories));
-	}
+public class CategoryRepositoryImpl extends BaseRepository implements CategoryRepository {
 
 	@Override
-	public List<Category> getAllDummyCategory() {
+	public List<Category> getAllCategory() {
 		return null;
 	}
 
+	//NOT IN USE NOW
+	public void getAllCategory1() {
+		//String jsonStr = serviceHandler.makeServiceCall(url, ServiceHandler.GET);
+		AlertForm alertForm = new AlertForm();
+		alertForm.setEmailId("eee");
+		List<AlertView> alertViews = new ArrayList<AlertView>();
+		AlertView av1 = new AlertView();
+		av1.setName("abc");
+		alertViews.add(av1);
+		alertForm.setAlertViews(alertViews);
+		String json1son;
+		try {
+			json1son = objectMapper.writeValueAsString(alertForm);
+			String jsonStr1 = serviceHandler.makeServiceCall("http://10.0.2.2:8080/catalogue/testalerts", ServiceHandler.POST,json1son);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
 }

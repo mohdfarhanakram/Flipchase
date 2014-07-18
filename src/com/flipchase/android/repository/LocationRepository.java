@@ -1,13 +1,13 @@
-package com.flipchase.android.service;
+package com.flipchase.android.repository;
 
 import java.util.List;
 
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.Location;
 
-public interface LocationService {
-
-	public void initLocation(Location location);
+public interface LocationRepository {
+	
+	public void initLocation(Location location)	;
 	
 	public List<City> getAllCities();
 	

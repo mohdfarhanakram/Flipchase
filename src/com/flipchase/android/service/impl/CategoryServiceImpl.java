@@ -18,16 +18,11 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public List<Category> getAllCategory() {
-		return categoryRepository.getAllDummyCategory();
+		return categoryRepository.getAllCategory();
 	}
 
 	@Override
 	public List<Catalogue> getCatalogueForCategory(String categoryId) {
-		return null;
-	}
-
-	@Override
-	public List<Category> getLatestCategory() {
 		return null;
 	}
 

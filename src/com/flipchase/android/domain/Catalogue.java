@@ -1,23 +1,42 @@
 package com.flipchase.android.domain;
 
+
 public class Catalogue extends BaseDomain {
 
+	private String status;
+	
 	private String publishDate;
 	
 	private String expiryDate;
 	
-	private Retailer retailer;
+	private Long retailer;
 	
-	boolean isPremium;
+	private Boolean isPremium;
 	
-	private Photo photo;
+	private Long photo;
 	
-	private String photoPath;
+	private String photo_path;
 	
-	private String photoThumb;
+	private Long photo_thumb;
 	
-	private String photoThumbPath;
+	private String photo_thumb_path;
 	
+	private Long height;
+	
+	private Long width;
+	
+	private Long count = 0L;
+	
+	private Boolean enabled = Boolean.FALSE;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getPublishDate() {
 		return publishDate;
 	}
@@ -34,52 +53,84 @@ public class Catalogue extends BaseDomain {
 		this.expiryDate = expiryDate;
 	}
 
-	public Retailer getRetailer() {
+	public Long getRetailer() {
 		return retailer;
 	}
 
-	public void setRetailer(Retailer retailer) {
+	public void setRetailer(Long retailer) {
 		this.retailer = retailer;
 	}
 
-	public boolean isPremium() {
+	public Boolean getIsPremium() {
 		return isPremium;
 	}
 
-	public void setPremium(boolean isPremium) {
+	public void setIsPremium(Boolean isPremium) {
 		this.isPremium = isPremium;
 	}
 
-	public Photo getPhoto() {
+	public Long getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(Photo photo) {
+	public void setPhoto(Long photo) {
 		this.photo = photo;
 	}
 
-	public String getPhotoPath() {
-		return photoPath;
+	public String getPhoto_path() {
+		return photo_path;
 	}
 
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
+	public void setPhoto_path(String photo_path) {
+		this.photo_path = photo_path;
 	}
 
-	public String getPhotoThumb() {
-		return photoThumb;
+	public Long getPhoto_thumb() {
+		return photo_thumb;
 	}
 
-	public void setPhotoThumb(String photoThumb) {
-		this.photoThumb = photoThumb;
+	public void setPhoto_thumb(Long photo_thumb) {
+		this.photo_thumb = photo_thumb;
 	}
 
-	public String getPhotoThumbPath() {
-		return photoThumbPath;
+	public String getPhoto_thumb_path() {
+		return photo_thumb_path;
 	}
 
-	public void setPhotoThumbPath(String photoThumbPath) {
-		this.photoThumbPath = photoThumbPath;
+	public void setPhoto_thumb_path(String photo_thumb_path) {
+		this.photo_thumb_path = photo_thumb_path;
+	}
+
+	public Long getHeight() {
+		return height;
+	}
+
+	public void setHeight(Long height) {
+		this.height = height;
+	}
+
+	public Long getWidth() {
+		return width;
+	}
+
+	public void setWidth(Long width) {
+		this.width = width;
+	}
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

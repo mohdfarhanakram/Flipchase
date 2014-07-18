@@ -9,8 +9,6 @@ public interface CategoryService {
 
 	public List<Category> getAllCategory();
 	
-	public List<Category> getLatestCategory();
-	
 	public List<Catalogue> getCatalogueForCategory(String categoryId);
 	
 	
