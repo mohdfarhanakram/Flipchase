@@ -3,6 +3,8 @@
  */
 package com.flipchase.android.location;
 
+import com.flipchase.android.listener.FlipchaseLocationListener;
+
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -47,9 +49,12 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
  
     // Declaring a Location Manager
     protected LocationManager locationManager;
+    
+    private FlipchaseLocationListener listener;
  
-    public FlipchaseLocationTracker(Context context) {
+    public FlipchaseLocationTracker(Context context,FlipchaseLocationListener listener) {
         this.mContext = context;
+        this.listener= listener;
         getLocation();
     }
  
@@ -67,7 +72,7 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
  
             if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
+            	listener.onLocationError("Unable to find your location. Either your GPS is disable or Nonetwork coverage");
             } else {
                 this.canGetLocation = true;
                 // First get location from Network Provider
@@ -104,9 +109,12 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
                         }
                     }
                 }
+                
+                listener.onGetLocation(latitude, longitude);
             }
  
         } catch (Exception e) {
+        	listener.onLocationError(e.getMessage());
             e.printStackTrace();
         }
  
@@ -192,6 +200,7 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
     	if(location != null){
     		latitude = location.getLatitude();
             longitude = location.getLongitude();
+            listener.onLocationChanged(latitude, longitude) ;
         }
     }
  

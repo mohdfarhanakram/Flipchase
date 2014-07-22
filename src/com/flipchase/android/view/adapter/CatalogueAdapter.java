@@ -76,7 +76,7 @@ public class CatalogueAdapter extends BaseAdapter{
 		holder.catalogueName.setText(catalogue.getDisplayName());
 		holder.catalogueExpiry.setText(catalogue.getExpiryDate());
 		
-		picassoLoad(catalogue.getPhotoThumbPath(), holder.catalogueImageView);
+		picassoLoad(catalogue.getPhoto_thumb_path(), holder.catalogueImageView);
 
 		return row;
 	}

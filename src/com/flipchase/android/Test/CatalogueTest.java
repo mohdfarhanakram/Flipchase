@@ -12,7 +12,7 @@ public class CatalogueTest {
 		DummyData d1=new DummyData();
 		List<Catalogue> catalogues = d1.getDummyCatalogues();
 		for(Catalogue cat : catalogues) {
-			System.out.println(cat.getPhotoThumbPath());
+			System.out.println(cat.getPhoto_thumb_path());
 		}
 	}
 }
