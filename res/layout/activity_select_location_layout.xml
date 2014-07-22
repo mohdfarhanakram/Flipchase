@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    
-    <TextView />
 
-</LinearLayout>
+    <ProgressBar
+        android:visibility="visible"
+        android:id="@+id/location_finder_spinner"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:id="@+id/find_location_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/current_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="15dp"
+            android:text="Your Current location is Ghaziabad" />
+
+        <TextView
+            android:id="@+id/select_city_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/apptheme_spinner_default_holo_light"
+            android:text="Select City" />
+
+        <TextView
+            android:id="@+id/select_location_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/apptheme_spinner_default_holo_light"
+            android:text="Select Location" />
+
+        <Button
+            android:id="@+id/done"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:text="OK" />
+    </LinearLayout>
+
+</RelativeLayout>

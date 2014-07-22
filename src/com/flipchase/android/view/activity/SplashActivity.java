@@ -1,31 +1,38 @@
 package com.flipchase.android.view.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.listener.FlipchaseLocationListener;
+import com.flipchase.android.location.FlipchaseLocationTracker;
+import com.flipchase.android.persistance.AppSharedPreference;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements FlipchaseLocationListener{
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_layout);
+		
+		new FlipchaseLocationTracker(this, this);
 
 		new Handler().postDelayed(new Runnable() {
 
-			/*
-			 * Showing splash screen with a timer. 
-			 */
+			
+			 
 			@Override
 			public void run() {
 				// This method will be executed once the timer is over
 				// Start your app main activity
-				Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+				Intent i = new Intent(SplashActivity.this, SelectLocationActivity.class);
 				startActivity(i);
 
 				// close this activity
@@ -53,6 +60,27 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		return true;
 	}
 	return super.onOptionsItemSelected(item);
+}
+
+@Override
+public void onGetLocation(double latitude, double longitude) {
+	Log.e("Location", latitude+" "+longitude);
+	
+	AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, (float)latitude, this);
+	AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, (float)longitude, this);
+	
+}
+
+@Override
+public void onLocationChanged(double latitude, double longitude) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void onLocationError(String errorMsg) {
+	// TODO Auto-generated method stub
+	
 }
 
 

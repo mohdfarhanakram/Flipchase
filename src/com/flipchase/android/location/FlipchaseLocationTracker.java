@@ -60,39 +60,37 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
  
     public Location getLocation() {
         try {
-            locationManager = (LocationManager) mContext
-                    .getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
  
             // getting GPS status
-            isGPSEnabled = locationManager
-                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
  
             // getting network status
-            isNetworkEnabled = locationManager
-                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
  
-            if (!isGPSEnabled && !isNetworkEnabled) {
+            if (!isNetworkEnabled) {
             	listener.onLocationError("Unable to find your location. Either your GPS is disable or Nonetwork coverage");
             } else {
                 this.canGetLocation = true;
                 // First get location from Network Provider
                 if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,MIN_TIME_BW_UPDATES,MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                     Log.d("Network", "Network");
                     if (locationManager != null) {
-                        location = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
+                            listener.onGetLocation(latitude, longitude);
+                        }else{
+                        	listener.onLocationError("Unable to find your location");
                         }
                     }
+                }else{
+                	listener.onLocationError("Unable to find your location");
                 }
                 // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
+                /*if (isGPSEnabled) {
                     if (location == null) {
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
@@ -108,9 +106,9 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
                             }
                         }
                     }
-                }
+                }*/
                 
-                listener.onGetLocation(latitude, longitude);
+               
             }
  
         } catch (Exception e) {

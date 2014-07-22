@@ -4,6 +4,7 @@
 package com.flipchase.android.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author m.farhan
@@ -11,8 +12,8 @@ import java.util.ArrayList;
  */
 public class CityDumyData {
 
-	public static ArrayList<City> getAllCity(){
-		ArrayList<City> cityList = new ArrayList<City>();
+	public static HashMap<String,City> getAllCity(){
+		HashMap<String,City> cityList = new HashMap<String,City>();
 		
 		
 		
@@ -80,8 +81,8 @@ public class CityDumyData {
 		city2.getCityLocations().add(cityLocation7);
 		city2.getCityLocations().add(cityLocation8);
 		
-		cityList.add(city1);
-		cityList.add(city2);
+		cityList.put("Delhi", city1);
+		cityList.put("Mumbai", city2);
 		
 		return cityList;
 	}
