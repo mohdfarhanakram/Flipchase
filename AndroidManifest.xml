@@ -40,6 +40,14 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme" >
         </activity>
+        
+        <activity
+            android:name="com.flipchase.android.view.activity.FlipHorizontalLayoutActivity" android:label="@string/app_name" android:theme="@style/AppTheme" >
+        </activity>
+        
+        <activity
+            android:name="com.flipchase.android.view.activity.ImageDisplayActivity" android:label="@string/app_name" android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>
