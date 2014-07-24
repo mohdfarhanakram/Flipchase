@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import com.flipchase.android.R;
 import com.flipchase.android.domain.Catalogue;
 import com.flipchase.android.util.PicassoEx;
+import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
 import com.flipchase.android.view.widget.CustomFontTextView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +59,7 @@ public class CatalogueAdapter extends BaseAdapter{
 		View row = convertView;
 		ViewHolder holder;
 
-		Catalogue catalogue = mCataArrayList.get(position);
-
+		final Catalogue catalogue = mCataArrayList.get(position);
 		if(convertView==null){
 
 			row = mInflater.inflate(R.layout.layout_catalog_grid_view, null, false);
@@ -68,6 +69,15 @@ public class CatalogueAdapter extends BaseAdapter{
 			holder.catalogueName = (CustomFontTextView)row.findViewById(R.id.catalog_item_name);
 			holder.catalogueExpiry = (CustomFontTextView)row.findViewById(R.id.cata_expiry_time_txtv);
 			row.setTag(holder);
+			
+			//DK:
+			ImageView iv = holder.catalogueImageView;
+		    iv.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class);      
+		        	mContext.startActivity(i);
+		        }
+		    });
 
 		}else{
 			holder = (ViewHolder)convertView.getTag();
