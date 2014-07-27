@@ -49,6 +49,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 
 	private LocationService locationService;
 	private List<City> cities;
+	private List<Location> cityLocations;
 	private AlertDialog alertDialogCities;
 	private AlertDialog alertDialogLocations;
 	
@@ -122,6 +123,17 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
        
 	}
 
+	private void refreshAddress(City selectedCity) {
+		mCity = selectedCity;
+		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
+		//((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
+	}
+	
+	private void refreshLocation(Location selectedLocation) {
+		mLocation = selectedLocation;
+		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
+	}
+	
 	private void showCitiesPopup() {
 		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, cities);
         ListView listViewCityItems = new ListView(this);
@@ -141,21 +153,9 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	        .show();
 	}
 	
-	private void refreshAddress(City selectedCity) {
-		mCity = selectedCity;
-		mLocation = DummyData.getLocationsForCity(mCity).get(0);
-		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
-		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
-	}
-	
-	private void refreshLocation(Location selectedLocation) {
-		mLocation = selectedLocation;
-		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
-	}
-	
 	private void showLocationPopup() {
-		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, 
-				DummyData.getLocationsForCity(mCity));
+		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, cityLocations
+				);
         ListView listViewLocationItems = new ListView(this);
         listViewLocationItems.setAdapter(locationAdapter);
         listViewLocationItems.setOnItemClickListener(new OnItemClickListener() {
@@ -171,6 +171,22 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         .setView(listViewLocationItems)
         .setTitle("Select Location")
         .show();
+	}
+	
+	@Override
+    protected void requestAndAssignData() {
+        super.requestAndAssignData();
+        cities = locationService.getAllCities();
+        mCity = cities.get(0);
+		cityLocations = locationService.getLocationsForCity(mCity.getId());
+		mLocation = cityLocations.get(0);
+    }
+	
+	@Override
+	protected void updateUI() {
+		super.updateUI();
+		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
+		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	}
 	
 	private void searchUserCurrentCityAndLocation()
@@ -278,18 +294,6 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			return false;
 		}
 		return true;
-	}
-
-	
-	@Override
-    protected void requestAndAssignData() {
-        super.requestAndAssignData();
-        cities = locationService.getAllCities();
-    }
-	
-	@Override
-	protected void updateUI() {
-		super.updateUI();
 	}
 
 	@Override

@@ -32,6 +32,14 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
+	public List<Location> getLocationsForCity(String cityId) {
+		if(cityId != null) {
+			return getLocationsForCity(Long.parseLong(cityId));
+		}
+		return null;
+	}
+	
+	@Override
 	public void updateLocation(Long cityId, Long locationId) {
 	}
 

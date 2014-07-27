@@ -12,6 +12,7 @@ public interface LocationService {
 	public List<City> getAllCities();
 	
 	public List<Location> getLocationsForCity(Long cityId);
+	public List<Location> getLocationsForCity(String cityId);
 	
 	public void updateLocation(Long cityId, Long locationId);
 }

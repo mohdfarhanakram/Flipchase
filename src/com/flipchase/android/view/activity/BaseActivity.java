@@ -5,6 +5,7 @@ package com.flipchase.android.view.activity;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -59,13 +60,7 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 	public boolean fetchData() {
 		boolean returnVal = false;
 		if (Utils.isInternetAvailable(this)) {
-			requestAndAssignData();
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					updateUI();
-				}
-			});
+			new GetData().execute();
 		}
 		return returnVal;
 	}
@@ -89,7 +84,32 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
     protected void populateViews() {
 
     }
-        	
+     
+    private class GetData extends AsyncTask<Void, Void, Void> {
+   	 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+ 
+        @Override
+        protected Void doInBackground(Void... arg0) {
+        	requestAndAssignData();
+        	runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                	updateUI();
+                }
+            });
+            return null;
+        }
+ 
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
+    
 	/**
      * Helper method for creating search view
      *
