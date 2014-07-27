@@ -13,6 +13,9 @@ public class AppSharedPreference {
 	private static final String PREF_NAME 		     = "flipchase_pref_com";
 	public final static String USER_DEVICE_LATITUDE  = "user_device_lat";
 	public final static String USER_DEVICE_LONGITUDE = "user_device_long";
+	
+	public final static String USER_SELECTED_CITY = "user_selected_city";
+	public final static String USER_SELECTED_LOCATION = "user_selected_location";
 
 	public static int getInt(String key, int defValue,Context context)
 	{

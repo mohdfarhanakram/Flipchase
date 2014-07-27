@@ -3,6 +3,7 @@
  */
 package com.flipchase.android.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -11,17 +12,19 @@ import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;
 
 /**
  * @author m.farhan
  *
  */
-public class HomeActivity extends BaseActivity implements ActionBar.TabListener ,OnClickListener,SearchView.OnQueryTextListener, SearchView.OnSuggestionListener {
+public class HomeActivity extends BaseActivity implements ActionBar.TabListener ,OnClickListener,SearchView.OnQueryTextListener, SearchView.OnSuggestionListener{
 	
 	private ActionBar mBar;
 	private ViewPager mHomeViewPager;
@@ -48,6 +51,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 		
 		return super.onCreateOptionsMenu(menu);
 	}
+	
+	
 	
 	
 	/**
@@ -125,6 +130,15 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 		
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId()==R.id.flipchase_location){
+			Intent intent = new Intent(HomeActivity.this, SelectLocationActivity.class);
+			intent.putExtra(AppConstants.IS_COMING_FROM_SPLASH, false);
+			startActivity(intent);
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
 	
-
 }

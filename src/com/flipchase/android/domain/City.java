@@ -12,6 +12,9 @@ public class City extends BaseDomain {
 
 	private String url_name;
 
+	public City() {
+	}
+	
 	public String getState() {
 		return state;
 	}
@@ -52,4 +55,8 @@ public class City extends BaseDomain {
 		this.url_name = url_name;
 	}
 	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 }

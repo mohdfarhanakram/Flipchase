@@ -1,18 +1,18 @@
 package com.flipchase.android.view.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.listener.FlipchaseLocationListener;
 import com.flipchase.android.location.FlipchaseLocationTracker;
 import com.flipchase.android.persistance.AppSharedPreference;
+import com.flipchase.android.util.StringUtils;
 
 public class SplashActivity extends BaseActivity implements FlipchaseLocationListener{
 
@@ -30,13 +30,23 @@ public class SplashActivity extends BaseActivity implements FlipchaseLocationLis
 			 
 			@Override
 			public void run() {
-				// This method will be executed once the timer is over
-				// Start your app main activity
-				Intent i = new Intent(SplashActivity.this, SelectLocationActivity.class);
-				startActivity(i);
-
-				// close this activity
-				finish();
+				
+				String city = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "", SplashActivity.this);
+				String location = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "", SplashActivity.this);
+				
+				if(StringUtils.isNullOrEmpty(city) || StringUtils.isNullOrEmpty(location)){
+					Intent i = new Intent(SplashActivity.this, SelectLocationActivity.class);
+					i.putExtra(AppConstants.IS_COMING_FROM_SPLASH, true);
+					startActivity(i);
+					finish();
+				}else{
+					Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+					startActivity(i);
+					finish();
+				}
+				
+				
+				
 			}
 		}, AppConstants.SPLASH_WAITING_TIME);
 

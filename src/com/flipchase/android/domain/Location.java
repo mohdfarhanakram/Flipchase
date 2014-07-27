@@ -52,4 +52,8 @@ public class Location extends BaseDomain {
 		this.url_name = url_name;
 	}
 	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 }

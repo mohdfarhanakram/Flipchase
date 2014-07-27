@@ -1,9 +1,13 @@
 package com.flipchase.android.dummyData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.domain.City;
+import com.flipchase.android.domain.Location;
 
 public class DummyData {
 
@@ -233,5 +237,125 @@ public class DummyData {
 		catalogueList.add(b5);
 		
 		return catalogueList;
+	}
+	
+	public static City getCityFromId(String id) {
+		City city1 = new City();
+		if(id.equalsIgnoreCase("1")) {
+			city1.setDisplayName("Delhi");
+			city1.setId("1");
+			city1.setName("Delhi");
+			city1.setLatitude(28.644);
+			city1.setLongitude(77.2167);
+		} else {
+			city1.setDisplayName("Mumbai");
+			city1.setId("2");
+			city1.setName("Mumbai");
+			city1.setLatitude(19.075);
+			city1.setLongitude(72.877);
+		}
+		return city1;
+	}
+	
+	public static Location getLocationFromId(String id) {
+		Location cityLocation1 = new Location();
+		cityLocation1.setId("1");
+		cityLocation1.setDisplayName("Kundli");
+		cityLocation1.setName("Kundli");
+		cityLocation1.setCity(1L);
+		
+		Location cityLocation2 = new Location();
+		cityLocation2.setId("2");
+		cityLocation2.setDisplayName("");
+		cityLocation2.setName("Sector 3, Rohini");
+		cityLocation2.setCity(1L);
+		
+		if(id.equalsIgnoreCase("1")) {
+			return cityLocation1;
+		} else {
+			return cityLocation2;
+		}
+	}
+	
+	public static List<City> getCities() {
+		List<City> cities = new ArrayList<City>();
+		City city1 = new City();
+		city1.setDisplayName("Delhi");
+		city1.setId("1");
+		city1.setName("Delhi");
+		city1.setLatitude(28.644);
+		city1.setLongitude(77.2167);
+		
+		City city2 = new City();
+		city2.setDisplayName("Mumbai");
+		city2.setId("2");
+		city2.setName("Mumbai");
+		city1.setLatitude(19.075);
+		city1.setLongitude(72.877);
+		
+		cities.add(city1);
+		cities.add(city2);
+		
+		return cities;
+	}
+	
+	public static List<Location> getLocationsForCity(City city) {
+		return getDummyCityWiseLocations().get(Long.parseLong(city.getId()));
+	}
+	
+	public static Map<Long, List<Location>> getDummyCityWiseLocations() {
+		
+		Map<Long, List<Location>> cityWiseLocations = new HashMap<Long, List<Location>>();
+		
+		List<Location> city1Locs = new ArrayList<Location>();
+		
+		Location cityLocation1 = new Location();
+		cityLocation1.setId("1");
+		cityLocation1.setDisplayName("Kundli");
+		cityLocation1.setName("Kundli");
+		cityLocation1.setCity(1L);
+		
+		Location cityLocation2 = new Location();
+		cityLocation2.setId("2");
+		cityLocation2.setDisplayName("");
+		cityLocation2.setName("Sector 3, Rohini");
+		cityLocation2.setCity(1L);
+		
+		Location cityLocation3 = new Location();
+		cityLocation3.setId("3");
+		cityLocation3.setDisplayName("");
+		cityLocation3.setName("Model Town");
+		cityLocation3.setCity(1L);
+		
+		city1Locs.add(cityLocation1);
+		city1Locs.add(cityLocation2);
+		city1Locs.add(cityLocation3);
+		cityWiseLocations.put(1L, city1Locs);
+		
+		List<Location> city2Locs = new ArrayList<Location>();
+		Location cityLocation4 = new Location();
+		cityLocation4.setId("4");
+		cityLocation4.setDisplayName("Nariman Point");
+		cityLocation4.setName("Nariman Point");
+		cityLocation4.setCity(2L);
+		
+		Location cityLocation5 = new Location();
+		cityLocation5.setId("5");
+		cityLocation5.setDisplayName("");
+		cityLocation5.setName("Colaba");
+		cityLocation5.setCity(2L);
+		
+		Location cityLocation6 = new Location();
+		cityLocation6.setId("6");
+		cityLocation6.setDisplayName("");
+		cityLocation6.setName("Borivali");
+		cityLocation6.setCity(2L);
+		
+		city2Locs.add(cityLocation4);
+		city2Locs.add(cityLocation5);
+		city2Locs.add(cityLocation6);
+		cityWiseLocations.put(2L, city2Locs);
+		
+		return cityWiseLocations;
 	}
 }

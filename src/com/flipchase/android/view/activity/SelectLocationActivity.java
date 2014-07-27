@@ -4,40 +4,40 @@
 package com.flipchase.android.view.activity;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import com.flipchase.android.R;
-import com.flipchase.android.R.id;
-import com.flipchase.android.constants.AppConstants;
-import com.flipchase.android.listener.FlipchaseGetAddressListener;
-import com.flipchase.android.listener.FlipchaseLocationListener;
-import com.flipchase.android.location.FlipchaseGetAddressController;
-import com.flipchase.android.location.FlipchaseLocationTracker;
-import com.flipchase.android.model.City;
-import com.flipchase.android.model.CityDumyData;
-import com.flipchase.android.model.CityLocation;
-import com.flipchase.android.persistance.AppSharedPreference;
-import com.flipchase.android.util.StringUtils;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.flipchase.android.R;
+import com.flipchase.android.R.id;
+import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.domain.City;
+import com.flipchase.android.domain.Location;
+import com.flipchase.android.dummyData.DummyData;
+import com.flipchase.android.persistance.AppSharedPreference;
+import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.view.adapter.CityListPopupAdapter;
+import com.flipchase.android.view.adapter.LocationListPopupAdapter;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 
 /**
  * @author m.farhan
@@ -45,35 +45,44 @@ import android.widget.TextView;
  */
 public class SelectLocationActivity extends BaseActivity implements View.OnClickListener{
 
-	private AlertDialog.Builder builderCity;
-	private AlertDialog.Builder builderLocation;
+	private AlertDialog alertDialogCities;
+	private AlertDialog alertDialogLocations;
+	
+	private String userCurrentPresentCity;
+	private String userCurrentPresentLocation;
+	
+	private City mCity = null;
+	private Location mLocation = null;
 
-	private String mFindCity="";
-	private String mLocation="";
-
+	// Google Map
+	private GoogleMap googleMap;
+	private boolean mIsComingFromSplash;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_select_location_layout);
 		
-		new Handler().postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				init();
-			}
-		}, AppConstants.SPLASH_WAITING_TIME);
-
-
+		mIsComingFromSplash = getIntent().getBooleanExtra(AppConstants.IS_COMING_FROM_SPLASH, true);
 		
-		
-
+		if(mIsComingFromSplash){
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					searchUserCurrentCityAndLocation();
+					init();
+				}
+			}, AppConstants.SPLASH_WAITING_TIME);
+		} else {
+			String selectedCityId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "", this);
+			mCity = DummyData.getCityFromId(selectedCityId);
+			String selectedLocationId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION, "", this);
+			mLocation = DummyData.getLocationFromId(selectedLocationId);
+			init();
+		}
 	}
-	
-	
+
 	private void init(){
-		
-		getCityFromLocation();
 
 		findViewById(R.id.location_finder_spinner).setVisibility(View.GONE);
 		findViewById(R.id.find_location_layout).setVisibility(View.VISIBLE);
@@ -86,73 +95,77 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		locationSpinner.setOnClickListener(this);
 		citySpinner.setOnClickListener(this);
 		((Button)findViewById(R.id.done)).setOnClickListener(this);
-		
-		if(!StringUtils.isNullOrEmpty(mFindCity)){
 
-			if(isCityMatchFromCityList()){
-
-				citySpinner.setText(mFindCity);
-				mLocation = getLocationListBasedOnCity().get(0).getName();
-				locationSpinner.setText(mLocation);
-
-				locationTextView.setText("Your current city is "+mFindCity+" & location "+mLocation);
-				
-
-			}else{
-				
-				locationTextView.setText("Your current city is "+mFindCity+" currently no offers & deals available for "+mFindCity+" city so please select city & location manually from the drop down list.");
-				
-				setCityLocation();
-			}
-
+		/* TODO : Future we will use this as selected in drop down */
+		if(!StringUtils.isNullOrEmpty(userCurrentPresentCity) && !StringUtils.isNullOrEmpty(userCurrentPresentLocation)){
+			//citySpinner.setText(userCurrentPresentCity);
+			//locationSpinner.setText(userCurrentPresentLocation);
+			locationTextView.setText("Your current city is = " + userCurrentPresentCity + " and location is = " + userCurrentPresentLocation);
 		}else{
-			
 			locationTextView.setText("Unable to find your location. Please select city & location manually from the drop down list.");
-			setCityLocation();
+			//setDefaultCityAndLocation();
 		}
 
-		setSpinnerTextViewdata();
-		
-		builderCity = new AlertDialog.Builder(this);
-		builderCity.setTitle("Select City");
-		final String[] citylist = getCityListStringArray();
-		builderCity.setSingleChoiceItems(citylist, -1, new  DialogInterface.OnClickListener(){
-			public void  onClick(DialogInterface dialog, int item){
+        //if(StringUtils.isNullOrEmpty(mCity) || StringUtils.isNullOrEmpty(mLocation)) {
+        //	setDefaultCityAndLocation();
+       // }
+        setSpinnerTextViewdata();
+        
+       
+	}
 
-				dialog.dismiss();
-				try
-				{
-					mFindCity = citylist[item];
-					String[] locList = getCityLocation(mFindCity);
-					mLocation = locList[0];
-					locationBuilder(locList);
-					setSpinnerTextViewdata();
-
-				} catch(Exception e) { Log.e("ChooseCityActivity", "" + e); }
+	private void showCitiesPopup() {
+		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, DummyData.getCities());
+        ListView listViewCityItems = new ListView(this);
+        listViewCityItems.setAdapter(adapter);
+        listViewCityItems.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View arg1, int position,
+					long arg3) {
+				City selectedCity = (City) adapterView.getItemAtPosition(position);
+				refreshAddress(selectedCity);
+				alertDialogCities.hide();
 			}
-		});
-		
-		
-		final String[] locationList = getCityLocation(mFindCity);
-		locationBuilder(locationList);
+        });
+        alertDialogCities = new AlertDialog.Builder(this)
+	        .setView(listViewCityItems)
+	        .setTitle("Select City")
+	        .show();
 	}
-
-
-	private boolean isCityMatchFromCityList(){
-		HashMap<String,City> cityList = CityDumyData.getAllCity();
-		return cityList.containsKey(mFindCity.trim());
+	
+	private void refreshAddress(City selectedCity) {
+		mCity = selectedCity;
+		mLocation = DummyData.getLocationsForCity(mCity).get(0);
+		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
+		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	}
-
-	private ArrayList<CityLocation> getLocationListBasedOnCity(){
-		if(isCityMatchFromCityList()){
-			HashMap<String,City> cityList = CityDumyData.getAllCity();
-			return cityList.get(mFindCity).getCityLocations();
-		}
-		return null;	
+	
+	private void refreshLocation(Location selectedLocation) {
+		mLocation = selectedLocation;
+		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	}
-
-
-	private void getCityFromLocation()
+	
+	private void showLocationPopup() {
+		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, 
+				DummyData.getLocationsForCity(mCity));
+        ListView listViewLocationItems = new ListView(this);
+        listViewLocationItems.setAdapter(locationAdapter);
+        listViewLocationItems.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View arg1, int position,
+					long arg3) {
+				Location selectedLocation = (Location) adapterView.getItemAtPosition(position);
+				refreshLocation(selectedLocation);
+				alertDialogLocations.hide();
+			}
+        });
+        alertDialogLocations = new AlertDialog.Builder(this)
+        .setView(listViewLocationItems)
+        .setTitle("Select Location")
+        .show();
+	}
+	
+	private void searchUserCurrentCityAndLocation()
 	{
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 		try
@@ -160,18 +173,12 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			List<Address> addresses = geocoder.getFromLocation(AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE, 0.0f, this),
 					AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, 0.0f, this), 1);
 			if(null == addresses || addresses.size()==0){
-				mFindCity = "";
 				return ;
 			}
-			Address obj = addresses.get(0);
-			mFindCity = obj.getLocality(); 
-			Log.e("City Nmae", mFindCity);
-
-
+			Address currentPresentAddress = addresses.get(0);
+			userCurrentPresentLocation = currentPresentAddress.getSubLocality();
+			userCurrentPresentCity = currentPresentAddress.getLocality(); 
 		} catch (IOException e) {
-
-			mFindCity = "";
-
 		}
 	}
 
@@ -180,93 +187,90 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case id.select_city_list:
-			builderCity.create().show();
+			showCitiesPopup();
 			break;
 		case id.select_location_list:
-			builderLocation.create().show();
+			showLocationPopup();
 			break;
 		case id.done:
-			Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
-			startActivity(i);
+			AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY, mCity.getId(), this);
+			AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION, mLocation.getId(), this);
+			AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, Float.parseFloat(mCity.getLatitude().toString()) , this);
+			AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, Float.parseFloat(mCity.getLongitude().toString()) , this);
+			setUpMap();
+			/*
+			if(mIsComingFromSplash){
+				Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
+				startActivity(i);
+			}
 			finish();
+			*/
 			break;
 		default:
 			break;
 		}
 
 	}
-	
-	private String[] getCityListStringArray(){
-		Map<String, City> cityMap = CityDumyData.getAllCity();
-		int i = 0;
-		String [] cityList = new String[cityMap.size()];
-		
-		Set entries = cityMap.entrySet();
-        Iterator iterator = entries.iterator();
-        
-        while(iterator.hasNext()){
 
-            Map.Entry mapping = (Map.Entry)iterator.next();
-            cityList[i] = mapping.getKey().toString();
-            i++;
-        }
-        
-        return cityList;
+
+	private void setDefaultCityAndLocation(){
 	}
-	
-	private String getFirstCityName(){
-		Map<String, City> cityMap = CityDumyData.getAllCity();
-		Set entries = cityMap.entrySet();
-        Iterator iterator = entries.iterator();
-        
-        return ((Map.Entry)iterator.next()).getKey().toString();
-	}
-	
-	private String[] getCityLocation(String city){
-		
-		ArrayList<CityLocation> locatioArrayList = CityDumyData.getAllCity().get(city.trim()).getCityLocations();
-		
-		String [] locationList = new String[locatioArrayList.size()];
-		
-		for(int i=0; i<locatioArrayList.size(); i++){
-			locationList[i] = locatioArrayList.get(i).getName();
-		}
-		return locationList;
-	}
-	
-	private void setCityLocation(){
-		mFindCity = getFirstCityName().trim();
-		mLocation = CityDumyData.getAllCity().get(mFindCity).getCityLocations().get(0).getName();
-	}
-	
+
 	private void setSpinnerTextViewdata(){
-		((TextView)findViewById(R.id.select_city_list)).setText(mFindCity);
-		((TextView)findViewById(R.id.select_location_list)).setText(mLocation);
+		//((TextView)findViewById(R.id.select_city_list)).setText(mCity);
+		//((TextView)findViewById(R.id.select_location_list)).setText(mLocation);
 	}
-	
-	private void locationBuilder(String[] list){
-		builderLocation = new AlertDialog.Builder(this);
-		builderLocation.setTitle("Select Location");
-		
-		builderLocation.setSingleChoiceItems(list, -1, new  DialogInterface.OnClickListener(){
-			public void  onClick(DialogInterface dialog, int item){
 
-				dialog.dismiss();
-				try
-				{
-					String[] locList = getCityLocation(mFindCity);
-					mLocation = locList[item];
-					setSpinnerTextViewdata();
+	/**
+	 * function to load map. If map is not created it will create it for you
+	 * */
+	private void initilizeMap() {
+		if (googleMap == null) {
+			googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
-				} catch(Exception e) { Log.e("ChooseCityActivity", "" + e); }
+
+			if (googleMap == null) {
+				Toast.makeText(getApplicationContext(),
+						"Sorry! unable to create maps", Toast.LENGTH_SHORT)
+						.show();
 			}
-		});
+			
+			if(googleMap!=null){
+				setUpMap();
+			}
+		}
+	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		initilizeMap();
+	}
+
+	private void setUpMap() {
+		// Hide the zoom controls as the button panel will cover it.
+		googleMap.getUiSettings().setZoomControlsEnabled(false);
+		
+		final LatLng USER_CURRENT_LOCATION = new LatLng(AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE, 0, this),
+				AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, 0, this));
+
+		Marker hamburg = googleMap.addMarker(new MarkerOptions().position(USER_CURRENT_LOCATION)
+		        .title("Flipchase"));
+		  
+		    // Move the camera instantly to hamburg with a zoom of 15.
+		    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(USER_CURRENT_LOCATION, 15));
+
+		    // Zoom in, animating the camera.
+		    googleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+	}
+
+	private boolean checkReady() {
+		if (googleMap == null) {
+			Toast.makeText(this, "Map is not ready", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
 	}
 
 }
-
-
-
-
 

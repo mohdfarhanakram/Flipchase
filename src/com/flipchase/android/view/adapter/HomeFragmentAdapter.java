@@ -35,7 +35,7 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 		
 		BaseFragment fragment=null;
 		
-		if(tabOption.equalsIgnoreCase(AppConstants.DEALS_FRAGMENT)){
+		if(tabOption.equalsIgnoreCase(AppConstants.CATALOGUE_FRAGMENT)){
 			fragment = new DealsFragment();
 		}else if(tabOption.equalsIgnoreCase(AppConstants.STORE_FRAGMENT)){
 			fragment = new StoreFragment();
