@@ -28,6 +28,8 @@ import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.dummyData.DummyData;
 import com.flipchase.android.persistance.AppSharedPreference;
+import com.flipchase.android.service.LocationService;
+import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
@@ -45,6 +47,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class SelectLocationActivity extends BaseActivity implements View.OnClickListener{
 
+	private LocationService locationService;
+	private List<City> cities;
 	private AlertDialog alertDialogCities;
 	private AlertDialog alertDialogLocations;
 	
@@ -57,6 +61,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	// Google Map
 	private GoogleMap googleMap;
 	private boolean mIsComingFromSplash;
+	
+	public SelectLocationActivity() {
+		locationService = new LocationServiceImpl();
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +123,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	}
 
 	private void showCitiesPopup() {
-		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, DummyData.getCities());
+		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, cities);
         ListView listViewCityItems = new ListView(this);
         listViewCityItems.setAdapter(adapter);
         listViewCityItems.setOnItemClickListener(new OnItemClickListener() {
@@ -274,9 +282,26 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 
 	
 	@Override
-    protected void requestData(int event, Object data) {
-        super.requestData(event, data);
-        fetchData(null, 1);
+    protected void requestAndAssignData() {
+        super.requestAndAssignData();
+        cities = locationService.getAllCities();
     }
+	
+	@Override
+	protected void updateUI() {
+		super.updateUI();
+	}
+
+	@Override
+	public void onSearchViewCollapsed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSearchViewExpanded() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
