@@ -9,3 +9,15 @@
     Package : com.flipchase.android.network;
     Class Name : VolleyGenericRequest 
     Method Name : getHeaders()
+
+
+MD5 : DE:3D:9C:2F:5E:AF:4A:4F:58:FB:01:5F:E0:52:82:64
+SHA1: 56:39:13:C1:66:2C:C1:C5:38:AC:DF:CB:C4:8B:58:2C:2B:1B:40:1A  (Release)
+
+SHA1: A4:9D:CE:17:DD:69:42:09:7B:9B:C3:1C:EB:C0:06:1A:EB:45:41:97  (Debug)
+
+
+GoogleMap Api Key : AIzaSyAVZBz8-e2xllLYXTtf0NpL5KVLl_zCcmg (Release)
+
+
+GoogleMap Api Key : AIzaSyCG4b9U9Sh5J8hhqbTN_XO9_4HuyDNeSFI (Debug)
