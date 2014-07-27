@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_refine_top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/filter_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/page_margin" >
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/page_margin"
+                android:paddingRight="@dimen/page_margin"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/main_layout_filter"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp" >
+
+                    <com.flipchase.android.view.widget.CustomFontTextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sort_by"
+                        android:textColor="@color/txt_color_dark_grey_nine"
+                        android:textSize="@dimen/filter_header_txt_size" />
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="#cccccc" />
+
+                    <include
+                        android:id="@+id/spinner_sortby"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/custom_spinner" />
+
+                    <!-- <com.flipchase.android.view.widget.CustomFontTextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/filter_by_margin_top"
+                        android:text="@string/filter_by"
+                        android:textColor="@color/txt_color_dark_grey_nine"
+                        android:textSize="@dimen/filter_header_txt_size" />
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="#cccccc" /> -->
+
+                    <LinearLayout
+                        android:id="@+id/all_filter_layout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:weightSum="2" >
+
+                    <com.flipchase.android.view.widget.CustomFontButton
+                        android:id="@+id/cancelFilterButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_grey"
+                        android:text="@string/txt_cancel"
+                        android:textColor="@color/txt_color_dark_grey_nine" />
+
+                    <View
+                        android:layout_width="15dp"
+                        android:layout_height="1dp" />
+
+                    <com.flipchase.android.view.widget.CustomFontButton
+                        android:id="@+id/applyFilterButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_app"
+                        android:text="@string/apply"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

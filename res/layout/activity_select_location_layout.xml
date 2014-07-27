@@ -4,50 +4,66 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ProgressBar
-        android:visibility="visible"
-        android:id="@+id/location_finder_spinner"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true" />
-
-    <LinearLayout
-        android:id="@+id/find_location_layout"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone" >
+        android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/current_location"
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="15dp"
-            android:text="Your Current location is Ghaziabad" />
+            android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/select_city_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="@drawable/apptheme_spinner_default_holo_light"
-            android:text="Select City" />
+            <ProgressBar
+                android:id="@+id/location_finder_spinner"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/select_location_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="@drawable/apptheme_spinner_default_holo_light"
-            android:text="Select Location" />
+            <LinearLayout
+                android:id="@+id/find_location_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" >
 
-        <Button
-            android:id="@+id/done"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:text="OK" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/current_location"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="15dp"
+                    />
+
+                <TextView
+                    android:id="@+id/select_city_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/apptheme_spinner_default_holo_light"
+                    android:text="Select City" />
+
+                <TextView
+                    android:id="@+id/select_location_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/apptheme_spinner_default_holo_light"
+                    android:text="Select Location" />
+
+                <Button
+                    android:id="@+id/done"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="OK" />
+
+                <fragment
+                    android:id="@+id/map"
+                    android:layout_width="fill_parent"
+                    android:layout_height="300dp"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

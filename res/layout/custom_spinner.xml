@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/customSpinnerId"
+              android:orientation="vertical"
+              android:paddingBottom="20dp"
+              android:layout_width="fill_parent"
+              android:layout_height="match_parent">
+    <com.flipchase.android.view.widget.CustomFontTextView
+            android:layout_marginTop="14dp"
+            android:id="@+id/txtv_single_selection"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="Popular"
+            android:paddingLeft="@dimen/generic_page_margin_left"
+            android:background="@drawable/custom_spinner_bg"
+            android:focusable="false"
+            android:clickable="false"
+            android:textColor="@color/txt_color_dark_grey"
+            android:textSize="@dimen/text_size_spinner"
+            />
+
+</LinearLayout>
