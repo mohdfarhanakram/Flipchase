@@ -272,5 +272,11 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		return true;
 	}
 
+	
+	@Override
+    protected void requestData(int event, Object data) {
+        super.requestData(event, data);
+        fetchData(null, 1);
+    }
 }
 

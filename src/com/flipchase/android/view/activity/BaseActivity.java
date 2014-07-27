@@ -3,13 +3,14 @@
  */
 package com.flipchase.android.view.activity;
 
+import java.util.HashMap;
+
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.internal.view.menu.MenuItemImpl;
 import android.support.v7.widget.SearchView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,9 +20,17 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.flipchase.android.R;
 import com.flipchase.android.app.Flipchase;
+import com.flipchase.android.listener.IParser;
+import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.network.VolleyGenericRequest;
+import com.flipchase.android.network.VolleyHelper;
+import com.flipchase.android.parser.BaseParser;
+import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.FlipdchaseSearchView;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewCollapsedEventListener;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewExpandedEventListener;
@@ -41,6 +50,115 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	}
+	
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (isDataExists()) {
+                populateViews();
+            } else {
+                 requestData(-1, null);
+                 return;
+            }
+        } else {
+            requestData(-1, null);
+        }
+    }
+    
+    public String getJSONForRequest(int eventType) {
+    	return "";
+    }
+    
+    private void postData(String url, int eventType, HashMap<String, String> map, String postData, int contentType) {
+    	
+    }
+    
+	public boolean fetchData(String url, final int eventType) {
+        boolean returnVal = false;
+        if (Utils.isInternetAvailable(this)) {
+        //VolleyGenericRequest req = new VolleyGenericRequest(url, this, this, this);
+        return returnVal;
+    }
+
+    
+    protected void requestData(int event, Object data) {
+
+    }
+
+    protected boolean isDataExists() {
+        return false;
+    }
+    
+    protected void populateViews() {
+
+    }
+    
+    @Override
+    public void onResponse(Object objResponse) {
+        if (isFinishing() || mDestroyed)
+            return;
+        ServiceResponse resp = (ServiceResponse) objResponse;
+
+        if (resp.getJabongBaseModel() == null) {
+            removeProgressDialog();
+            showCommonError(getResources().getString(R.string.common_error_msg));
+            if (resp.getEventType() == ApiType.API_REFRESH_CART_LIST_AFTER_APPLYING_VOUCHER ||
+                    resp.getEventType() == ApiType.API_REFRESH_CART_LIST_AFTER_REMOVING_VOUCHER) {
+                updateUi(resp);
+            }
+        } else {
+            checkIfInitApiDataHasExpired(resp.getJabongBaseModel().getSession().getCacheControlApp());
+            if (!StringUtils.isNullOrEmpty(resp.getJabongBaseModel().getSession().getApiToken())) {
+                StaticDataDao.getInstance(this).updateApiToken(resp.getJabongBaseModel().getSession().getApiToken());
+            }
+            if (!StringUtils.isNullOrEmpty(resp.getJabongBaseModel().getSession().getId()) && !(resp.getEventType() == ApiType.API_INIT || resp.getEventType() == ApiType.BANNER_API_REQUEST)) {
+                updateSessionId(resp.getJabongBaseModel().getSession().getId());
+
+                if (Utils.isLoggedIn(this) && !resp.getJabongBaseModel().getSession().isLoggedIn()) {
+                    logout();
+                    updateDrawerMenu();
+
+                    if (resp.getErrorCode() == ServiceResponse.MESSAGE_ERROR) {
+                        String message = getErrorMessage(resp);
+                        if (!StringUtils.isNullOrEmpty(message)) {
+                            Toast.makeText(this, message, 3000).show();
+                        }
+
+                    }
+                }
+            }
+            updateUi(resp);
+        }
+    }
+    
+    /**
+     * Search view Callback interface implementation
+     */
+	@Override
+	public void onSearchViewExpanded() {
+		 if (null != mMenu) {
+	            //getSupportActionBar().setIcon(R.drawable.ic_menu_logo);
+	            int size = mMenu.size();
+	            for (int i = 0; i < size; i++) {
+	                mMenu.getItem(i).setVisible(false);
+	            }
+	        }
+	}
+
+	/**
+     * Search view Callback interface implementation
+     */
+	@Override
+	public void onSearchViewCollapsed() {
+		if (null != mMenu) {
+            int size = mMenu.size();
+            for (int i = 0; i < size; i++) {
+                mMenu.getItem(i).setVisible(true);
+            }
+            restoreAdapter();
+        }
 	}
 	
 	/**
@@ -108,37 +226,7 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
         }**/
         mSearchView.setOnSuggestionListener(suggestionListener);
     }
-    
-    
-    
-    /**
-     * Search view Callback interface implementation
-     */
-	@Override
-	public void onSearchViewExpanded() {
-		 if (null != mMenu) {
-	            //getSupportActionBar().setIcon(R.drawable.ic_menu_logo);
-	            int size = mMenu.size();
-	            for (int i = 0; i < size; i++) {
-	                mMenu.getItem(i).setVisible(false);
-	            }
-	        }
-	}
 
-	/**
-     * Search view Callback interface implementation
-     */
-	@Override
-	public void onSearchViewCollapsed() {
-		if (null != mMenu) {
-            int size = mMenu.size();
-            for (int i = 0; i < size; i++) {
-                mMenu.getItem(i).setVisible(true);
-            }
-            restoreAdapter();
-        }
-	}
-	
 	public void restoreAdapter() {
     }
 
