@@ -24,5 +24,6 @@ public final class URLConstants {
 	/************************** LOCATION ***********************************************/
 	public static final String INITIALIZE_LOCATION_URL = BASE_LOCATION_URL + "/initSettings";
 	public static final String GET_ALL_CITIES_URL = BASE_LOCATION_URL + "/getAllCities";
+	public static final String GET_ALL_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllLocations";
 	public static final String GET_LOCATIONS_FOR_CITY = BASE_LOCATION_URL + "/getLocationsForCity/{cityid}";
 }

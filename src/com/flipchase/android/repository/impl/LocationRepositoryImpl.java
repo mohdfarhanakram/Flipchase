@@ -37,6 +37,21 @@ public class LocationRepositoryImpl extends BaseRepository implements LocationRe
 	}
 
 	@Override
+	public List<Location> getAllLocations() {
+		String jsonStr = serviceHandler.makeServiceCall(URLConstants.GET_ALL_LOCATIONS_URL, ServiceHandler.GET);
+		Location[] locations = null;
+        try {
+			jp = jsonFactory.createJsonParser(jsonStr);
+			locations = objectMapper.readValue(jp, Location[].class);
+		} catch (JsonParseException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+        return new ArrayList<Location>(Arrays.asList(locations));
+	}
+	
+	@Override
 	public List<Location> getLocationsForCity(Long cityId) {
 		String jsonStr = serviceHandler.makeServiceCall(URLConstants.GET_LOCATIONS_FOR_CITY, ServiceHandler.GET, null, cityId);
 		Location[] locations = null;

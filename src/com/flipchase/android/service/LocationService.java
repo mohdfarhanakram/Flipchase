@@ -10,6 +10,7 @@ public interface LocationService {
 	public void initLocation(Location location);
 	
 	public List<City> getAllCities();
+	public List<Location> getAllLocations();
 	
 	public List<Location> getLocationsForCity(Long cityId);
 	public List<Location> getLocationsForCity(String cityId);

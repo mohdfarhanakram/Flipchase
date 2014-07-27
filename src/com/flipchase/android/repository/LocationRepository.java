@@ -10,7 +10,7 @@ public interface LocationRepository {
 	public void initLocation(Location location)	;
 	
 	public List<City> getAllCities();
-	
+	public List<Location> getAllLocations();
 	public List<Location> getLocationsForCity(Long cityId);
 	
 	public void updateLocation(Long cityId, Long locationId);
