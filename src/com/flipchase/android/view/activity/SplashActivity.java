@@ -109,6 +109,6 @@ public class SplashActivity extends BaseActivity implements
 	@Override
     protected void requestAndAssignData() {
         super.requestAndAssignData();
-        locationService.initLocation(null);
+        //locationService.initLocation(null);
     }
 }

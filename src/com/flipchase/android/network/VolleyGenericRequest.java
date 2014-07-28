@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.flipchase.android.listener.IRequest;
 import com.flipchase.android.listener.IRequestCompletionListener;
+import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.volley.AuthFailureError;
 import com.flipchase.android.network.volley.NetworkResponse;
 import com.flipchase.android.network.volley.ParseError;
@@ -166,12 +167,11 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
         try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Log.d("VolleyGenericRequest", jsonString);
-            /*ServiceResponse serviceResponse = getParser().parseData(mEventType, jsonString);
-            serviceResponse.setRequestData(getRequestData());
+            ServiceResponse serviceResponse = getParser().parseData(mEventType, jsonString);
+           // serviceResponse.setRequestData(getRequestData());
             serviceResponse.setEventType(mEventType);
             Response<Object> resp = Response.success((Object) (serviceResponse), HttpHeaderParser.parseCacheHeaders(response));
-            return resp;*/
-            return null;
+            return resp;
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         }

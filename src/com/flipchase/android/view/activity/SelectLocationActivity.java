@@ -12,7 +12,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.SyncStateContract.Constants;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,14 +24,14 @@ import android.widget.Toast;
 import com.flipchase.android.R;
 import com.flipchase.android.R.id;
 import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.Location;
-import com.flipchase.android.dummyData.DummyData;
 import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.service.LocationService;
 import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
-import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -86,9 +85,9 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			}, AppConstants.SPLASH_WAITING_TIME);
 		} else {
 			String selectedCityId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "", this);
-			mCity = DummyData.getCityFromId(selectedCityId);
+			//mCity = DummyData.getCityFromId(selectedCityId);
 			String selectedLocationId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION, "", this);
-			mLocation = DummyData.getLocationFromId(selectedLocationId);
+			//mLocation = DummyData.getLocationFromId(selectedLocationId);
 			init();
 		}
 	}
@@ -175,36 +174,16 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         .show();
 	}
 	
+	/**
+	 * On screen load this method is called, so call the webservice to fetch data
+	 */
 	@Override
     protected void requestData(int event, Object data) {
         super.requestData(event, data);
         switch (event) {
             default:
                 showProgressDialog("Loading");
-                if (StringUtils.isNullOrEmpty(getTagBaseUrl())) {
-                    fetchData(Constants.INIT_API, ApiType.API_INIT, null);
-                } else {
-                    String url = getIntent().getStringExtra(Constants.EXTRA_URL);
-                    if(url!=null)
-                    {
-                        if (!url.contains(getTagBaseUrl())) {
-                            url = getTagBaseUrl()
-                                    + JabongApiDetails.getProductDetailApi
-                                    .getApiurl(this) + "?sku="
-                                    + getIntent().getStringExtra(Constants.EXTRA_URL);
-                            getIntent().putExtra(Constants.EXTRA_URL, url);
-                        }
-                        fetchData(getIntent().getStringExtra(Constants.EXTRA_URL),
-                                ApiType.API_PRODUCT_DETAILS, null);
-                    }
-                    else
-                    {
-                        //null pointer in bugsense..unable to locate
-                        if(getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY)!=null && getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY_EXTRA)!=null)
-                        Utils.postExceptionOnGA("Error in requestData of PDP \r\n url=null \r\n Intent Source class" + getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY)+" \n "+getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY_EXTRA)+" \n sessionid: "+getSessionId(),false);
-                    }
-
-                }
+                fetchData(URLConstants.GET_ALL_CITIES_URL, FlipchaseApi.INIT_REQUEST, null);
                 break;
         }
     }

@@ -277,7 +277,7 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
             final IParser parser1 = parser == null ? new BaseParser() : parser;
             String cachedResponse = getJSONForRequest(eventType);
             if (StringUtils.isNullOrEmpty(cachedResponse)) {
-                url = addSessionId(url, eventType);
+                //url = addSessionId(url, eventType);
                 VolleyGenericRequest req = new VolleyGenericRequest(url, this, this, this);
 
                 req.setEventType(eventType);
