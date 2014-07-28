@@ -39,6 +39,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jabong.android.constants.ApiType;
+import com.jabong.android.constants.Constants;
+import com.jabong.android.constants.JabongApiDetails;
+import com.jabong.android.utils.Utils;
 
 
 /**
@@ -173,6 +177,40 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         .show();
 	}
 	
+	@Override
+    protected void requestData(int event, Object data) {
+        super.requestData(event, data);
+        switch (event) {
+            default:
+                showProgressDialog("Loading");
+                if (StringUtils.isNullOrEmpty(getTagBaseUrl())) {
+                    fetchData(Constants.INIT_API, ApiType.API_INIT, null);
+                } else {
+                    String url = getIntent().getStringExtra(Constants.EXTRA_URL);
+                    if(url!=null)
+                    {
+                        if (!url.contains(getTagBaseUrl())) {
+                            url = getTagBaseUrl()
+                                    + JabongApiDetails.getProductDetailApi
+                                    .getApiurl(this) + "?sku="
+                                    + getIntent().getStringExtra(Constants.EXTRA_URL);
+                            getIntent().putExtra(Constants.EXTRA_URL, url);
+                        }
+                        fetchData(getIntent().getStringExtra(Constants.EXTRA_URL),
+                                ApiType.API_PRODUCT_DETAILS, null);
+                    }
+                    else
+                    {
+                        //null pointer in bugsense..unable to locate
+                        if(getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY)!=null && getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY_EXTRA)!=null)
+                        Utils.postExceptionOnGA("Error in requestData of PDP \r\n url=null \r\n Intent Source class" + getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY)+" \n "+getIntent().getStringExtra(Constants.INTENT_SOURCE_ACTIVITY_EXTRA)+" \n sessionid: "+getSessionId(),false);
+                    }
+
+                }
+                break;
+        }
+    }
+
 	@Override
     protected void requestAndAssignData() {
         super.requestAndAssignData();

@@ -19,6 +19,9 @@ public class AppConstants {
 	
 	public final static String IS_COMING_FROM_SPLASH = "coming_from_splash";
 	
-	
+	public static String RESPONSE_INIT= "response_init";
+    public static String RESPONSE_GET_CITIES = "response_get_cities";
+    public static String RESPONSE_GET_LOCATIONS = "response_get_locations";
+    public static String RESPONSE_GET_LOCATIONS_FOR_CITY = "response_get_locations_for_city";
 
 }

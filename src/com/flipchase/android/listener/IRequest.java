@@ -3,6 +3,9 @@
  */
 package com.flipchase.android.listener;
 
+import com.flipchase.android.parser.IParser;
+
+
 /**
  * @author m.farhan
  *
@@ -22,4 +25,6 @@ public interface IRequest {
      */
      boolean updateListeners(Object newListener);
 
+     IParser getParser();
+     void setParser(IParser parser);
 }

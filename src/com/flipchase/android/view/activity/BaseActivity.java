@@ -3,24 +3,39 @@
  */
 package com.flipchase.android.view.activity;
 
+import java.util.HashMap;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.app.Flipchase;
+import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.network.VolleyGenericRequest;
+import com.flipchase.android.network.VolleyHelper;
+import com.flipchase.android.network.volley.Response;
+import com.flipchase.android.parser.BaseParser;
+import com.flipchase.android.parser.IParser;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.FlipdchaseSearchView;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewCollapsedEventListener;
@@ -30,12 +45,15 @@ import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewExpand
  * @author m.farhan
  *
  */
-abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCollapsedEventListener, OnSearchViewExpandedEventListener,View.OnFocusChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener{
+abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCollapsedEventListener, OnSearchViewExpandedEventListener,
+	View.OnFocusChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener ,
+	Response.Listener, Response.ErrorListener {
 	
 	protected Menu mMenu;
 	private MenuItem mSearchMenuItem;
 	private static final int SEARCH = 1000120;
 	private FlipdchaseSearchView mSearchView;
+	public ProgressDialog mProgressDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,25 +63,31 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 	
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    	super.onPostCreate(savedInstanceState);
         if (savedInstanceState != null) {
+            //we are restoring from previous state
+            //instance created because of device configuration changes(rotation)
             if (isDataExists()) {
                 populateViews();
             } else {
-            	fetchData();
+                //check if our previous request is still pending
+                //if yes then we have to update the callbacks
+                //else make a fresh request
+                //TODO: refine this condition
+                if (!VolleyHelper.getInstance(this).updateListeners(this)) {
+                    requestData(-1, null);
+                    return;
+                }
             }
+            //updating listener for pending requests
+            VolleyHelper.getInstance(this).updateListeners(this);
         } else {
-        	fetchData();
+            //we don't have any previous state to restore
+            // perhaps this must be default creation
+            requestData(-1, null);
         }
     }
     
-	public boolean fetchData() {
-		boolean returnVal = false;
-		if (Utils.isInternetAvailable(this)) {
-			new GetData().execute();
-		}
-		return returnVal;
-	}
     
 	protected void updateUI() {
 		
@@ -73,8 +97,13 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 		
 	}
 	
-    protected void requestData() {
-
+	/**
+     * Helper method for making all network requests
+     *
+     * @param event event for data
+     * @param data  request data
+     */
+    protected void requestData(int event, Object data) {
     }
 
     protected boolean isDataExists() {
@@ -85,31 +114,138 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 
     }
      
-    private class GetData extends AsyncTask<Void, Void, Void> {
-   	 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
- 
-        @Override
-        protected Void doInBackground(Void... arg0) {
-        	requestAndAssignData();
-        	runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                	updateUI();
-                }
-            });
-            return null;
-        }
- 
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
+    /**
+     * Utility function for displaying progress dialog
+     *
+     * @param bodyText message to be shown
+     */
+
+    public void showProgressDialog(String bodyText) {
+        if (Utils.isInternetAvailable(this)) {
+            if (mProgressDialog == null) {
+                mProgressDialog = new ProgressDialog(BaseActivity.this);
+                mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode,
+                                         KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_CAMERA
+                                || keyCode == KeyEvent.KEYCODE_SEARCH) {
+                            return true; //
+                        }
+                        return false;
+                    }
+                });
+            }
+
+            mProgressDialog.setMessage(bodyText);
+
+            if (!mProgressDialog.isShowing()) {
+                mProgressDialog.show();
+            }
         }
     }
-    
+
+    /**
+     * Utility function to remove progress dialog
+     */
+    public void removeProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing() && !isFinishing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+        
+    /**
+     * Helper function to obtain cached json data based on event type
+     *
+     * @param eventType
+     * @return
+     */
+    public String getJSONForRequest(int eventType) {
+        String request = null;
+        switch (eventType) {
+
+            case FlipchaseApi.INIT_REQUEST:
+                request = AppConstants.RESPONSE_INIT;
+                break;
+            case FlipchaseApi.GET_ALL_CITIES:
+                request = AppConstants.RESPONSE_GET_CITIES;
+                break;
+
+            case FlipchaseApi.GET_ALL_LOCATIONS:
+                request = AppConstants.RESPONSE_GET_LOCATIONS;
+                break;
+
+            case FlipchaseApi.GET_CITIES_FOR_LOCATIONS:
+                request = AppConstants.RESPONSE_GET_LOCATIONS_FOR_CITY;
+                break;
+            default:
+                return "";
+        }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.contains(request)) {
+            return preferences.getString(request, "");
+        }
+        return "";
+    }
+
+    /**
+     * Helper method for making a http post request
+     *
+     * @param url         request url
+     * @param eventType   request event type
+     * @param map         post body params as map
+     * @param postData    string/json post body
+     * @param contentType content type for distinguishing json/plain text request
+     * @param parser      parser object tobe used for response parsing
+     */
+    private void postData(String url, int eventType, HashMap<String, String> map, String postData, int contentType, IParser parser) {
+        url = addSessionId(url, eventType);
+        try {
+            VolleyGenericRequest req = null;
+            if (map != null) {
+                req = new VolleyGenericRequest(VolleyGenericRequest.ContentType.FORM_ENCODED_DATA, url, map, this, this, this);
+            } else
+                req = new VolleyGenericRequest(contentType, url, postData, this, this, this);
+            req.setEventType(eventType);
+
+            req.setParser(parser == null ? new BaseParser() : parser);
+
+            VolleyHelper.getInstance(this).addRequestInQueue(req);
+            //   Log.d("URL:  ", url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Helper method for making a http post request
+     *
+     * @param url         request url
+     * @param eventType   request event type
+     * @param postData    string/json post body
+     * @param contentType content type for distinguishing json/plain text request
+     * @param parser      parser object tobe used for response parsing
+     */
+    public void postData(String url, int eventType, String postData, int contentType, IParser parser) {
+        postData(url, eventType, null, postData, contentType, parser);
+
+    }
+
+    /**
+     * Helper method for making a http post request
+     *
+     * @param url       request url
+     * @param eventType request event type
+     * @param map       post body params as map
+     * @param parser    parser object tobe used for response parsing
+     */
+    public void postData(String url, int eventType, HashMap<String, String> map, IParser parser) {
+        postData(url, eventType, map, null, VolleyGenericRequest.ContentType.FORM_ENCODED_DATA, parser);
+
+    }
+
 	/**
      * Helper method for creating search view
      *

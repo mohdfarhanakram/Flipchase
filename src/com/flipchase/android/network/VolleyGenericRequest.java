@@ -12,7 +12,6 @@ import android.util.Log;
 
 import com.flipchase.android.listener.IRequest;
 import com.flipchase.android.listener.IRequestCompletionListener;
-import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.volley.AuthFailureError;
 import com.flipchase.android.network.volley.NetworkResponse;
 import com.flipchase.android.network.volley.ParseError;
@@ -21,6 +20,7 @@ import com.flipchase.android.network.volley.Response;
 import com.flipchase.android.network.volley.VolleyError;
 import com.flipchase.android.network.volley.VolleyLog;
 import com.flipchase.android.network.volley.toolbox.HttpHeaderParser;
+import com.flipchase.android.parser.IParser;
 
 /**
  * @author m.farhan
@@ -54,7 +54,7 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
     protected IRequestCompletionListener mRequestCompletionListener;
     protected int mContentType;
     protected Context mContext;
-
+    protected IParser mParser;
    
     private Object mRequestData = null;
 
@@ -204,7 +204,7 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
         super.cancel();
     }
 
-    /*@Override
+    @Override
     public IParser getParser() {
         return mParser;
     }
@@ -212,7 +212,7 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
     @Override
     public void setParser(IParser parser) {
         mParser = parser;
-    }*/
+    }
 
     public boolean updateListeners(Object newListener) {
         boolean isUpdated = false;
