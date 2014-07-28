@@ -34,6 +34,7 @@ import com.flipchase.android.R;
 import com.flipchase.android.app.Flipchase;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.listener.IScreenView;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.JVolleyError;
 import com.flipchase.android.network.VolleyGenericRequest;
@@ -47,8 +48,6 @@ import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.FlipdchaseSearchView;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewCollapsedEventListener;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewExpandedEventListener;
-import com.jabong.android.app.Jabong;
-import com.jabong.android.dao.StaticDataDao;
 
 /**
  * @author m.farhan
@@ -56,7 +55,7 @@ import com.jabong.android.dao.StaticDataDao;
  */
 abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCollapsedEventListener, OnSearchViewExpandedEventListener,
 	View.OnFocusChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener ,
-	Response.Listener, Response.ErrorListener {
+	Response.Listener, Response.ErrorListener, IScreenView {
 	
 	protected Menu mMenu;
 	private MenuItem mSearchMenuItem;
@@ -257,12 +256,10 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 
     private String addSessionId(String url, int eventType) {
         String sessionId = getSessionId();
-        if (!(eventType == ApiType.API_LOGIN || eventType == ApiType.API_GET_GUEST_USER_SHORTLIST)) {
             if (!StringUtils.isNullOrEmpty(sessionId)) {
                 url += url.contains("?") == true ? "&session[id]=" + sessionId : "?session[id]=" + sessionId;
                 return url;
             }
-        }
         return url;
     }
     
@@ -546,4 +543,19 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
     	return "ses11";
         //return StaticDataDao.getInstance(this).getSessionId();
     }
+    
+    @Override
+    public void updateUi(ServiceResponse response) {
+    }
+
+    private String getScreenName() {
+        String screenName = "";
+        if (this instanceof SplashActivity) {
+            screenName = "Splash";
+        } else if (this instanceof SelectLocationActivity) {
+            screenName = "Select Location";
+        } 
+        return screenName;
+    }
+
 }

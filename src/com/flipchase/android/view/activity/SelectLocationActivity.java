@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.SyncStateContract.Constants;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,6 +32,7 @@ import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.service.LocationService;
 import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,10 +41,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.jabong.android.constants.ApiType;
-import com.jabong.android.constants.Constants;
-import com.jabong.android.constants.JabongApiDetails;
-import com.jabong.android.utils.Utils;
 
 
 /**
