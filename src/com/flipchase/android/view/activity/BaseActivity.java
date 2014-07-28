@@ -16,6 +16,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -26,20 +28,27 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.flipchase.android.R;
 import com.flipchase.android.app.Flipchase;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.network.JVolleyError;
 import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.network.VolleyHelper;
 import com.flipchase.android.network.volley.Response;
+import com.flipchase.android.network.volley.VolleyError;
 import com.flipchase.android.parser.BaseParser;
 import com.flipchase.android.parser.IParser;
+import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.FlipdchaseSearchView;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewCollapsedEventListener;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewExpandedEventListener;
+import com.jabong.android.app.Jabong;
+import com.jabong.android.dao.StaticDataDao;
 
 /**
  * @author m.farhan
@@ -246,7 +255,151 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 
     }
 
-	/**
+    private String addSessionId(String url, int eventType) {
+        String sessionId = getSessionId();
+        if (!(eventType == ApiType.API_LOGIN || eventType == ApiType.API_GET_GUEST_USER_SHORTLIST)) {
+            if (!StringUtils.isNullOrEmpty(sessionId)) {
+                url += url.contains("?") == true ? "&session[id]=" + sessionId : "?session[id]=" + sessionId;
+                return url;
+            }
+        }
+        return url;
+    }
+    
+    /**
+     * Helper method to make Http get data from server.
+     *
+     * @param url       request url
+     * @param eventType request event type
+     * @param parser    parser object to be used for response parsing
+     */
+
+    public boolean fetchData(String url, final int eventType, IParser parser) {
+        boolean returnVal = false;
+        if (Utils.isInternetAvailable(this)) {
+            final IParser parser1 = parser == null ? new BaseParser() : parser;
+            String cachedResponse = getJSONForRequest(eventType);
+            if (StringUtils.isNullOrEmpty(cachedResponse)) {
+                url = addSessionId(url, eventType);
+                VolleyGenericRequest req = new VolleyGenericRequest(url, this, this, this);
+
+                req.setEventType(eventType);
+                req.setParser(parser1);
+                //TODO  req.setRequestTimeOut(Constants.API_TIMEOUT);
+                VolleyHelper.getInstance(this).addRequestInQueue(req);
+            } else {
+                final String tempResponse = cachedResponse;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onResponse(parser1.parseData(eventType, tempResponse));
+                    }
+                });
+            }
+        } else {
+            removeProgressDialog();
+            showCommonError(AppConstants.NETWORK_CONNECTION_ERROR);
+            returnVal = true;
+        }
+        return returnVal;
+    }
+
+    /**
+     * Volley response callback method
+     *
+     * @param objResponse response object
+     */
+
+    @Override
+    public void onResponse(Object objResponse) {
+       // if (isFinishing() || mDestroyed)
+       //     return;
+        ServiceResponse resp = (ServiceResponse) objResponse;
+
+        if (resp.getFlipChaseBaseModel() == null) {
+            removeProgressDialog();
+            showCommonError("Common Error Message");
+            //DK: Depending upon Screen we can update the UI
+            //updateUi(resp);
+        } else {
+            updateUi(resp);
+        }
+    }
+
+    private String getErrorMessage(ServiceResponse response) {
+        String errorMsg = "";
+        if (response.getErrorMessages() != null && response.getErrorMessages().size() > 0) {
+            for (int i = 0; i < response.getErrorMessages().size(); i++) {
+                if (errorMsg == null) {
+                    errorMsg = response.getErrorMessages().get(i);
+                } else {
+                    errorMsg = errorMsg + response.getErrorMessages().get(i);
+                }
+            }
+        }
+        return errorMsg;
+    }
+    
+    /**
+     * Volley error response callback method
+     *
+     * @param error error object
+     */
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        //if (isFinishing() || mDestroyed)
+        //    return;
+        JVolleyError jError = (JVolleyError) error;
+        ServiceResponse response = new ServiceResponse();
+        response.setEventType(jError.getEventType());
+        response.setErrorCode(ServiceResponse.EXCEPTION);
+        response.setErrorText("Volley Error");
+
+        if (response.getFlipChaseBaseModel() == null) {
+            removeProgressDialog();
+            showCommonError("Common Error Message");
+            updateUi(response);
+        } else {
+            updateUi(response);
+        }
+    }
+
+    /**
+     * Utility function for showing common error dialog.
+     *
+     * @param message
+     */
+
+    public void showCommonError(String message) {
+        if (TextUtils.isEmpty(message)) {
+            message = "Common Error Message";
+        }
+        Toast.makeText(this, message, 3000).show();
+    }
+
+    /**
+     * Utility function for showing common error dialog.
+     *
+     * @param message message to be shown
+     */
+    public void showWebErrorDialog(String message) {
+        showCommonError(message);
+        removeProgressDialog();
+    }
+    
+    /**
+     * Util function for calculating screen width
+     *
+     * @return calculated screen width
+     */
+    public int getScreenWidth() {
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.widthPixels;
+    }
+
+    /**
      * Helper method for creating search view
      *
      * @param searchId           menu item id
@@ -374,4 +527,23 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 		
 	}
 
+	/**
+     * Shows message dialog
+     *
+     * @param errormsg message to be shown
+     */
+    public void showMessageDialog(String errormsg) {
+        showCommonError(errormsg);
+    }
+    
+    @Override
+    protected void onRestart() {
+    	//isAppComingFromBackgroundToForground
+        super.onRestart();
+    }
+    
+    public String getSessionId() {
+    	return "ses11";
+        //return StaticDataDao.getInstance(this).getSessionId();
+    }
 }
