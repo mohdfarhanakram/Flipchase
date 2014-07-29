@@ -31,6 +31,8 @@ import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.persistance.AppSharedPreference;
+import com.flipchase.android.service.LocationService;
+import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
@@ -48,8 +50,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class SelectLocationActivity extends BaseActivity implements View.OnClickListener{
 
-	private List<City> cities;
-	private List<Location> cityLocations;
+	private LocationService locationService = new LocationServiceImpl();
 	private AlertDialog alertDialogCities;
 	private AlertDialog alertDialogLocations;
 	
@@ -121,8 +122,9 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 
 	private void refreshAddress(City selectedCity) {
 		mCity = selectedCity;
+		mLocation = locationService.getFirstLocationForCity(mCity);
 		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
-		//((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
+		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	}
 	
 	private void refreshLocation(Location selectedLocation) {
@@ -131,7 +133,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	}
 	
 	private void showCitiesPopup() {
-		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, cities);
+		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, locationService.getAllCities());
         ListView listViewCityItems = new ListView(this);
         listViewCityItems.setAdapter(adapter);
         listViewCityItems.setOnItemClickListener(new OnItemClickListener() {
@@ -150,8 +152,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	}
 	
 	private void showLocationPopup() {
-		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, cityLocations
-				);
+		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, 
+				locationService.getLocationsForCity(mCity));
         ListView listViewLocationItems = new ListView(this);
         listViewLocationItems.setAdapter(locationAdapter);
         listViewLocationItems.setOnItemClickListener(new OnItemClickListener() {
@@ -190,7 +192,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		switch (response.getEventType()) {
 		case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS:
 			CityLocationWrapper cityLocationWrapper = (CityLocationWrapper) response.getResponseObject();
-			cityLocationWrapper.getCities();
+			locationService.setCityLocationWrapper(cityLocationWrapper);
+			setDefaultCityLocationsAfterFetchingData();
 			break;
 		default:
 			break;
@@ -198,24 +201,13 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		removeProgressDialog();
     }
 	
-	private void searchUserCurrentCityAndLocation()
-	{
-		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-		try
-		{
-			List<Address> addresses = geocoder.getFromLocation(AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE, 0.0f, this),
-					AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, 0.0f, this), 1);
-			if(null == addresses || addresses.size()==0){
-				return ;
-			}
-			Address currentPresentAddress = addresses.get(0);
-			userCurrentPresentLocation = currentPresentAddress.getSubLocality();
-			userCurrentPresentCity = currentPresentAddress.getLocality(); 
-		} catch (IOException e) {
-		}
-	}
-
-
+	private void setDefaultCityLocationsAfterFetchingData() {
+		mCity = locationService.getFirstCity();
+		mLocation = locationService.getFirstLocationForCity(mCity);
+		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
+		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
+	};
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -244,14 +236,23 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		}
 
 	}
-
-
-	private void setDefaultCityAndLocation(){
-	}
-
-	private void setSpinnerTextViewdata(){
-		//((TextView)findViewById(R.id.select_city_list)).setText(mCity);
-		//((TextView)findViewById(R.id.select_location_list)).setText(mLocation);
+	
+	/***********************************  Google Maps START  ***************************/
+	private void searchUserCurrentCityAndLocation()
+	{
+		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+		try
+		{
+			List<Address> addresses = geocoder.getFromLocation(AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE, 0.0f, this),
+					AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, 0.0f, this), 1);
+			if(null == addresses || addresses.size()==0){
+				return ;
+			}
+			Address currentPresentAddress = addresses.get(0);
+			userCurrentPresentLocation = currentPresentAddress.getSubLocality();
+			userCurrentPresentCity = currentPresentAddress.getLocality(); 
+		} catch (IOException e) {
+		}
 	}
 
 	/**
@@ -303,6 +304,16 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			return false;
 		}
 		return true;
+	}
+	
+	/***********************************  Google Maps END  ***************************/
+
+	private void setDefaultCityAndLocation(){
+	}
+
+	private void setSpinnerTextViewdata(){
+		//((TextView)findViewById(R.id.select_city_list)).setText(mCity);
+		//((TextView)findViewById(R.id.select_location_list)).setText(mLocation);
 	}
 
 	@Override

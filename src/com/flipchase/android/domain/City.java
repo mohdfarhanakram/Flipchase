@@ -12,9 +12,6 @@ public class City extends BaseDomain {
 
 	private String url_name;
 
-	public City() {
-	}
-	
 	public String getState() {
 		return state;
 	}

@@ -2,11 +2,11 @@ package com.flipchase.android.domain;
 
 public abstract class BaseDomain {
 
-	private String id;
+	protected String id;
 	
-	private String name;
+	protected String name;
 	
-	private String displayName;
+	protected String displayName;
 
 	public String getId() {
 		return id;
@@ -32,6 +32,17 @@ public abstract class BaseDomain {
 		this.displayName = displayName;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		BaseDomain bd = (BaseDomain) obj;
+		return this.id.equals(bd.getId());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.id.hashCode();
+	}
+	
 	@Override
 	public String toString() {
 		return id;
