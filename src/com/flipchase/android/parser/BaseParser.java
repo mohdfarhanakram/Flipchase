@@ -24,43 +24,9 @@ public class BaseParser implements IParser {
 
     protected FlipChaseBaseModel parseBaseData(JSONObject jsonObject)
             throws JSONException {
-
     	FlipChaseBaseModel baseModel = new FlipChaseBaseModel();
         baseModel.setSuccess(jsonObject.getBoolean(JsonKey.SUCCESS));
-        com.flipchase.android.response.Session session = new com.flipchase.android.response.Session();
-        if (jsonObject.has("session")) {
-
-            session.setLoggedIn(jsonObject.getJSONObject("session").optBoolean("is_loggedin"));
-            session.setId(jsonObject.getJSONObject("session").optString("id"));
-            session.setApiToken(jsonObject.getJSONObject("session").optString("api_token"));
-            session.setCacheControlApp(jsonObject.getJSONObject("session").optString(JsonKey.CACHE_EXPIRY_KEY));
-
-        }
-        baseModel.setSession(session);
-        MetaData metaData = new MetaData();
-        if (jsonObject.has("metadata") && (jsonObject.get("metadata") instanceof JSONObject)) {
-
-            metaData.setBaseUrl(jsonObject.getJSONObject("metadata").optString("base_url"));
-        }
-        baseModel.setMetadata(metaData);
         return baseModel;
-        /*if (!Utils.isJsonObject(jsonObject, JsonKey.META_DATA)) {
-
-            JabongBaseModel baseModel = new JabongBaseModel();
-            baseModel.setSuccess(jsonObject.getBoolean(JsonKey.SUCCESS));
-            Session session = new Session();
-            session.setId(jsonObject.getJSONObject(JsonKey.SESSION).getString(
-                    JsonKey.ID));
-            if (jsonObject.getJSONObject("session").has("api_token")) {
-                Jabong.API_TOKEN = jsonObject.getJSONObject(
-                        "session").getString("api_token");
-            }
-            baseModel.setSession(session);
-            return baseModel;
-        }
-        Gson gson = new Gson();
-        JabongBaseModel baseModel = gson.fromJson(jsonObject.toString(), JabongBaseModel.class);
-        return baseModel;*/
     }
 
     protected ServiceResponse handleJsonResponse(int eventType, JSONObject jsonObject) {

@@ -28,6 +28,7 @@ import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.Location;
+import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.service.LocationService;
 import com.flipchase.android.service.impl.LocationServiceImpl;
@@ -189,20 +190,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
     }
 
 	@Override
-    protected void requestAndAssignData() {
-        super.requestAndAssignData();
-        cities = locationService.getAllCities();
-        mCity = cities.get(0);
-		cityLocations = locationService.getLocationsForCity(mCity.getId());
-		mLocation = cityLocations.get(0);
+    public void updateUi(ServiceResponse response) {
+		super.updateUi(response);
+		removeProgressDialog();
     }
-	
-	@Override
-	protected void updateUI() {
-		super.updateUI();
-		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
-		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
-	}
 	
 	private void searchUserCurrentCityAndLocation()
 	{

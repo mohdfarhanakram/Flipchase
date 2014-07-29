@@ -12,19 +12,11 @@ import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.listener.FlipchaseLocationListener;
 import com.flipchase.android.location.FlipchaseLocationTracker;
 import com.flipchase.android.persistance.AppSharedPreference;
-import com.flipchase.android.service.LocationService;
-import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
 
 public class SplashActivity extends BaseActivity implements
 		FlipchaseLocationListener {
 
-	private LocationService locationService;
-	
-	public SplashActivity() {
-		locationService = new LocationServiceImpl();
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -106,9 +98,4 @@ public class SplashActivity extends BaseActivity implements
 
 	}
 
-	@Override
-    protected void requestAndAssignData() {
-        super.requestAndAssignData();
-        //locationService.initLocation(null);
-    }
 }

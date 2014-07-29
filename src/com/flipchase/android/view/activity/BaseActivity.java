@@ -96,15 +96,6 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
         }
     }
     
-    
-	protected void updateUI() {
-		
-	}
-	
-	protected void requestAndAssignData() {
-		
-	}
-	
 	/**
      * Helper method for making all network requests
      *
