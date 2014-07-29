@@ -20,5 +20,7 @@ public interface FlipchaseApi {
 	 public static final int INIT_REQUEST = 1;
 	 public static final int GET_ALL_CITIES = 2;
 	 public static final int GET_ALL_LOCATIONS = 3;
-	 public static final int GET_CITIES_FOR_LOCATIONS = 4;
+	 public static final int GET_ALL_CITIES_AND_LOCATIONS = 4;
+	 public static final int GET_CITIES_FOR_LOCATIONS = 5;
+
 }

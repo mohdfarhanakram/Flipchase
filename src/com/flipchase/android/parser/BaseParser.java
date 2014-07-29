@@ -102,24 +102,22 @@ public class BaseParser implements IParser {
     }
 
     protected void parseJsonData(ServiceResponse response) throws JSONException {
+    	JSONObject jsonObjectData = response.getJsonResponse();
         switch (response.getEventType()) {
             case FlipchaseApi.INIT_REQUEST:
-                response.setResponseObject(JsonParser.parseCatalogue(response
-                        .getJsonResponse()));
                 break;
             case FlipchaseApi.GET_ALL_CITIES:
-                response.setResponseObject(JsonParser.parseOrderSummary(response.getJsonResponse()));
+                response.setResponseObject(FlipChaseJsonParser.parseCities(jsonObjectData));
                 break;
-            /*
             case FlipchaseApi.GET_ALL_LOCATIONS:
-                response.setResponseObject(JsonParser.parseCatalog(response
-                        .getJsonResponse().getJSONObject(JsonKey.META_DATA)
-                        .getJSONObject(JsonKey.DATA)));
+                response.setResponseObject(FlipChaseJsonParser.parseLocations(jsonObjectData));
+                break;
+            case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS:
+                response.setResponseObject(FlipChaseJsonParser.parseCityAndLocations(jsonObjectData));
                 break;
             case FlipchaseApi.GET_CITIES_FOR_LOCATIONS:
-                response.setResponseObject(JsonParser.parseAddToCart(response.getJsonResponse()));
+                //response.setResponseObject(FlipChaseJsonParser.parseCities(jsonObjectData));
                 break;
-            */
             default:
                 break;
         }

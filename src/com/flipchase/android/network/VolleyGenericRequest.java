@@ -170,8 +170,8 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
             ServiceResponse serviceResponse = getParser().parseData(mEventType, jsonString);
            // serviceResponse.setRequestData(getRequestData());
             //serviceResponse.setEventType(mEventType);
-            //Response<Object> resp = Response.success((Object) (serviceResponse), HttpHeaderParser.parseCacheHeaders(response));
-            Response<Object> resp = Response.success((Object) (serviceResponse), null);
+            Response<Object> resp = Response.success((Object) (serviceResponse), HttpHeaderParser.parseCacheHeaders(response));
+            //Response<Object> resp = Response.success((Object) (serviceResponse), null);
             return resp;
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

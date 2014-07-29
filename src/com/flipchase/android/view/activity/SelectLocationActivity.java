@@ -27,11 +27,10 @@ import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.City;
+import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.persistance.AppSharedPreference;
-import com.flipchase.android.service.LocationService;
-import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
@@ -49,7 +48,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class SelectLocationActivity extends BaseActivity implements View.OnClickListener{
 
-	private LocationService locationService;
 	private List<City> cities;
 	private List<Location> cityLocations;
 	private AlertDialog alertDialogCities;
@@ -64,10 +62,6 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	// Google Map
 	private GoogleMap googleMap;
 	private boolean mIsComingFromSplash;
-	
-	public SelectLocationActivity() {
-		locationService = new LocationServiceImpl();
-	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +178,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         switch (event) {
             default:
                 showProgressDialog("Loading");
-                fetchData(URLConstants.GET_ALL_CITIES_URL, FlipchaseApi.INIT_REQUEST, null);
+                fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
                 break;
         }
     }
@@ -192,6 +186,15 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	@Override
     public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
+		
+		switch (response.getEventType()) {
+		case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS:
+			CityLocationWrapper cityLocationWrapper = (CityLocationWrapper) response.getResponseObject();
+			cityLocationWrapper.getCities();
+			break;
+		default:
+			break;
+		}
 		removeProgressDialog();
     }
 	

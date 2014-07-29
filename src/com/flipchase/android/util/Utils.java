@@ -29,6 +29,27 @@ public class Utils {
     }
 	
 	/**
+     * Check particular node is array.
+     *
+     * @param jsonObject
+     * @return true if particular node is Array.
+     */
+    public static boolean isJsonArray(JSONObject jsonObject, String key) {
+
+        if (!jsonObject.isNull(key)) {
+
+            try {
+                jsonObject.getJSONArray(key);
+                return true;
+            } catch (JSONException e) {
+                return false;
+            }
+
+        }
+        return false;
+    }
+
+    /**
      * Check particular node is object.
      *
      * @param jsonObject
