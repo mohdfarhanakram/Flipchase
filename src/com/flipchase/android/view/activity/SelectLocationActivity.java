@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.flipchase.android.R;
 import com.flipchase.android.R.id;
+import com.flipchase.android.cache.FlipChaseObjectsCache;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
@@ -81,9 +83,9 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			}, AppConstants.SPLASH_WAITING_TIME);
 		} else {
 			String selectedCityId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "", this);
-			//mCity = DummyData.getCityFromId(selectedCityId);
+			mCity = locationService.getCityWithId(selectedCityId);
 			String selectedLocationId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION, "", this);
-			//mLocation = DummyData.getLocationFromId(selectedLocationId);
+			mLocation = locationService.getLocationWithId(selectedLocationId, mCity);
 			init();
 		}
 	}
@@ -112,23 +114,26 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			//setDefaultCityAndLocation();
 		}
 
-        //if(StringUtils.isNullOrEmpty(mCity) || StringUtils.isNullOrEmpty(mLocation)) {
-        //	setDefaultCityAndLocation();
-       // }
+        if(mCity != null && mLocation != null) {
+        	((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
+    		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
+       }
         setSpinnerTextViewdata();
-        
-       
 	}
 
 	private void refreshAddress(City selectedCity) {
 		mCity = selectedCity;
 		mLocation = locationService.getFirstLocationForCity(mCity);
+		updateAppSharedPreferenceForLocations();
+		setUpMap();
 		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
 		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	}
 	
 	private void refreshLocation(Location selectedLocation) {
 		mLocation = selectedLocation;
+		updateAppSharedPreferenceForLocations();
+		setUpMap();
 		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	}
 	
@@ -218,23 +223,23 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			showLocationPopup();
 			break;
 		case id.done:
-			AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY, mCity.getId(), this);
-			AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION, mLocation.getId(), this);
-			AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, Float.parseFloat(mCity.getLatitude().toString()) , this);
-			AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, Float.parseFloat(mCity.getLongitude().toString()) , this);
-			setUpMap();
-			/*
 			if(mIsComingFromSplash){
 				Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
 				startActivity(i);
 			}
 			finish();
-			*/
 			break;
 		default:
 			break;
 		}
 
+	}
+	
+	private void updateAppSharedPreferenceForLocations() {
+		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY, mCity.getId(), this);
+		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION, mLocation.getId(), this);
+		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, Float.parseFloat(mCity.getLatitude().toString()) , this);
+		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, Float.parseFloat(mCity.getLongitude().toString()) , this);
 	}
 	
 	/***********************************  Google Maps START  ***************************/

@@ -6,27 +6,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.flipchase.android.cache.FlipChaseObjectsCache;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
-import com.flipchase.android.repository.LocationRepository;
-import com.flipchase.android.repository.impl.LocationRepositoryImpl;
 import com.flipchase.android.service.LocationService;
 
 public class LocationServiceImpl implements LocationService {
 
 	private Map<City, List<Location>> cityLocationMap;
-	private CityLocationWrapper cityLocationWrapper;
-	
-	private LocationRepository locationRepository;
+	private CityLocationWrapper cityLocationWrapper ;
     
 	public LocationServiceImpl() {
-		locationRepository = new LocationRepositoryImpl();
+		this.cityLocationWrapper = FlipChaseObjectsCache.getInstance().getCityLocationWrapper();
+		if(cityLocationWrapper != null) {
+			prepareCityWiseLocatioMap(cityLocationWrapper);
+		}
 	}
 	
 	@Override
 	public void initLocation(Location location) {
-		locationRepository.initLocation(location);
 	}
 	
 	@Override
@@ -47,12 +46,14 @@ public class LocationServiceImpl implements LocationService {
 		return cityLocationWrapper;
 	}
 
+	@Override
 	public void setCityLocationWrapper(CityLocationWrapper cityLocationWrapper) {
 		this.cityLocationWrapper = cityLocationWrapper;
-		prepareCityWiseLocatioMap();
+		prepareCityWiseLocatioMap(cityLocationWrapper);
+		FlipChaseObjectsCache.getInstance().setCityLocationWrapper(cityLocationWrapper);
 	}
 
-	private void prepareCityWiseLocatioMap() {
+	private void prepareCityWiseLocatioMap(CityLocationWrapper cityLocationWrapper) {
 		cityLocationMap = new HashMap<City, List<Location>>();
 		List<City> cities = cityLocationWrapper.getCities();
 		List<Location> locations = cityLocationWrapper.getLocations();
@@ -87,4 +88,27 @@ public class LocationServiceImpl implements LocationService {
 	public List<Location> getLocationsForCity(City city) {
 		return cityLocationMap.get(city);
 	}
+
+	@Override
+	public City getCityWithId(String cityId) {
+		List<City> cities = getAllCities();
+		for(City city : cities) {
+			if(city.getId().equalsIgnoreCase(cityId)) {
+				return city;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Location getLocationWithId(String locationId, City city) {
+		List<Location> locations = getLocationsForCity(city);
+		for(Location location : locations) {
+			if(location.getId().equalsIgnoreCase(locationId)) {
+				return location;
+			}
+		}
+		return null;
+	}
+
 }
