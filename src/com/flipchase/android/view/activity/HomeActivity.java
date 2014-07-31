@@ -3,6 +3,8 @@
  */
 package com.flipchase.android.view.activity;
 
+import java.util.Stack;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +20,7 @@ import android.view.View.OnClickListener;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;
 
 /**
@@ -28,6 +31,9 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	
 	private ActionBar mBar;
 	private ViewPager mHomeViewPager;
+	
+	private Stack<StoreCatalogue> mProductDataStack;
+	private StoreCatalogue mLatestCatalogData;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +58,11 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 		return super.onCreateOptionsMenu(menu);
 	}
 	
-	
+	public Stack<StoreCatalogue> getStoreCatalogueDataStack() {
+		if (mProductDataStack == null)
+			mProductDataStack = new Stack<StoreCatalogue>();
+		return mProductDataStack;
+	}
 	
 	
 	/**
@@ -141,4 +151,7 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public StoreCatalogue getCatalogDataIfDataIsExist() {
+        return mLatestCatalogData;
+    }
 }

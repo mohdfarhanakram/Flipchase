@@ -12,9 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.extlibpro.CataloguesData;
 import com.flipchase.android.extlibpro.FlipBookLog;
 import com.flipchase.android.extlibpro.IO;
-import com.flipchase.android.extlibpro.CataloguesData;
 import com.flipchase.android.extlibpro.UI;
 import com.flipchase.android.view.activity.ImageDisplayActivity;
 
@@ -24,19 +24,19 @@ public class CataloguePageAdapter extends BaseAdapter {
 
   private int repeatCount = 1;
 
-  private List<CataloguesData.Data> travelData;
+  private List<CataloguesData.Data> catalogueData;
 
   private Context activityContext;
   
   public CataloguePageAdapter(Context context) {
 	activityContext = context;
     inflater = LayoutInflater.from(context);
-    travelData = new ArrayList<CataloguesData.Data>(CataloguesData.IMG_DESCRIPTIONS);
+    catalogueData = new ArrayList<CataloguesData.Data>(CataloguesData.IMG_DESCRIPTIONS);
   }
 
   @Override
   public int getCount() {
-    return travelData.size() * repeatCount;
+    return catalogueData.size() * repeatCount;
   }
 
   public int getRepeatCount() {
@@ -65,7 +65,7 @@ public class CataloguePageAdapter extends BaseAdapter {
       FlipBookLog.d("created new view from adapter: %d", position);
     }
 
-    final CataloguesData.Data data = travelData.get(position % travelData.size());
+    final CataloguesData.Data data = catalogueData.get(position % catalogueData.size());
 
     UI
     .<ImageView>findViewById(layout, R.id.photo)
@@ -110,8 +110,8 @@ public class CataloguePageAdapter extends BaseAdapter {
   }
 
   public void removeData(int index) {
-    if (travelData.size() > 1) {
-      travelData.remove(index);
+    if (catalogueData.size() > 1) {
+    	catalogueData.remove(index);
     }
   }
 }

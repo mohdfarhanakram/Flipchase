@@ -27,4 +27,7 @@ public final class URLConstants {
 	public static final String GET_ALL_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllLocations";
 	public static final String GET_LOCATIONS_FOR_CITY = BASE_LOCATION_URL + "/getLocationsForCity/{cityid}";
 	public static final String GET_ALL_CITIES_AND_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllCitiAndLocations";
+	
+	public static final String EXTRA_URL = "url";
+	public static final String INTENT_SOURCE_ACTIVITY = "source_activity";
 }

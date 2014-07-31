@@ -26,5 +26,7 @@ public class AppConstants {
     
     /** Alerts **/
     public static final String NETWORK_CONNECTION_ERROR = "Please Check your network connection";
+    
+    public static final int MAX_CATALOG_STACK_SIZE = 3;
 
 }

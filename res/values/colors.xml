@@ -11,5 +11,6 @@
     <color name="trinary_color">#f3f3f3</color>
     <color name="dark_grey">#cccccc</color>
     <color name="txt_color_dark_grey_nine">#999999</color>
+    <color name="refine_btn_bg_color">#999999</color>
     
 </resources>

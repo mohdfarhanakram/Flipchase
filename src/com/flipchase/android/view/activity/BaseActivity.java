@@ -4,6 +4,7 @@
 package com.flipchase.android.view.activity;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -41,6 +42,7 @@ import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.network.VolleyHelper;
 import com.flipchase.android.network.volley.Response;
 import com.flipchase.android.network.volley.VolleyError;
+import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.parser.BaseParser;
 import com.flipchase.android.parser.IParser;
 import com.flipchase.android.util.StringUtils;
@@ -53,18 +55,26 @@ import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewExpand
  * @author m.farhan
  *
  */
-abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCollapsedEventListener, OnSearchViewExpandedEventListener,
+public abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCollapsedEventListener, OnSearchViewExpandedEventListener,
 	View.OnFocusChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener ,
 	Response.Listener, Response.ErrorListener, IScreenView {
 	
-	protected Menu mMenu;
+	public Menu mMenu;
 	private MenuItem mSearchMenuItem;
 	private static final int SEARCH = 1000120;
 	private FlipdchaseSearchView mSearchView;
+	protected static HashMap<String, Object> mRetainedObjects = new HashMap<String, Object>();
 	public ProgressDialog mProgressDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+            restoreParcelableData(savedInstanceState);
+            Object retainedObj = mRetainedObjects.get(getClass().getName());
+            if (retainedObj != null)
+                restoreNonParcelableData(retainedObj);
+            mRetainedObjects.remove(getClass().getName());
+        }
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
@@ -113,6 +123,52 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
 
     }
      
+    /**
+     * Callback method for restoring saved parcelable dat
+     *
+     * @param savedInstanceState bundle object containing the saved data
+     */
+    protected void restoreParcelableData(Bundle savedInstanceState) {
+
+    }
+
+
+    /**
+     * Callback method for restoring the non parcelable objects across orientation change
+     *
+     * @param retainedObject
+     */
+    protected void restoreNonParcelableData(Object retainedObject) {
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        saveParcelableInstances(outState);
+        mRetainedObjects.put(getClass().getName(), getNonParcelableInstances());
+        super.onSaveInstanceState(outState);
+
+
+    }
+
+    /**
+     * Callback method for saving the parcelable instances across Orientation changes
+     *
+     * @param bundle Bundle object to put the data in
+     */
+    protected void saveParcelableInstances(Bundle bundle) {
+
+    }
+
+    /**
+     * This method should return the non parcelable instance to be retained across Orientation changes
+     *
+     * @return Non Parcelable objects
+     */
+    protected Object getNonParcelableInstances() {
+        return null;
+    }
+
     /**
      * Utility function for displaying progress dialog
      *
@@ -387,6 +443,15 @@ abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCol
         return displaymetrics.widthPixels;
     }
 
+    /**
+     * returns catalog stack data
+     *
+     * @return
+     */
+    public Stack<StoreCatalogue> getStoreCatalogueDataStack() {
+        return null;
+    }
+    
     /**
      * Helper method for creating search view
      *

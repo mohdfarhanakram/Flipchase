@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.flipchase.android.R;
 import com.flipchase.android.R.id;
-import com.flipchase.android.cache.FlipChaseObjectsCache;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
@@ -61,6 +60,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	
 	private City mCity = null;
 	private Location mLocation = null;
+	private boolean isCityLocationsDataCached = false;
 
 	// Google Map
 	private GoogleMap googleMap;
@@ -86,6 +86,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			mCity = locationService.getCityWithId(selectedCityId);
 			String selectedLocationId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION, "", this);
 			mLocation = locationService.getLocationWithId(selectedLocationId, mCity);
+			isCityLocationsDataCached = true;
 			init();
 		}
 	}
@@ -176,6 +177,15 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         .show();
 	}
 	
+
+	/** Currently commented because SharedInstance is null every time ... NEED TO FIX **/
+	/*
+	@Override
+    protected boolean isDataExists() {
+        return isCityLocationsDataCached;
+    }
+    */
+
 	/**
 	 * On screen load this method is called, so call the webservice to fetch data
 	 */
@@ -184,8 +194,11 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         super.requestData(event, data);
         switch (event) {
             default:
-                showProgressDialog("Loading");
-                fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
+            	/** SHOULD BE REMOVED  ... SHOULD USE isDataExists **/
+            	if(!isCityLocationsDataCached) {
+            		showProgressDialog("Loading...");
+                    fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
+            	}
                 break;
         }
     }
@@ -223,11 +236,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			showLocationPopup();
 			break;
 		case id.done:
-			if(mIsComingFromSplash){
-				Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
-				startActivity(i);
-			}
-			finish();
+			Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
+			startActivity(i);
+			//DK:comment out
+			//finish();
 			break;
 		default:
 			break;
