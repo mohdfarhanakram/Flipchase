@@ -7,16 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.flipchase.android.parcels.StoreItem;
-import com.flipchase.android.view.widget.CustomFontTextView;
+import com.flipchase.android.R;
+import com.flipchase.android.domain.Retailer;
 
 public class StoreAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Activity mContext;
-    private List<StoreItem> items;
+    private List<Retailer> items;
 
     private int mImageHeight;
     private int mImageWidth;
@@ -35,7 +35,7 @@ public class StoreAdapter extends BaseAdapter {
         mContext = context;
     }
 
-    public void setItems(List<StoreItem> items) {
+    public void setItems(List<Retailer> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -52,8 +52,9 @@ public class StoreAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        int colCount = mContext.getResources().getInteger(1);
-        return position < colCount ? VIEW_TYPE_FIRST_ROW : (getRowNo(position)==getRowNo(items.size()-1)? VIEW_TYPE_LAST_ROW : VIEW_TYPE_NORMAL_ROW);
+    	return 1;
+        //int colCount = mContext.getResources().getInteger(1);
+        //return position < colCount ? VIEW_TYPE_FIRST_ROW : (getRowNo(position)==getRowNo(items.size()-1)? VIEW_TYPE_LAST_ROW : VIEW_TYPE_NORMAL_ROW);
     }
 
     /**
@@ -97,20 +98,17 @@ public class StoreAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) row.getTag();
         }
-        StoreItem itemDetail = items.get(position);
+        Retailer itemDetail = items.get(position);
+        holder.textViewItem.setText(itemDetail.getName());
 //        picassoLoad(Utils.changeImageUrl(itemDetail.getImage(),mSuffix), holder.itemPic);
         // picassoLoad(itemDetail.getImage(), holder.itemPic);
         return row;
     }
 
     private View getRowView() {
-        View row = null ;////inflater.inflate(R.layout.row_grid_item, null, false);
+        View row = inflater.inflate(R.layout.row_grid_item, null, false);
         ViewHolder holder = new ViewHolder();
-        holder.addToShortListImgview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        holder.textViewItem = (TextView) row.findViewById(R.id.textViewItem);
         row.setTag(holder);
         return row;
     }
@@ -123,18 +121,7 @@ public class StoreAdapter extends BaseAdapter {
      * View Holder for grid row view.
      */
     public static class ViewHolder {
-        public ImageView itemPic;
-        public ImageView offer;
-        public ImageView addToShortListImgview;
-        public CustomFontTextView brandName;
-        public CustomFontTextView itemName;
-        public CustomFontTextView price;
-        public CustomFontTextView discount;
-        public CustomFontTextView mSpecialPrice;
-        public CustomFontTextView mOffer;
-        //     public CustomFontTextView mOfferDummy;
-        public CustomFontTextView priceDummy;
-
+        public TextView textViewItem;
     }
 
     public void setImageHeightWidth(int imageHeight, int imageWidth) {

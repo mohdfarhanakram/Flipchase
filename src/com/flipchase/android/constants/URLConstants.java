@@ -9,24 +9,30 @@ public final class URLConstants {
 	//public static final String BASE_URL = "http://203.124.96.154:8080";
 		
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
-	//public static final String BASE_CATALOGUE_URL = BASE_URL;
 	public static final String BASE_LOCATION_URL = BASE_URL + "/location";
+	public static final String BASE_RETAILER_URL = BASE_URL + "/retailer";
 	
 	public static final String GET_ALL_CATEGORY_URL = "http://10.0.2.2:8080/catalogue/getCataloguesForCategory/1";
 	
 
 	public static final String GET_LOCATIONS_FOR_CITY_URL = "http://203.124.96.154:8080//getLocationsForCity/1";
 	
+	/************************** INIT WEBSERVICE FOR APP ***********************************************/
+	public static final String INITIALIZE_LOCATION_URL = BASE_LOCATION_URL + "/initSettings";
+	
 	/************************** CATALOGUE ***********************************************/
 	public static final String GET_LATEST_CATEGORY_URL = BASE_CATALOGUE_URL + "/getLatestCatalogues";
 	public static final String GET_CATALOGUE_PAGES_FOR_CATEGORY_URL = BASE_CATALOGUE_URL + "/getCataloguePages/{catalogueid}";
 
 	/************************** LOCATION ***********************************************/
-	public static final String INITIALIZE_LOCATION_URL = BASE_LOCATION_URL + "/initSettings";
 	public static final String GET_ALL_CITIES_URL = BASE_LOCATION_URL + "/getAllCities";
 	public static final String GET_ALL_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllLocations";
 	public static final String GET_LOCATIONS_FOR_CITY = BASE_LOCATION_URL + "/getLocationsForCity/{cityid}";
 	public static final String GET_ALL_CITIES_AND_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllCitiAndLocations";
+	
+	/************************** RETAILERS ***********************************************/
+	public static final String GET_ALL_RETAILERS_URL = BASE_RETAILER_URL + "/getAllRetailers";
+	public static final String GET_STORES_FOR_RETAILER = BASE_RETAILER_URL + "/getStoresForRetailer/{retailerId}";
 	
 	public static final String EXTRA_URL = "url";
 	public static final String INTENT_SOURCE_ACTIVITY = "source_activity";

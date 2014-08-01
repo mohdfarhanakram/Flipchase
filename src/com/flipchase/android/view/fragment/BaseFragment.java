@@ -197,7 +197,6 @@ public class BaseFragment extends Fragment implements IScreenView, SearchView.On
 
 	@Override
 	public void updateUi(ServiceResponse response) {
-		// TODO Auto-generated method stub
 		
 	}
 

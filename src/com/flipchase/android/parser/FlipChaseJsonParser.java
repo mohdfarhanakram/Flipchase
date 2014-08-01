@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
+import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.util.Utils;
 
 public class FlipChaseJsonParser {
@@ -79,4 +80,21 @@ public class FlipChaseJsonParser {
     	return cityLocationWrapper;
     }
 
+    public static List<Retailer> parseRetailers(JSONObject jsonObjectData) throws JSONException {
+    	Retailer[] retailers = null;
+    	if (Utils.isJsonArray(jsonObjectData, "response")) {
+            JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
+            String json = itemsJsonArray.toString();
+            JsonFactory jsonFactory = new JsonFactory();
+            try {
+				JsonParser jp = jsonFactory.createJsonParser(json);
+				retailers = objectMapper.readValue(jp, Retailer[].class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        }
+    	return Arrays.asList(retailers);
+    }
 }

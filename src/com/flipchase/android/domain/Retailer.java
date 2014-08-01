@@ -2,19 +2,19 @@ package com.flipchase.android.domain;
 
 public class Retailer extends BaseDomain {
 
-	private Photo photo;
+	private Long photo;
 	
 	private String description;
 	
 	private String description1;
 	
-	private String photoPath;
+	private String photo_path;
 	
-	public Photo getPhoto() {
+	public Long getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(Photo photo) {
+	public void setPhoto(Long photo) {
 		this.photo = photo;
 	}
 
@@ -34,12 +34,12 @@ public class Retailer extends BaseDomain {
 		this.description1 = description1;
 	}
 
-	public String getPhotoPath() {
-		return photoPath;
+	public String getPhoto_path() {
+		return photo_path;
 	}
 
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
+	public void setPhoto_path(String photo_path) {
+		this.photo_path = photo_path;
 	}
-	
+
 }

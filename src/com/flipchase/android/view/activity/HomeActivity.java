@@ -3,6 +3,7 @@
  */
 package com.flipchase.android.view.activity;
 
+import java.util.List;
 import java.util.Stack;
 
 import android.content.Intent;
@@ -20,6 +21,11 @@ import android.view.View.OnClickListener;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Retailer;
+import com.flipchase.android.domain.Store;
+import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;
 
@@ -34,6 +40,7 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	
 	private Stack<StoreCatalogue> mProductDataStack;
 	private StoreCatalogue mLatestCatalogData;
+	private HomeFragmentAdapter homeFragmentAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +85,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 
 	                    }
 	                });
-		mHomeViewPager.setAdapter(new HomeFragmentAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.home_tabs)));
+		homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.home_tabs));
+		mHomeViewPager.setAdapter(homeFragmentAdapter);
 	}
 	
 	
@@ -99,7 +107,33 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
         }
     }
 
+	public void updateRetailerCatalogData(String refineUrl) {
 
+        showProgressDialog("Loading");
+        /*
+        if(mItemsGridFragment==null)
+        {
+            if(getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY) != null && getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY_EXTRA) != null)
+                Utils.postExceptionOnGA("Error in updateCatalogData of CatalogActivity \r\n mItemsGridFragment=null  \r\n Calling Activity: "+getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY)+" \r\n Extras: "+getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY_EXTRA)+" \n sessionid: "+getSessionId(),false);
+        }
+        mItemsGridFragment.setRefineFilterUrl(refineUrl, "");
+        */
+        fetchData(URLConstants.GET_ALL_RETAILERS_URL, FlipchaseApi.GET_ALL_RETAILERS, null);
+    }
+
+	@Override
+	public void updateUi(ServiceResponse response) {
+		super.updateUi(response);
+		removeProgressDialog();
+		if (response.getErrorCode() == ServiceResponse.EXCEPTION) {
+            showCommonError("Error Occured...");
+        } else if (response.getErrorCode() == ServiceResponse.SUCCESS) {
+            if (response.getFlipChaseBaseModel().isSuccess()) {
+            	homeFragmentAdapter.updateFragmentUI(response);
+            }
+        }
+	}
+	
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub

@@ -206,17 +206,22 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	@Override
     public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
-		
-		switch (response.getEventType()) {
-		case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS:
-			CityLocationWrapper cityLocationWrapper = (CityLocationWrapper) response.getResponseObject();
-			locationService.setCityLocationWrapper(cityLocationWrapper);
-			setDefaultCityLocationsAfterFetchingData();
-			break;
-		default:
-			break;
-		}
 		removeProgressDialog();
+        if (response.getErrorCode() == ServiceResponse.EXCEPTION) {
+            showCommonError("Error Occured...");
+        } else if (response.getErrorCode() == ServiceResponse.SUCCESS) {
+            if (response.getFlipChaseBaseModel().isSuccess()) {
+            	switch (response.getEventType()) {
+        		case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS:
+        			CityLocationWrapper cityLocationWrapper = (CityLocationWrapper) response.getResponseObject();
+        			locationService.setCityLocationWrapper(cityLocationWrapper);
+        			setDefaultCityLocationsAfterFetchingData();
+        			break;
+        		default:
+        			break;
+        		}
+            }
+        }
     }
 	
 	private void setDefaultCityLocationsAfterFetchingData() {

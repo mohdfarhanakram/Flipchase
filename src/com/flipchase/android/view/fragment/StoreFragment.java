@@ -3,10 +3,13 @@
  */
 package com.flipchase.android.view.fragment;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -17,7 +20,7 @@ import android.widget.LinearLayout;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.FlipchaseApi;
-import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.volley.toolbox.ImageLoader;
 import com.flipchase.android.parcels.StoreCatalogue;
@@ -61,6 +64,12 @@ public class StoreFragment extends BaseFragment {
         mShowMoreLayout = (LinearLayout) view.findViewById(R.id.storeLayoutShowMore);
 
         mItemsGrid = (StoreListView) view.findViewById(R.id.storeListItems);
+        if (null == mItemsGridAdapter) {
+            mItemsGridAdapter = new StoreAdapter(getActivity());
+        }
+       // mItemsGridAdapter.setImageHeightWidth(mImageHeight, mImageWidth);
+            mItemsGrid.setAdapter(mItemsGridAdapter);
+            mItemsGridAdapter.notifyDataSetChanged();
         mItemsGrid.setOnScrollListener(new OnScrollListener() {
         	
             @Override
@@ -82,17 +91,17 @@ public class StoreFragment extends BaseFragment {
 
             }
         });
-        /*
-        mRefineButton = (CustomFontTextView) view.findViewById(R.id.refineButton);
+        
+        mRefineButton = (CustomFontTextView) view.findViewById(R.id.storeRefineButton);
         mRefineButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                openFilterActivity();
+                //openFilterActivity();
             }
         });
-		*/
-        
+		
+        /*
         if(getArguments().getString(URLConstants.EXTRA_URL) != null)
             mRefineUrl = getArguments().getString(URLConstants.EXTRA_URL);
         else
@@ -104,19 +113,17 @@ public class StoreFragment extends BaseFragment {
             mRefineUrl="";
         }
 
-
+		*/
         if (savedInstanceState != null) {  // this case is handled if do not keep activity is true, keep a boolean value that
         }
 
         mStoreData = ((HomeActivity) getActivity()).getCatalogDataIfDataIsExist();  //orientation of device is changed then get the exist data.
 
-        /** DK:
         if (mStoreData == null) {
-            ((HomeActivity) getActivity()).updateCatalogData(getRefineURL());
+            ((HomeActivity) getActivity()).updateRetailerCatalogData("");
         } else {
-            drawCatalogData();
+            //drawCatalogData();
         }
-		**/
         setStoreItemClick();
         /** DK:
         if (getActivity() instanceof HomeActivity) {
@@ -133,6 +140,14 @@ public class StoreFragment extends BaseFragment {
         return view;
 	}
 
+	@Override
+	public void updateUi(ServiceResponse response) {
+		super.updateUi(response);
+		List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
+		 ((StoreAdapter) mItemsGrid.getAdapter()).setItems(retailers);
+		 mItemsGridAdapter.notifyDataSetChanged();
+	}
+	
 	/**
      * loads more Store data
      */
@@ -267,7 +282,7 @@ public class StoreFragment extends BaseFragment {
             	storeCatalogue = new StoreCatalogue();
 
             mStoreData.getItems().addAll(storeCatalogue.getItems());
-            ((StoreAdapter) mItemsGrid.getAdapter()).setItems(mStoreData.getItems());
+            //((StoreAdapter) mItemsGrid.getAdapter()).setItems(mStoreData.getItems());
             mTotalCatalog = mStoreData.getTotal();
 
             int pId = mStoreData.getPageId();
