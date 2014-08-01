@@ -8,17 +8,19 @@
 
     <com.flipchase.android.view.widget.RetailerListView
             android:background="#ffffff"
-            android:id="@+id/retailerListItems"
+            android:id="@+id/storeListItems"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:numColumns="auto_fit"
             android:stretchMode="spacingWidth"
             android:scrollbarStyle="outsideOverlay"
             android:scrollingCache="false"
+
+
             />
 
     <LinearLayout
-            android:id="@+id/retailerLayoutShowMore"
+            android:id="@+id/storeLayoutShowMore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -33,7 +35,7 @@
         
         <com.flipchase.android.view.widget.CustomFontTextView
 
-                android:id="@+id/retailerFilterButton"
+                android:id="@+id/storeFilterButton"
                 android:layout_width="@dimen/catalog_page_refine_button_width"
                 android:layout_height="@dimen/catalog_page_refine_button_height"
                 android:textSize="@dimen/catalog_page_refine_button_text_size"

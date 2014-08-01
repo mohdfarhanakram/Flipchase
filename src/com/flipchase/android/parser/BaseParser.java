@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.JsonKey;
 import com.flipchase.android.model.ServiceResponse;
-import com.flipchase.android.response.MetaData;
 import com.flipchase.android.response.common.FlipChaseBaseModel;
 
 public class BaseParser implements IParser {
@@ -122,7 +121,7 @@ public class BaseParser implements IParser {
                 response.setResponseObject(FlipChaseJsonParser.parseRetailers(jsonObjectData));
                 break;
             case FlipchaseApi.GET_STORES_FOR_RETAILER:
-                //response.setResponseObject(FlipChaseJsonParser.parseCities(jsonObjectData));
+                response.setResponseObject(FlipChaseJsonParser.parseStoresForRetailers(jsonObjectData));
                 break;
             default:
                 break;

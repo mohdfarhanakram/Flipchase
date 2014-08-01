@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/store_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+    
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/refineLayout"
+            android:gravity="center"
+            android:visibility="visible"
+            android:clickable="false"
+            android:background="@drawable/catalog_footer_bg"
+            android:layout_alignParentBottom="true"
+            >
+
+        <com.flipchase.android.view.widget.CustomFontTextView
+
+                android:id="@+id/filterButton"
+                android:layout_width="@dimen/catalog_page_refine_button_width"
+                android:layout_height="@dimen/catalog_page_refine_button_height"
+                android:textSize="@dimen/catalog_page_refine_button_text_size"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:clickable="true"
+                android:background="@drawable/bg_btn_refine"
+                android:text="@string/filter_txt" />
+    </LinearLayout>
+
+</RelativeLayout>

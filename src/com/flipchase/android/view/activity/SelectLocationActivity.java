@@ -49,7 +49,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @author m.farhan
  *
  */
-public class SelectLocationActivity extends BaseActivity implements View.OnClickListener{
+public class SelectLocationActivity extends BaseActivity implements View.OnClickListener {
 
 	private LocationService locationService = new LocationServiceImpl();
 	private AlertDialog alertDialogCities;

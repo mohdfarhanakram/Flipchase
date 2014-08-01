@@ -5,7 +5,7 @@ package com.flipchase.android.constants;
 public final class URLConstants {
 
 	public static final String BASE_URL = "http://10.0.2.2:8080";
-	//public static final String BASE_URL = "http://192.168.1.11:8080";
+	//public static final String BASE_URL = "http://192.168.1.12:8080";
 	//public static final String BASE_URL = "http://203.124.96.154:8080";
 		
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
@@ -32,7 +32,7 @@ public final class URLConstants {
 	
 	/************************** RETAILERS ***********************************************/
 	public static final String GET_ALL_RETAILERS_URL = BASE_RETAILER_URL + "/getAllRetailers";
-	public static final String GET_STORES_FOR_RETAILER = BASE_RETAILER_URL + "/getStoresForRetailer/{retailerId}";
+	public static final String GET_STORES_FOR_RETAILER_URL = BASE_RETAILER_URL + "/getStoresForRetailer/{retailerId}";
 	
 	public static final String EXTRA_URL = "url";
 	public static final String INTENT_SOURCE_ACTIVITY = "source_activity";

@@ -6,6 +6,7 @@ package com.flipchase.android.view.fragment;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,10 @@ import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.volley.toolbox.ImageLoader;
 import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.view.activity.HomeActivity;
-import com.flipchase.android.view.adapter.StoreAdapter;
+import com.flipchase.android.view.activity.RetailerStoresActivity;
+import com.flipchase.android.view.adapter.RetailerAdapter;
 import com.flipchase.android.view.widget.CustomFontTextView;
-import com.flipchase.android.view.widget.StoreListView;
+import com.flipchase.android.view.widget.RetailerListView;
 
 /**
  * @author m.farhan
@@ -35,11 +37,11 @@ import com.flipchase.android.view.widget.StoreListView;
  */
 public class StoreFragment extends BaseFragment {
 	
- 	private StoreListView mItemsGrid;
+ 	private RetailerListView mItemsListView;
     private String mRefineUrl = "";
     private String mFilterUrl = "";
     private StoreCatalogue mStoreData;
-    private StoreAdapter mItemsGridAdapter;
+    private RetailerAdapter mItemsListAdapter;
     private ImageLoader mImageLoader;
     private LinearLayout mShowMoreLayout;
     private int mTotalCatalog = 0;
@@ -59,18 +61,18 @@ public class StoreFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_items_grid, container, false);
-		mRefineLayout = (LinearLayout) (view.findViewById(R.id.storeRefineLayout));
+		mRefineLayout = (LinearLayout) (view.findViewById(R.id.retailerRefineLayout));
         //initializeImageWidthHeight();
-        mShowMoreLayout = (LinearLayout) view.findViewById(R.id.storeLayoutShowMore);
+        mShowMoreLayout = (LinearLayout) view.findViewById(R.id.retailerLayoutShowMore);
 
-        mItemsGrid = (StoreListView) view.findViewById(R.id.storeListItems);
-        if (null == mItemsGridAdapter) {
-            mItemsGridAdapter = new StoreAdapter(getActivity());
+        mItemsListView = (RetailerListView) view.findViewById(R.id.retailerListItems);
+        if (null == mItemsListAdapter) {
+        	mItemsListAdapter = new RetailerAdapter(getActivity());
         }
        // mItemsGridAdapter.setImageHeightWidth(mImageHeight, mImageWidth);
-            mItemsGrid.setAdapter(mItemsGridAdapter);
-            mItemsGridAdapter.notifyDataSetChanged();
-        mItemsGrid.setOnScrollListener(new OnScrollListener() {
+        mItemsListView.setAdapter(mItemsListAdapter);
+        mItemsListAdapter.notifyDataSetChanged();
+            mItemsListView.setOnScrollListener(new OnScrollListener() {
         	
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -92,7 +94,7 @@ public class StoreFragment extends BaseFragment {
             }
         });
         
-        mRefineButton = (CustomFontTextView) view.findViewById(R.id.storeRefineButton);
+        mRefineButton = (CustomFontTextView) view.findViewById(R.id.retailerRefineButton);
         mRefineButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -143,9 +145,23 @@ public class StoreFragment extends BaseFragment {
 	@Override
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
-		List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
-		 ((StoreAdapter) mItemsGrid.getAdapter()).setItems(retailers);
-		 mItemsGridAdapter.notifyDataSetChanged();
+		switch (response.getEventType()) {
+		case FlipchaseApi.GET_ALL_RETAILERS:
+			List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
+			 ((RetailerAdapter) mItemsListView.getAdapter()).setItems(retailers);
+			 mItemsListAdapter.notifyDataSetChanged();
+			break;
+		case FlipchaseApi.GET_STORES_FOR_RETAILER:
+			/* DK: WHEN SHOULD WE DOWNLOAD THE DATA
+			List<Store> stores = (List<Store>)response.getResponseObject();
+			Intent i = new Intent(getActivity(),
+					RetailerStoresActivity.class);
+			startActivity(i);
+			*/
+			break;
+		default:
+			break;
+		}
 	}
 	
 	/**
@@ -185,8 +201,8 @@ public class StoreFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (mItemsGridAdapter != null)
-            mItemsGridAdapter.setContext(activity);
+        if (mItemsListAdapter != null)
+        	mItemsListAdapter.setContext(activity);
     }
     
     /**
@@ -210,11 +226,16 @@ public class StoreFragment extends BaseFragment {
      * set grid item click listener
      */
     private void setStoreItemClick() {
-        mItemsGrid.setOnItemClickListener(new OnItemClickListener() {
+    	mItemsListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View View,
-                                    int position, long arg3) {
+            public void onItemClick(AdapterView<?> adapterView, View arg1, int position,
+            		long arg3) {
+            	Intent i = new Intent(getActivity(),
+    					RetailerStoresActivity.class);
+            	Retailer retailer = (Retailer) adapterView.getItemAtPosition(position);
+            	i.putExtra("retailerId", retailer.getId());
+            	startActivity(i);
             }
         });
     }

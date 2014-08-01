@@ -1,6 +1,10 @@
 package com.flipchase.android.domain;
 
-public abstract class BaseDomain {
+import java.io.Serializable;
+
+public abstract class BaseDomain implements Serializable {
+
+	private static final long serialVersionUID = 2453732863760632378L;
 
 	protected String id;
 	

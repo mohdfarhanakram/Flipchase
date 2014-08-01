@@ -3,7 +3,6 @@
  */
 package com.flipchase.android.view.activity;
 
-import java.util.List;
 import java.util.Stack;
 
 import android.content.Intent;
@@ -23,8 +22,6 @@ import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
-import com.flipchase.android.domain.Retailer;
-import com.flipchase.android.domain.Store;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;

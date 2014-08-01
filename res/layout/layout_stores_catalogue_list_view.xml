@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <ImageView
+        android:id="@+id/catalogImg"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/catalog_row_height"
+        android:scaleType="fitCenter"
+        android:src="@drawable/flip" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <com.flipchase.android.view.widget.CustomFontTextView
+            android:id="@+id/catalog_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Farhan"
+            android:textColor="@color/catalog_text_color"
+            android:textSize="@dimen/catalog_text_size"
+            android:textStyle="bold" >
+        </com.flipchase.android.view.widget.CustomFontTextView>
+
+        <com.flipchase.android.view.widget.CustomFontTextView
+            android:id="@+id/cata_expiry_time_txtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/catalog_expiry_color"
+            android:textSize="@dimen/catalog_expiry_time_text_size" />
+    </LinearLayout>
+
+</LinearLayout>

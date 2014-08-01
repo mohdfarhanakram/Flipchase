@@ -67,11 +67,10 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 	public void updateFragmentUI(ServiceResponse response) {
 		switch (response.getEventType()) {
 		case FlipchaseApi.GET_ALL_RETAILERS:
-			List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
 			storeFragment.updateUi(response);
 			break;
 		case FlipchaseApi.GET_STORES_FOR_RETAILER:
-			List<Store> stores = (List<Store>)response.getResponseObject();
+			storeFragment.updateUi(response);
 			break;
 		default:
 			break;
