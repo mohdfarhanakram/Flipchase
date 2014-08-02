@@ -26,6 +26,9 @@ public interface FlipchaseApi {
 	 public static final int GET_ALL_RETAILERS = 6;
 	 public static final int GET_STORES_FOR_RETAILER = 7;
 	 
+	 public static final int GET_LATEST_CATALOGUES = 8;
+	 public static final int GET_CATALOGUE_PAGES_FOR_CATALOGUE = 9;
+	 
 	 public static final int API_STORE_SHOW_MORE = 10;
 
 }

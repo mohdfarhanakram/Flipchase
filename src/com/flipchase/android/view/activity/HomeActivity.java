@@ -104,9 +104,13 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
         }
     }
 
+	public void updateDealsCatalogueData(String refineUrl) {
+		showProgressDialog("Loading Deals Data...");
+		fetchData(URLConstants.GET_LATEST_CATEGORY_URL, FlipchaseApi.GET_LATEST_CATALOGUES, null);
+	}
+	
 	public void updateRetailerCatalogData(String refineUrl) {
-
-        showProgressDialog("Loading");
+        showProgressDialog("Loading Retailer Data...");
         /*
         if(mItemsGridFragment==null)
         {

@@ -123,6 +123,12 @@ public class BaseParser implements IParser {
             case FlipchaseApi.GET_STORES_FOR_RETAILER:
                 response.setResponseObject(FlipChaseJsonParser.parseStoresForRetailers(jsonObjectData));
                 break;
+            case FlipchaseApi.GET_LATEST_CATALOGUES:
+                response.setResponseObject(FlipChaseJsonParser.parseLatestCatalogues(jsonObjectData));
+                break;
+            case FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE:
+                response.setResponseObject(FlipChaseJsonParser.parseCataloguePagesForCatalogue(jsonObjectData));
+                break;
             default:
                 break;
         }

@@ -30,6 +30,7 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 	private String[] mTabOptionList;
 	private FragmentManager fragmentManager;
 	private StoreFragment storeFragment;
+	private DealsFragment dealsFragment;
 	
 	public HomeFragmentAdapter(FragmentManager fm,String[] tabOptionList) {
 		super(fm);
@@ -45,7 +46,8 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 		BaseFragment fragment = null;
 		
 		if(tabOption.equalsIgnoreCase(AppConstants.CATALOGUE_FRAGMENT)){
-			fragment = new DealsFragment();
+			dealsFragment = new DealsFragment();
+			fragment = dealsFragment;
 		}else if(tabOption.equalsIgnoreCase(AppConstants.STORE_FRAGMENT)){
 			storeFragment = new StoreFragment();
 			fragment = storeFragment;
@@ -72,6 +74,8 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 		case FlipchaseApi.GET_STORES_FOR_RETAILER:
 			storeFragment.updateUi(response);
 			break;
+		case FlipchaseApi.GET_LATEST_CATALOGUES:
+			dealsFragment.updateUi(response);
 		default:
 			break;
 		}

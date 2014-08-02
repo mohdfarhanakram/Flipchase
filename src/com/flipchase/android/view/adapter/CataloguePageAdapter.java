@@ -1,10 +1,10 @@
 package com.flipchase.android.view.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.flipchase.android.R;
-import com.flipchase.android.extlibpro.CataloguesData;
+import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.extlibpro.FlipBookLog;
-import com.flipchase.android.extlibpro.IO;
-import com.flipchase.android.extlibpro.UI;
+import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.view.activity.ImageDisplayActivity;
 
 public class CataloguePageAdapter extends BaseAdapter {
@@ -24,19 +23,30 @@ public class CataloguePageAdapter extends BaseAdapter {
 
   private int repeatCount = 1;
 
-  private List<CataloguesData.Data> catalogueData;
+  private List<CataloguePage> catalogueData;
 
   private Context activityContext;
   
-  public CataloguePageAdapter(Context context) {
+  public CataloguePageAdapter(Context context, List<CataloguePage> catalogueData) {
 	activityContext = context;
     inflater = LayoutInflater.from(context);
-    catalogueData = new ArrayList<CataloguesData.Data>(CataloguesData.IMG_DESCRIPTIONS);
+    this.catalogueData = catalogueData;
   }
 
+  public CataloguePageAdapter(Context context) {
+		activityContext = context;
+	    inflater = LayoutInflater.from(context);
+  }
+  
+  public void setItems(List<CataloguePage> items) {
+      this.catalogueData = items;
+      notifyDataSetChanged();
+  }
+  
   @Override
   public int getCount() {
-    return catalogueData.size() * repeatCount;
+	  return catalogueData == null ? 0 : catalogueData.size() * repeatCount;
+    //return catalogueData.size() * repeatCount;
   }
 
   public int getRepeatCount() {
@@ -61,20 +71,23 @@ public class CataloguePageAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     View layout = convertView;
     if (convertView == null) {
-      layout = inflater.inflate(R.layout.complex1, null);
+      layout = inflater.inflate(R.layout.horizontal_flip_book_layout, null);
       FlipBookLog.d("created new view from adapter: %d", position);
     }
 
-    final CataloguesData.Data data = catalogueData.get(position % catalogueData.size());
+    final CataloguePage data = catalogueData.get(position % catalogueData.size());
 
+    ImageView iv =(ImageView) layout.findViewById(R.id.photo);
+    picassoLoad(data.getPhoto_path(), iv);
+    /*
     UI
     .<ImageView>findViewById(layout, R.id.photo)
     .setImageBitmap(IO.readBitmap(inflater.getContext().getAssets(), data.imageFilename));
-    ImageView iv =(ImageView) layout.findViewById(R.id.photo);
+    */
     iv.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
         	Intent i = new Intent(activityContext, ImageDisplayActivity.class);      
-        	i.putExtra("selectedImageName", data.imageFilename);
+        	i.putExtra("selectedImageName", "00002.png");
         	activityContext.startActivity(i);
         }
     });
@@ -109,6 +122,10 @@ public class CataloguePageAdapter extends BaseAdapter {
     return layout;
   }
 
+  private void picassoLoad(String url, ImageView imageView) {
+		PicassoEx.getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
+  }
+  
   public void removeData(int index) {
     if (catalogueData.size() > 1) {
     	catalogueData.remove(index);

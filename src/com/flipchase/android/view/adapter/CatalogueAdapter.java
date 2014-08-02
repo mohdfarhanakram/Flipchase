@@ -3,13 +3,7 @@
  */
 package com.flipchase.android.view.adapter;
 
-import java.util.ArrayList;
-
-import com.flipchase.android.R;
-import com.flipchase.android.domain.Catalogue;
-import com.flipchase.android.util.PicassoEx;
-import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
-import com.flipchase.android.view.widget.CustomFontTextView;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +14,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.flipchase.android.R;
+import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.util.PicassoEx;
+import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
+import com.flipchase.android.view.widget.CustomFontTextView;
+
 /**
  * @author m.farhan
  *
@@ -27,15 +28,20 @@ import android.widget.ImageView;
 public class CatalogueAdapter extends BaseAdapter{
 
 	private Context mContext;
-	private ArrayList<Catalogue> mCataArrayList;
+	private List<Catalogue> mCataArrayList;
 	private LayoutInflater mInflater;
 
-	public CatalogueAdapter(Context context, ArrayList<Catalogue> cataArrayList){
+	public CatalogueAdapter(Context context, List<Catalogue> cataArrayList){
 		mContext = context;
 		mCataArrayList = cataArrayList;
 		mInflater = LayoutInflater.from(context);
 	}
 
+	public void setItems(List<Catalogue> items) {
+        this.mCataArrayList = items;
+        notifyDataSetChanged();
+    }
+	
 	@Override
 	public int getCount() {
 		return mCataArrayList==null ? 0 : mCataArrayList.size();
@@ -43,8 +49,7 @@ public class CatalogueAdapter extends BaseAdapter{
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
+		return mCataArrayList.get(position);
 	}
 
 	@Override
@@ -86,19 +91,15 @@ public class CatalogueAdapter extends BaseAdapter{
 		holder.catalogueName.setText(catalogue.getDisplayName());
 		holder.catalogueExpiry.setText(catalogue.getExpiryDate());
 		
-		picassoLoad(catalogue.getPhoto_thumb_path(), holder.catalogueImageView);
+		picassoLoad(URLConstants.IMAGE_SERVER_URL + catalogue.getPhoto_thumb_path(), holder.catalogueImageView);
 
 		return row;
 	}
 
 
 	private void picassoLoad(String url, ImageView imageView) {
-
 		PicassoEx.getPicasso(mContext).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
 	}
-
-
-
 
 	public class ViewHolder{
 		public ImageView catalogueImageView;

@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
@@ -115,5 +117,41 @@ public class FlipChaseJsonParser {
 			}
         }
     	return Arrays.asList(stores);
+    }
+    
+    public static List<Catalogue> parseLatestCatalogues(JSONObject jsonObjectData) throws JSONException {
+    	Catalogue[] catalogues = null;
+    	if (Utils.isJsonArray(jsonObjectData, "response")) {
+            JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
+            String json = itemsJsonArray.toString();
+            JsonFactory jsonFactory = new JsonFactory();
+            try {
+				JsonParser jp = jsonFactory.createJsonParser(json);
+				catalogues = objectMapper.readValue(jp, Catalogue[].class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        }
+    	return Arrays.asList(catalogues);
+    }
+    
+    public static List<CataloguePage> parseCataloguePagesForCatalogue(JSONObject jsonObjectData) throws JSONException {
+    	CataloguePage[] cataloguePages = null;
+    	if (Utils.isJsonArray(jsonObjectData, "response")) {
+            JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
+            String json = itemsJsonArray.toString();
+            JsonFactory jsonFactory = new JsonFactory();
+            try {
+				JsonParser jp = jsonFactory.createJsonParser(json);
+				cataloguePages = objectMapper.readValue(jp, CataloguePage[].class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        }
+    	return Arrays.asList(cataloguePages);
     }
 }
