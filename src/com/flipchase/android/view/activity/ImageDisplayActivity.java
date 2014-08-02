@@ -22,7 +22,7 @@ public class ImageDisplayActivity extends FragmentActivity {
 
     private List<Page> pages;
 
-    private String selectedImageName = null;
+    private String selectedImageURL = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +37,7 @@ public class ImageDisplayActivity extends FragmentActivity {
         );
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-        	selectedImageName = extras.getString("selectedImageName");
+        	selectedImageURL = extras.getString("selectedImageURL");
         }
         updatePage();
     }
@@ -55,7 +55,7 @@ public class ImageDisplayActivity extends FragmentActivity {
     }
 
     public String getSelectedImageName() {
-    	return selectedImageName;
+    	return selectedImageURL;
     }
     
     public void next() {

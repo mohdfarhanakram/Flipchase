@@ -27,7 +27,8 @@ public class ImageDisplayLargeFragment extends Fragment {
         });
         */
         SubsamplingScaleImageView imageView = (SubsamplingScaleImageView)rootView.findViewById(R.id.imageView);
-        imageView.setImageAsset(selectedImageName);
+        //imageView.setImageAsset(selectedImageName);
+        imageView.setImageFile(selectedImageName);
         return rootView;
     }
 

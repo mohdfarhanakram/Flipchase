@@ -88,7 +88,7 @@ public class CataloguePageAdapter extends BaseAdapter {
     iv.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
         	Intent i = new Intent(activityContext, ImageDisplayActivity.class);      
-        	i.putExtra("selectedImageName", "00002.png");
+        	i.putExtra("selectedImageURL", URLConstants.IMAGE_SERVER_URL + data.getPhoto_path());
         	activityContext.startActivity(i);
         }
     });

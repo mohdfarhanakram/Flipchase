@@ -30,6 +30,10 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 	    flipView = new FlipViewController(this, FlipViewController.HORIZONTAL);
 	    cataloguePageAdapter = new CataloguePageAdapter(this);
 	    flipView.setAdapter(cataloguePageAdapter);
+	    Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+        	catalogueId = extras.getString("catalogueId");
+        }
 	    setContentView(flipView);
 	  }
 

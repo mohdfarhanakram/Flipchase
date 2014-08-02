@@ -79,7 +79,8 @@ public class CatalogueAdapter extends BaseAdapter{
 			ImageView iv = holder.catalogueImageView;
 		    iv.setOnClickListener(new View.OnClickListener() {
 		        public void onClick(View v) {
-		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class);      
+		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class);  
+		        	i.putExtra("catalogueId", catalogue.getId());
 		        	mContext.startActivity(i);
 		        }
 		    });
