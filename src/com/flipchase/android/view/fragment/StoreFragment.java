@@ -122,8 +122,7 @@ public class StoreFragment extends BaseFragment {
         mStoreData = ((HomeActivity) getActivity()).getCatalogDataIfDataIsExist();  //orientation of device is changed then get the exist data.
 
         if (mStoreData == null) {
-        	//DK: Need to remove
-           // ((HomeActivity) getActivity()).updateRetailerCatalogData("");
+           ((HomeActivity) getActivity()).updateRetailerCatalogData("");
         } else {
             //drawCatalogData();
         }
