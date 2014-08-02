@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.extlibpro.FlipBookLog;
 import com.flipchase.android.util.PicassoEx;
@@ -78,7 +79,7 @@ public class CataloguePageAdapter extends BaseAdapter {
     final CataloguePage data = catalogueData.get(position % catalogueData.size());
 
     ImageView iv =(ImageView) layout.findViewById(R.id.photo);
-    picassoLoad(data.getPhoto_path(), iv);
+    picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(), iv);
     /*
     UI
     .<ImageView>findViewById(layout, R.id.photo)
