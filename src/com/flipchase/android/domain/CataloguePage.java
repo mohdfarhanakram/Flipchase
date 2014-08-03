@@ -1,8 +1,37 @@
 package com.flipchase.android.domain;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+
+import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.util.PicassoEx;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 
 public class CataloguePage extends BaseDomain {
 
+	public Bitmap cBitmap;
+	
+	private Target target = new Target() {
+	      @Override
+	      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {  
+	    	  cBitmap = bitmap;
+	      }
+
+		@Override
+		public void onBitmapFailed(Drawable arg0) {
+			System.out.println("faile");
+		}
+
+		@Override
+		public void onPrepareLoad(Drawable arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+	    };
+	
 	private Long pagenum;
 	
 	private String title;
@@ -144,4 +173,19 @@ public class CataloguePage extends BaseDomain {
 		return count;
 	}
 	
+	
+	public Bitmap getcBitmap() {
+		return cBitmap;
+	}
+
+	public void setcBitmap(Bitmap cBitmap) {
+		this.cBitmap = cBitmap;
+	}
+
+	public void loadBitmap(Context activityContext) {
+		if(cBitmap == null) {
+			PicassoEx.getPicasso(activityContext).with(activityContext).load
+			(URLConstants.IMAGE_SERVER_URL + this.photo_path).into(target);
+		}
+	}
 }

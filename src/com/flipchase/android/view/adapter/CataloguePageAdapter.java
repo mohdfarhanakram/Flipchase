@@ -79,7 +79,8 @@ public class CataloguePageAdapter extends BaseAdapter {
     final CataloguePage data = catalogueData.get(position % catalogueData.size());
 
     ImageView iv =(ImageView) layout.findViewById(R.id.photo);
-    picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(), iv);
+    iv.setImageBitmap(data.getcBitmap());
+    //picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(), iv);
     /*
     UI
     .<ImageView>findViewById(layout, R.id.photo)
@@ -124,7 +125,9 @@ public class CataloguePageAdapter extends BaseAdapter {
   }
 
   private void picassoLoad(String url, ImageView imageView) {
-		PicassoEx.getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
+	  //PicassoEx.getPicasso(activityContext).load(url).fit().into(imageView);
+	PicassoEx.getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565).placeholder( android.R.drawable.dark_header).
+	fit().into(imageView);
   }
   
   public void removeData(int index) {
