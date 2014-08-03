@@ -2,6 +2,7 @@
 package com.flipchase.android.view.activity;
 
 import java.util.List;
+import java.util.Stack;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.extlibpro.FlipViewController;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.view.adapter.CataloguePageAdapter;
 
 public class FlipHorizontalLayoutActivity extends BaseActivity {
@@ -18,6 +20,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 	  private FlipViewController flipView;
 	  private CataloguePageAdapter cataloguePageAdapter;
 	  private String catalogueId;
+	  private Stack<CataloguePagesChunk> mProductDataStack;
 	  
 	  /**
 	   * Called when the activity is first created.
@@ -47,7 +50,8 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 	            default:
 	            	showProgressDialog("Loading Latest Catalogues...");
 	            	String refinedURL = URLConstants.GET_CATALOGUE_PAGES_FOR_CATEGORY_URL.replace("{catalogueid}", catalogueId);
-	                fetchData(refinedURL, FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE, null);
+	            	refinedURL = refinedURL + "?pageid=1";
+	            	fetchData(refinedURL, FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE, null);
 	                break;
 	        }
 	    }
@@ -62,8 +66,10 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 	            if (response.getFlipChaseBaseModel().isSuccess()) {
 	            	switch (response.getEventType()) {
 	        		case FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE:
-	        			List<CataloguePage> latestCatalogues = (List<CataloguePage>) response.getResponseObject();
-	        			handleCatalogueImageLoadingData(latestCatalogues);
+	        			CataloguePagesChunk cataloguePagesChunk = (CataloguePagesChunk) response.getResponseObject();
+	        			updateTopFragmentCatalogData(cataloguePagesChunk);
+	        			cataloguePageAdapter.setItems(cataloguePagesChunk.getItems());
+	        			//handleCatalogueImageLoadingData(latestCatalogues);
 	        			break;
 	        		default:
 	        			break;
@@ -86,7 +92,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 		new Handler().postDelayed(new Runnable() {
             public void run() {
             	loadBitmaps(latestCatalogues);
-            	cataloguePageAdapter.setItems(latestCatalogues);
+            	//cataloguePageAdapter.setItems(latestCatalogues);
             	removeProgressDialog();
             }
         }, 2000);
@@ -95,6 +101,72 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 		for(CataloguePage cataloguePage : latestCatalogues) {
 			cataloguePage.loadBitmap(this);
 		}
+	}
+	
+	/**
+     * updates the fragment stack by removing the first product and
+     * adding the last product seen
+     *
+     * @param productData : : instance of Catalog
+     */
+    public void updateTopFragmentCatalogData(CataloguePagesChunk productData) {
+    	if(mProductDataStack == null) {
+    		mProductDataStack = new Stack<CataloguePagesChunk>();
+    	} else if(mProductDataStack.size() > 0) {
+        	mProductDataStack.pop();
+    	}
+
+        mProductDataStack.push(productData);
+    }
+    /*
+    public void loadMoreData() {
+        String showMoreUrl = "";
+        showMoreUrl=getUrl(mCatalogData.getPageId() + 1);
+        boolean isNetworkError = fetchData(getTagBaseUrl() + showMoreUrl, ApiType.API_CATALOG_SHOW_MORE, null);
+        if (isNetworkError) {
+            IS_ERROR_OCCURED_WHILE_LOADING_MORE_DATA = true;
+            mShowMoreLayout.setVisibility(View.GONE);
+            mRefineLayout.setVisibility(View.VISIBLE);
+            return;
+        }
+        IS_LOADING_MORE_DATA = true;
+    }
+    */
+    
+    public Stack<CataloguePagesChunk> getCatalogDataStack() {
+        if (mProductDataStack == null)
+            mProductDataStack = new Stack<CataloguePagesChunk>();
+        return mProductDataStack;
+    }
+	 
+    public void onDestoryOfThisActivity() {
+    	CataloguePagesChunk data = popFragmentCatalogData();
+    }
+    
+	/*
+	 * public Catalog popFragmentCatalogData() {
+	 * 
+	 */
+	public CataloguePagesChunk popFragmentCatalogData() {
+		if(mProductDataStack != null) {
+			if (mProductDataStack.size() == 1) {
+				mProductDataStack.pop();
+				return null;
+			}
+			if (mProductDataStack.size() > 1) {
+				mProductDataStack.pop();// remove the top Catalog
+				CataloguePagesChunk data = null;
+				do {
+					data = mProductDataStack.peek();
+					if (data != null) {//DK: && data.getItems().size() == 0) {
+						mProductDataStack.pop();
+						data = null;
+					}
+				} while ((data == null) && mProductDataStack.size() > 0);
+				return data;
+			}
+		}
+		return null;
 	}
 	
 	  @Override

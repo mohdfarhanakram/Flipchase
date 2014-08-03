@@ -3,17 +3,12 @@
  */
 package com.flipchase.android.view.adapter;
 
-import java.util.List;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
-import com.flipchase.android.domain.Retailer;
-import com.flipchase.android.domain.Store;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.view.fragment.BaseFragment;
 import com.flipchase.android.view.fragment.CouponFragment;
@@ -38,6 +33,7 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 		mTabOptionList = tabOptionList;
 	}
 
+	//TODO: Every time page loads it calls parser .. need to remove this
 	@Override
 	public Fragment getItem(int index) {
 		

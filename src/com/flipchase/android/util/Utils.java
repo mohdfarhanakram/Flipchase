@@ -4,8 +4,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 
 public class Utils {
 
@@ -81,4 +83,15 @@ public class Utils {
         return jsonObject.has(key);
 
     }
+    
+    public static void putStringinPrefs(Context mContext, String mKey, String mVal) {
+        SharedPreferences.Editor prefsEditorr = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+        try {
+            prefsEditorr.putString(mKey, mVal.toString());
+            prefsEditorr.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

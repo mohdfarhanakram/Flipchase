@@ -15,6 +15,7 @@ import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.extlibpro.FlipBookLog;
+import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.view.activity.ImageDisplayActivity;
 
@@ -24,11 +25,11 @@ public class CataloguePageAdapter extends BaseAdapter {
 
   private int repeatCount = 1;
 
-  private List<CataloguePage> catalogueData;
+  private List<CataloguePageItem> catalogueData;
 
   private Context activityContext;
   
-  public CataloguePageAdapter(Context context, List<CataloguePage> catalogueData) {
+  public CataloguePageAdapter(Context context, List<CataloguePageItem> catalogueData) {
 	activityContext = context;
     inflater = LayoutInflater.from(context);
     this.catalogueData = catalogueData;
@@ -39,7 +40,7 @@ public class CataloguePageAdapter extends BaseAdapter {
 	    inflater = LayoutInflater.from(context);
   }
   
-  public void setItems(List<CataloguePage> items) {
+  public void setItems(List<CataloguePageItem> items) {
       this.catalogueData = items;
       notifyDataSetChanged();
   }
@@ -76,10 +77,10 @@ public class CataloguePageAdapter extends BaseAdapter {
       FlipBookLog.d("created new view from adapter: %d", position);
     }
 
-    final CataloguePage data = catalogueData.get(position % catalogueData.size());
+    final CataloguePageItem data = catalogueData.get(position % catalogueData.size());
 
     ImageView iv =(ImageView) layout.findViewById(R.id.photo);
-    iv.setImageBitmap(data.getcBitmap());
+    //iv.setImageBitmap(data.getcBitmap());
     //picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(), iv);
     /*
     UI

@@ -35,7 +35,6 @@ public class SplashActivity extends BaseActivity implements
 				String location = AppSharedPreference.getString(
 						AppSharedPreference.USER_SELECTED_CITY, "",
 						SplashActivity.this);
-				/*
 				if (StringUtils.isNullOrEmpty(city)
 						|| StringUtils.isNullOrEmpty(location)) {
 					Intent i = new Intent(SplashActivity.this,
@@ -44,14 +43,14 @@ public class SplashActivity extends BaseActivity implements
 					startActivity(i);
 					finish();
 				} 
-				else {*/
+				else {
 					Intent i = new Intent(SplashActivity.this,
 							HomeActivity.class);
 					startActivity(i);
 					finish();
 				}
 
-			//}
+			}
 		}, AppConstants.SPLASH_WAITING_TIME);
 
 	}

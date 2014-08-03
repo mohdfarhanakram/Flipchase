@@ -220,7 +220,6 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
     public String getJSONForRequest(int eventType) {
         String request = null;
         switch (eventType) {
-
             case FlipchaseApi.INIT_REQUEST:
                 request = AppConstants.RESPONSE_INIT;
                 break;
@@ -231,9 +230,11 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
             case FlipchaseApi.GET_ALL_LOCATIONS:
                 request = AppConstants.RESPONSE_GET_LOCATIONS;
                 break;
-
-            case FlipchaseApi.GET_CITIES_FOR_LOCATIONS:
-                request = AppConstants.RESPONSE_GET_LOCATIONS_FOR_CITY;
+            case FlipchaseApi.GET_LATEST_CATALOGUES:
+                request = AppConstants.RESPONSE_GET_LATEST_CATALOGUES;
+                break;
+            case FlipchaseApi.GET_ALL_RETAILERS:
+                request = AppConstants.RESPONSE_GET_REATILERS;
                 break;
             default:
                 return "";
@@ -600,8 +601,19 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
         //return StaticDataDao.getInstance(this).getSessionId();
     }
     
+    //TODO: If we receive response from server it saves in prefs but if from prefs then again it re saves it
     @Override
     public void updateUi(ServiceResponse response) {
+    	switch (response.getEventType()) {
+        case FlipchaseApi.GET_LATEST_CATALOGUES:
+        	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_LATEST_CATALOGUES, response.getJsonResponse().toString());
+        	break;
+        case FlipchaseApi.GET_ALL_RETAILERS:
+        	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_REATILERS, response.getJsonResponse().toString());
+        	break;
+        default: 
+        	break;
+    	}
     }
 
     private String getScreenName() {

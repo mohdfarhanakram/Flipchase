@@ -19,6 +19,8 @@ import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.domain.Store;
+import com.flipchase.android.parcels.CataloguePageItem;
+import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.util.Utils;
 
 public class FlipChaseJsonParser {
@@ -137,21 +139,21 @@ public class FlipChaseJsonParser {
     	return Arrays.asList(catalogues);
     }
     
-    public static List<CataloguePage> parseCataloguePagesForCatalogue(JSONObject jsonObjectData) throws JSONException {
-    	CataloguePage[] cataloguePages = null;
-    	if (Utils.isJsonArray(jsonObjectData, "response")) {
+    public static CataloguePagesChunk parseCataloguePagesForCatalogue(JSONObject jsonObjectData) throws JSONException {
+    	CataloguePagesChunk cataloguePagesChunk = null;
+    	if (Utils.isJsonObject(jsonObjectData, "response")) {
             JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
             String json = itemsJsonArray.toString();
             JsonFactory jsonFactory = new JsonFactory();
             try {
 				JsonParser jp = jsonFactory.createJsonParser(json);
-				cataloguePages = objectMapper.readValue(jp, CataloguePage[].class);
+				cataloguePagesChunk = objectMapper.readValue(jp, CataloguePagesChunk.class);
 			} catch (JsonParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
         }
-    	return Arrays.asList(cataloguePages);
+    	return cataloguePagesChunk;
     }
 }

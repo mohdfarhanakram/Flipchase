@@ -241,6 +241,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			showLocationPopup();
 			break;
 		case id.done:
+			updateAppSharedPreferenceForLocations();
 			Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
 			startActivity(i);
 			//DK:comment out
