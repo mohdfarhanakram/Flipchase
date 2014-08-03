@@ -80,7 +80,7 @@ public class CataloguePageAdapter extends BaseAdapter {
     final CataloguePageItem data = catalogueData.get(position % catalogueData.size());
 
     ImageView iv =(ImageView) layout.findViewById(R.id.photo);
-    //iv.setImageBitmap(data.getcBitmap());
+    iv.setImageBitmap(data.getcBitmap());
     //picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(), iv);
     /*
     UI

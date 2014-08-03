@@ -13,12 +13,12 @@ import com.squareup.picasso.Target;
 public class CataloguePage extends BaseDomain {
 
 	public Bitmap cBitmap;
-	
+
 	private Target target = new Target() {
-	      @Override
-	      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {  
-	    	  cBitmap = bitmap;
-	      }
+		@Override
+		public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+			cBitmap = bitmap;
+		}
 
 		@Override
 		public void onBitmapFailed(Drawable arg0) {
@@ -28,9 +28,9 @@ public class CataloguePage extends BaseDomain {
 		@Override
 		public void onPrepareLoad(Drawable arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
-	    };
+	};
 	
 	private Long pagenum;
 	

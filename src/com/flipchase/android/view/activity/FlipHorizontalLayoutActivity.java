@@ -9,9 +9,9 @@ import android.os.Handler;
 
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
-import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.extlibpro.FlipViewController;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.view.adapter.CataloguePageAdapter;
 
@@ -68,8 +68,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 	        		case FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE:
 	        			CataloguePagesChunk cataloguePagesChunk = (CataloguePagesChunk) response.getResponseObject();
 	        			updateTopFragmentCatalogData(cataloguePagesChunk);
-	        			cataloguePageAdapter.setItems(cataloguePagesChunk.getItems());
-	        			//handleCatalogueImageLoadingData(latestCatalogues);
+	        			handleCatalogueImageLoadingData(cataloguePagesChunk.getItems());
 	        			break;
 	        		default:
 	        			break;
@@ -78,28 +77,29 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 	        }
 	    }
 		
-	private void handleCatalogueImageLoadingData(final List<CataloguePage> latestCatalogues) {
-		if(latestCatalogues == null || latestCatalogues.size() == 0) {
+	private void handleCatalogueImageLoadingData(final List<CataloguePageItem> items) {
+		if(items == null || items.size() == 0) {
 			return;
 		}
-		CataloguePage c1 = latestCatalogues.get(0);
+		CataloguePageItem c1 = items.get(0);
 		c1.loadBitmap(this);
-		if(latestCatalogues != null && latestCatalogues.size() > 1) {
-			CataloguePage c2 = latestCatalogues.get(1);
+		if(items.size() > 1) {
+			CataloguePageItem c2 = items.get(1);
 			c2.loadBitmap(this);
 		}
 		showProgressDialog("Loading Catalogues Books Pages");
 		new Handler().postDelayed(new Runnable() {
             public void run() {
-            	loadBitmaps(latestCatalogues);
-            	//cataloguePageAdapter.setItems(latestCatalogues);
+            	loadBitmaps(items);
+            	cataloguePageAdapter.setItems(items);
             	removeProgressDialog();
             }
-        }, 2000);
+        }, 4000); //DK: Depending upon the network
 	}
-	private void loadBitmaps(List<CataloguePage> latestCatalogues) {
-		for(CataloguePage cataloguePage : latestCatalogues) {
-			cataloguePage.loadBitmap(this);
+	
+	private void loadBitmaps(List<CataloguePageItem> items) {
+		for(CataloguePageItem item : items) {
+			item.loadBitmap(this);
 		}
 	}
 	

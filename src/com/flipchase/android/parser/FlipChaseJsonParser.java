@@ -142,8 +142,8 @@ public class FlipChaseJsonParser {
     public static CataloguePagesChunk parseCataloguePagesForCatalogue(JSONObject jsonObjectData) throws JSONException {
     	CataloguePagesChunk cataloguePagesChunk = null;
     	if (Utils.isJsonObject(jsonObjectData, "response")) {
-            JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
-            String json = itemsJsonArray.toString();
+            JSONObject itemsJsonObject = jsonObjectData.getJSONObject("response");
+            String json = itemsJsonObject.toString();
             JsonFactory jsonFactory = new JsonFactory();
             try {
 				JsonParser jp = jsonFactory.createJsonParser(json);
