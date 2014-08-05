@@ -97,10 +97,11 @@ public class CataloguePageAdapter extends BaseAdapter {
         	activityContext.startActivity(i);
         }
     });
-    
+    /*
     if(position == catalogueData.size() -1 && !isAllItemsLoaded) {
     	((FlipHorizontalLayoutActivity) activityContext).loadMoreCataloguepagesChunk(pageId + 1);
     }
+    */
     /*
     UI
         .<TextView>findViewById(layout, R.id.title)
