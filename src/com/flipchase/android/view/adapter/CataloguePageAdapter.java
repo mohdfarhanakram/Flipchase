@@ -14,7 +14,6 @@ import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.extlibpro.FlipBookLog;
 import com.flipchase.android.parcels.CataloguePageItem;
-import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
 import com.flipchase.android.view.activity.ImageDisplayActivity;
 
 public class CataloguePageAdapter extends BaseAdapter {

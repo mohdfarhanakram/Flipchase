@@ -105,7 +105,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 				cataloguePageAdapter.setItems(items, cataloguePagesChunk.getPageId());
 				removeProgressDialog();
 			}
-		}, 4000); // DK: Depending upon the network
+		}, 1000); // DK: Depending upon the network
 	}
 
 	private void loadBitmaps(List<CataloguePageItem> items) {

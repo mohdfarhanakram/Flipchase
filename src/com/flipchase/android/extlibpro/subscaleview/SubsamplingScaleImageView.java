@@ -19,6 +19,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
@@ -972,6 +973,9 @@ public class SubsamplingScaleImageView extends View {
                     Context context = contextRef.get();
                     if (context != null) {
                         int exifOrientation = ORIENTATION_0;
+                        InputStream in = new java.net.URL(source).openStream();
+                        decoder = BitmapRegionDecoder.newInstance(in, true);
+                        /*
                         if (sourceIsAsset) {
                             decoder = BitmapRegionDecoder.newInstance(context.getAssets().open(source, AssetManager.ACCESS_RANDOM), true);
                         } else {
@@ -995,6 +999,7 @@ public class SubsamplingScaleImageView extends View {
                             }
 
                         }
+                        */
                         return new int[] { decoder.getWidth(), decoder.getHeight(), exifOrientation };
                     }
                 }

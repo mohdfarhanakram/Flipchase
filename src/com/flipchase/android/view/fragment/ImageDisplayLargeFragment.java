@@ -27,7 +27,7 @@ public class ImageDisplayLargeFragment extends Fragment {
         });
         */
         SubsamplingScaleImageView imageView = (SubsamplingScaleImageView)rootView.findViewById(R.id.imageView);
-        //imageView.setImageAsset(selectedImageName);
+        /** What ever the method you call it will treat this as url **/
         imageView.setImageFile(selectedImageName);
         return rootView;
     }
