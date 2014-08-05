@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,9 @@ import android.widget.ImageView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
-import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.extlibpro.FlipBookLog;
 import com.flipchase.android.parcels.CataloguePageItem;
-import com.flipchase.android.util.PicassoEx;
+import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
 import com.flipchase.android.view.activity.ImageDisplayActivity;
 
 public class CataloguePageAdapter extends BaseAdapter {
@@ -29,10 +27,14 @@ public class CataloguePageAdapter extends BaseAdapter {
 
   private Context activityContext;
   
-  public CataloguePageAdapter(Context context, List<CataloguePageItem> catalogueData) {
+  private int pageId;
+  private boolean isAllItemsLoaded = false;
+  
+  public CataloguePageAdapter(Context context, List<CataloguePageItem> catalogueData, int pageId) {
 	activityContext = context;
     inflater = LayoutInflater.from(context);
     this.catalogueData = catalogueData;
+    this.pageId = pageId;
   }
 
   public CataloguePageAdapter(Context context) {
@@ -40,8 +42,9 @@ public class CataloguePageAdapter extends BaseAdapter {
 	    inflater = LayoutInflater.from(context);
   }
   
-  public void setItems(List<CataloguePageItem> items) {
+  public void setItems(List<CataloguePageItem> items, int pageId) {
       this.catalogueData = items;
+      this.pageId = pageId;
       notifyDataSetChanged();
   }
   
@@ -95,6 +98,9 @@ public class CataloguePageAdapter extends BaseAdapter {
         }
     });
     
+    if(position == catalogueData.size() -1 && !isAllItemsLoaded) {
+    	((FlipHorizontalLayoutActivity) activityContext).loadMoreCataloguepagesChunk(pageId + 1);
+    }
     /*
     UI
         .<TextView>findViewById(layout, R.id.title)
@@ -125,12 +131,32 @@ public class CataloguePageAdapter extends BaseAdapter {
     return layout;
   }
 
+  
+  /*
   private void picassoLoad(String url, ImageView imageView) {
 	  //PicassoEx.getPicasso(activityContext).load(url).fit().into(imageView);
 	PicassoEx.getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565).placeholder( android.R.drawable.dark_header).
 	fit().into(imageView);
   }
+  */
   
+  public int getPageId() {
+	return pageId;
+  }
+
+  public void setPageId(int pageId) {
+	this.pageId = pageId;
+  }
+
+  
+  public boolean isAllItemsLoaded() {
+	return isAllItemsLoaded;
+  }
+
+  public void setAllItemsLoaded(boolean isAllItemsLoaded) {
+	this.isAllItemsLoaded = isAllItemsLoaded;
+  }
+
   public void removeData(int index) {
     if (catalogueData.size() > 1) {
     	catalogueData.remove(index);
