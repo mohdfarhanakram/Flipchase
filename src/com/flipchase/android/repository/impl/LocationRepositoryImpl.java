@@ -53,7 +53,7 @@ public class LocationRepositoryImpl extends BaseRepository implements LocationRe
 	
 	@Override
 	public List<Location> getLocationsForCity(Long cityId) {
-		String jsonStr = serviceHandler.makeServiceCall(URLConstants.GET_LOCATIONS_FOR_CITY, ServiceHandler.GET, null, cityId);
+		String jsonStr = serviceHandler.makeServiceCall(URLConstants.GET_LOCATIONS_FOR_CITY_URL, ServiceHandler.GET, null, cityId);
 		Location[] locations = null;
         try {
 			jp = jsonFactory.createJsonParser(jsonStr);

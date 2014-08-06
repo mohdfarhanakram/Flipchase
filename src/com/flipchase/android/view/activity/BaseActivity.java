@@ -3,8 +3,13 @@
  */
 package com.flipchase.android.view.activity;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -604,15 +609,17 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
     //TODO: If we receive response from server it saves in prefs but if from prefs then again it re saves it
     @Override
     public void updateUi(ServiceResponse response) {
-    	switch (response.getEventType()) {
-        case FlipchaseApi.GET_LATEST_CATALOGUES:
-        	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_LATEST_CATALOGUES, response.getJsonResponse().toString());
-        	break;
-        case FlipchaseApi.GET_ALL_RETAILERS:
-        	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_REATILERS, response.getJsonResponse().toString());
-        	break;
-        default: 
-        	break;
+    	if (response.getErrorCode() == ServiceResponse.SUCCESS) {
+    		switch (response.getEventType()) {
+            case FlipchaseApi.GET_LATEST_CATALOGUES:
+            	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_LATEST_CATALOGUES, response.getJsonResponse().toString());
+            	break;
+            case FlipchaseApi.GET_ALL_RETAILERS:
+            	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_REATILERS, response.getJsonResponse().toString());
+            	break;
+            default: 
+            	break;
+        	}
     	}
     }
 
@@ -626,4 +633,18 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
         return screenName;
     }
 
+    protected String convertObjectToJsonString(Object obj) {
+    	ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(obj);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }
+    
 }

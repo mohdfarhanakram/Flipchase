@@ -28,7 +28,8 @@ public interface FlipchaseApi {
 	 
 	 public static final int GET_LATEST_CATALOGUES = 8;
 	 public static final int GET_CATALOGUE_PAGES_FOR_CATALOGUE = 9;
+	 public static final int SAVE_USER_CITY_AND_LOCATION = 10;
 	 
-	 public static final int API_STORE_SHOW_MORE = 10;
+	 public static final int API_STORE_SHOW_MORE = 11;
 
 }

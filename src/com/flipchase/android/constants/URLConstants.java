@@ -5,17 +5,13 @@ package com.flipchase.android.constants;
 public final class URLConstants {
 
 	//public static final String BASE_URL = "http://10.0.2.2:8080";
-	public static final String BASE_URL = "http://192.168.1.11:8080";
+	public static final String BASE_URL = "http://192.168.43.214:8080";
 	//public static final String BASE_URL = "http://203.124.96.154:8080";
 	public static final String IMAGE_SERVER_URL = "http://203.124.96.154";	
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
 	public static final String BASE_LOCATION_URL = BASE_URL + "/location";
 	public static final String BASE_RETAILER_URL = BASE_URL + "/retailer";
 	
-	public static final String GET_ALL_CATEGORY_URL = "http://10.0.2.2:8080/catalogue/getCataloguesForCategory/1";
-	
-
-	public static final String GET_LOCATIONS_FOR_CITY_URL = "http://203.124.96.154:8080//getLocationsForCity/1";
 	
 	/************************** INIT WEBSERVICE FOR APP ***********************************************/
 	public static final String INITIALIZE_LOCATION_URL = BASE_LOCATION_URL + "/initSettings";
@@ -27,8 +23,9 @@ public final class URLConstants {
 	/************************** LOCATION ***********************************************/
 	public static final String GET_ALL_CITIES_URL = BASE_LOCATION_URL + "/getAllCities";
 	public static final String GET_ALL_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllLocations";
-	public static final String GET_LOCATIONS_FOR_CITY = BASE_LOCATION_URL + "/getLocationsForCity/{cityid}";
+	public static final String GET_LOCATIONS_FOR_CITY_URL = BASE_LOCATION_URL + "/getLocationsForCity/{cityid}";
 	public static final String GET_ALL_CITIES_AND_LOCATIONS_URL = BASE_LOCATION_URL + "/getAllCitiAndLocations";
+	public static final String SAVE_USER_CITY_AND_LOCATION_URL = BASE_LOCATION_URL + "/saveUserLocation";
 	
 	/************************** RETAILERS ***********************************************/
 	public static final String GET_ALL_RETAILERS_URL = BASE_RETAILER_URL + "/getAllRetailers";

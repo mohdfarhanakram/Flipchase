@@ -30,7 +30,9 @@ import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
+import com.flipchase.android.domain.UserLocation;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.service.LocationService;
 import com.flipchase.android.service.impl.LocationServiceImpl;
@@ -217,6 +219,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         			locationService.setCityLocationWrapper(cityLocationWrapper);
         			setDefaultCityLocationsAfterFetchingData();
         			break;
+        		case FlipchaseApi.SAVE_USER_CITY_AND_LOCATION:
+        			break;
         		default:
         			break;
         		}
@@ -242,15 +246,25 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			break;
 		case id.done:
 			updateAppSharedPreferenceForLocations();
+			saveUserLocation();
+			/** For Now we are assuming that the location saves correctly, so send user to next page. **/
 			Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
 			startActivity(i);
-			//DK:comment out
-			//finish();
+			finish();
 			break;
 		default:
 			break;
 		}
 
+	}
+	
+	private void saveUserLocation() {
+		UserLocation userLocation = new UserLocation();
+		userLocation.setSession_id("session_d_u_m");
+		userLocation.setCity_id(Long.valueOf(mCity.getId()));
+		userLocation.setLocation_id(Long.valueOf(mLocation.getId()));
+		String jsonString = convertObjectToJsonString(userLocation);
+		postData(URLConstants.SAVE_USER_CITY_AND_LOCATION_URL, FlipchaseApi.SAVE_USER_CITY_AND_LOCATION, jsonString, VolleyGenericRequest.ContentType.JSON, null);
 	}
 	
 	private void updateAppSharedPreferenceForLocations() {

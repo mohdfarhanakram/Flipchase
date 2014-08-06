@@ -129,6 +129,9 @@ public class BaseParser implements IParser {
             case FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE:
                 response.setResponseObject(FlipChaseJsonParser.parseCataloguePagesForCatalogue(jsonObjectData));
                 break;
+            case FlipchaseApi.SAVE_USER_CITY_AND_LOCATION:
+            	// Nothing to do for now, but the service sends the updated user location object
+            	break;
             default:
                 break;
         }
