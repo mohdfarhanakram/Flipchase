@@ -16,7 +16,7 @@ import android.widget.ImageView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
-import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
 import com.flipchase.android.view.widget.CustomFontTextView;
@@ -28,16 +28,16 @@ import com.flipchase.android.view.widget.CustomFontTextView;
 public class CatalogueAdapter extends BaseAdapter{
 
 	private Context mContext;
-	private List<Catalogue> mCataArrayList;
+	private List<CatalogueDisplay> mCataArrayList;
 	private LayoutInflater mInflater;
 
-	public CatalogueAdapter(Context context, List<Catalogue> cataArrayList){
+	public CatalogueAdapter(Context context, List<CatalogueDisplay> cataArrayList){
 		mContext = context;
 		mCataArrayList = cataArrayList;
 		mInflater = LayoutInflater.from(context);
 	}
 
-	public void setItems(List<Catalogue> items) {
+	public void setItems(List<CatalogueDisplay> items) {
         this.mCataArrayList = items;
         notifyDataSetChanged();
     }
@@ -64,7 +64,7 @@ public class CatalogueAdapter extends BaseAdapter{
 		View row = convertView;
 		ViewHolder holder;
 
-		final Catalogue catalogue = mCataArrayList.get(position);
+		final CatalogueDisplay catalogue = mCataArrayList.get(position);
 		if(convertView==null){
 
 			row = mInflater.inflate(R.layout.layout_catalog_grid_view, null, false);
@@ -80,7 +80,7 @@ public class CatalogueAdapter extends BaseAdapter{
 		    iv.setOnClickListener(new View.OnClickListener() {
 		        public void onClick(View v) {
 		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class);  
-		        	i.putExtra("catalogueId", catalogue.getId());
+		        	i.putExtra("catalogueId", catalogue.getCatalogue().getId());
 		        	mContext.startActivity(i);
 		        }
 		    });
@@ -89,10 +89,10 @@ public class CatalogueAdapter extends BaseAdapter{
 			holder = (ViewHolder)convertView.getTag();
 		}
 
-		holder.catalogueName.setText(catalogue.getDisplayName());
-		holder.catalogueExpiry.setText(catalogue.getExpiryDate());
+		holder.catalogueName.setText(catalogue.getCatalogue().getDisplayName());
+		holder.catalogueExpiry.setText(catalogue.getCatalogue().getExpiryDate());
 		
-		picassoLoad(URLConstants.IMAGE_SERVER_URL + catalogue.getPhoto_thumb_path(), holder.catalogueImageView);
+		picassoLoad(URLConstants.IMAGE_SERVER_URL + catalogue.getCatalogue().getPhoto_thumb_path(), holder.catalogueImageView);
 
 		return row;
 	}

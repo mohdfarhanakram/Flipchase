@@ -16,7 +16,7 @@ import android.widget.GridView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.FlipchaseApi;
-import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.view.activity.FilterActivity;
 import com.flipchase.android.view.activity.HomeActivity;
@@ -55,7 +55,7 @@ public class DealsFragment extends BaseFragment {
 		super.updateUi(response);
 		switch (response.getEventType()) {
 		case FlipchaseApi.GET_LATEST_CATALOGUES:
-			List<Catalogue> latestCatalogues = (List<Catalogue>)response.getResponseObject();
+			List<CatalogueDisplay> latestCatalogues = (List<CatalogueDisplay>)response.getResponseObject();
 			catalogueAdapter.setItems(latestCatalogues);
 			break;
 		default:

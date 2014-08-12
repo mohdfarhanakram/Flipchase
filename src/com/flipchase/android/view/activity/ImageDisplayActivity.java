@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.flipchase.android.R;
-import com.flipchase.android.view.fragment.ImageDisplayLargeFragment;
+import com.flipchase.android.view.fragment.ExtensionPinFragment;
 
 public class ImageDisplayActivity extends FragmentActivity {
 
@@ -33,7 +33,8 @@ public class ImageDisplayActivity extends FragmentActivity {
             position = savedInstanceState.getInt(BUNDLE_POSITION);
         }
         pages = Arrays.asList(
-                new Page("Large images", ImageDisplayLargeFragment.class)
+               // new Page("Large images", ImageDisplayLargeFragment.class)
+        		 new Page("Large images", ExtensionPinFragment.class)
         );
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

@@ -94,10 +94,12 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 		}
 		CataloguePageItem c1 = items.get(0);
 		c1.loadBitmap(this);
+		/*
 		if (items.size() > 1) {
 			CataloguePageItem c2 = items.get(1);
 			c2.loadBitmap(this);
 		}
+		*/
 		showProgressDialog("Loading Catalogues Offers Images");
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
@@ -105,7 +107,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 				cataloguePageAdapter.setItems(items, cataloguePagesChunk.getPageId());
 				removeProgressDialog();
 			}
-		}, 1000); // DK: Depending upon the network
+		}, 2000); // DK: Depending upon the network
 	}
 
 	private void loadBitmaps(List<CataloguePageItem> items) {

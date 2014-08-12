@@ -50,7 +50,7 @@
 
     </RelativeLayout>
 -->
-    <com.flipchase.android.extlibpro.subscaleview.SubsamplingScaleImageView
+    <com.flipchase.android.extlibpro.extension.views.PinView
             android:id="@+id/imageView"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/text"

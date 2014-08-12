@@ -38,7 +38,7 @@ public class PinView extends SubsamplingScaleImageView {
 
     private void initialise() {
         float density = getResources().getDisplayMetrics().densityDpi;
-        pin = BitmapFactory.decodeResource(this.getResources(), com.flipchase.android.R.drawable.pushpin_blue);
+        pin = BitmapFactory.decodeResource(this.getResources(), com.flipchase.android.R.drawable.coupon);
         float w = (density/420f) * pin.getWidth();
         float h = (density/420f) * pin.getHeight();
         pin = Bitmap.createScaledBitmap(pin, (int)w, (int)h, true);

@@ -13,13 +13,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.flipchase.android.domain.Catalogue;
-import com.flipchase.android.domain.CataloguePage;
+import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.domain.Store;
-import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.util.Utils;
 
@@ -121,15 +120,15 @@ public class FlipChaseJsonParser {
     	return Arrays.asList(stores);
     }
     
-    public static List<Catalogue> parseLatestCatalogues(JSONObject jsonObjectData) throws JSONException {
-    	Catalogue[] catalogues = null;
+    public static List<CatalogueDisplay> parseLatestCatalogues(JSONObject jsonObjectData) throws JSONException {
+    	CatalogueDisplay[] catalogues = null;
     	if (Utils.isJsonArray(jsonObjectData, "response")) {
             JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
             String json = itemsJsonArray.toString();
             JsonFactory jsonFactory = new JsonFactory();
             try {
 				JsonParser jp = jsonFactory.createJsonParser(json);
-				catalogues = objectMapper.readValue(jp, Catalogue[].class);
+				catalogues = objectMapper.readValue(jp, CatalogueDisplay[].class);
 			} catch (JsonParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
