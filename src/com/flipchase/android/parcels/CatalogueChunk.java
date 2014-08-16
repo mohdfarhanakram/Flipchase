@@ -15,6 +15,10 @@ public class CatalogueChunk implements Serializable {
 	
 	private int pageId = 0;
 
+	private SortBy sortBy;
+	
+	private FilterBy filterBy;
+	
 	public Integer getTotal() {
 		return total;
 	}
@@ -37,6 +41,22 @@ public class CatalogueChunk implements Serializable {
 
 	public void setPageId(int pageId) {
 		this.pageId = pageId;
+	}
+
+	public SortBy getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(SortBy sortBy) {
+		this.sortBy = sortBy;
+	}
+
+	public FilterBy getFilterBy() {
+		return filterBy;
+	}
+
+	public void setFilterBy(FilterBy filterBy) {
+		this.filterBy = filterBy;
 	}
 	
 }

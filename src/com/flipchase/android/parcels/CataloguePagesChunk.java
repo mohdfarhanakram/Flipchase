@@ -10,7 +10,6 @@ public class CataloguePagesChunk implements Parcelable {
 
 	private int total = 0;
     private String headerText;
-    private SortedBy sortedBy;
     private List<CataloguePageItem> items = new ArrayList<CataloguePageItem>();
     private int pageId = 0;
     private boolean filterData = false;
@@ -171,15 +170,6 @@ public class CataloguePagesChunk implements Parcelable {
     public void setHeaderText(String headerText) {
         this.headerText = headerText;
     }
-
-    public SortedBy getSortedBy() {
-        return sortedBy;
-    }
-
-    public void setSortedBy(SortedBy sortedBy) {
-        this.sortedBy = sortedBy;
-    }
-
 
     public int getTotal() {
         return total;
