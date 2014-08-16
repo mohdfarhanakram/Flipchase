@@ -12,13 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.flipchase.android.domain.Catalogue;
-import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.domain.Store;
+import com.flipchase.android.parcels.CatalogueChunk;
 import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.util.Utils;
 
@@ -120,22 +119,22 @@ public class FlipChaseJsonParser {
     	return Arrays.asList(stores);
     }
     
-    public static List<CatalogueDisplay> parseLatestCatalogues(JSONObject jsonObjectData) throws JSONException {
-    	CatalogueDisplay[] catalogues = null;
-    	if (Utils.isJsonArray(jsonObjectData, "response")) {
-            JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
-            String json = itemsJsonArray.toString();
+    public static CatalogueChunk parseLatestCatalogues(JSONObject jsonObjectData) throws JSONException {
+    	CatalogueChunk catalogues = null;
+    	if (Utils.isJsonObject(jsonObjectData, "response")) {
+    		JSONObject itemsJsonObject = jsonObjectData.getJSONObject("response");
+            String json = itemsJsonObject.toString();
             JsonFactory jsonFactory = new JsonFactory();
             try {
 				JsonParser jp = jsonFactory.createJsonParser(json);
-				catalogues = objectMapper.readValue(jp, CatalogueDisplay[].class);
+				catalogues = objectMapper.readValue(jp, CatalogueChunk.class);
 			} catch (JsonParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
         }
-    	return Arrays.asList(catalogues);
+    	return catalogues;
     }
     
     public static CataloguePagesChunk parseCataloguePagesForCatalogue(JSONObject jsonObjectData) throws JSONException {
