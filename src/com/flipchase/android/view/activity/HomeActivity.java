@@ -83,6 +83,7 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	                    }
 	                });
 		homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.home_tabs));
+		mHomeViewPager.setOffscreenPageLimit(4);
 		mHomeViewPager.setAdapter(homeFragmentAdapter);
 	}
 	
