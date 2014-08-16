@@ -612,10 +612,10 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
     	if (response.getErrorCode() == ServiceResponse.SUCCESS) {
     		switch (response.getEventType()) {
             case FlipchaseApi.GET_LATEST_CATALOGUES:
-            	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_LATEST_CATALOGUES, response.getJsonResponse().toString());
+            	//Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_LATEST_CATALOGUES, response.getJsonResponse().toString());
             	break;
             case FlipchaseApi.GET_ALL_RETAILERS:
-            	Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_REATILERS, response.getJsonResponse().toString());
+            	//Utils.putStringinPrefs(this, AppConstants.RESPONSE_GET_REATILERS, response.getJsonResponse().toString());
             	break;
             default: 
             	break;
