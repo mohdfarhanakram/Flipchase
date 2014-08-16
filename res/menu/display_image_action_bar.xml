@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.flipchase.android.view.activity.ImageDisplayActivity" >
+
+    <!-- Star Icon / will display always -->
+    <item
+        android:id="@+id/action_favourite"
+        android:icon="@drawable/ic_action_important"
+        app:showAsAction="always"
+        android:title="Favourite"/>
+
+    <!-- Image Crop -->
+    <item
+        android:id="@+id/action_image_crop"
+        android:icon="@drawable/ic_action_crop"
+        app:showAsAction="always"
+        android:title="Image Crop"/>
+
+    <!-- Image List -->
+    <item
+        android:id="@+id/action_image_list"
+        android:icon="@drawable/ic_action_sort_by_size"
+        app:showAsAction="always"
+        android:title="Image List"/>
+
+    <!-- Near By -->
+    <item
+        android:id="@+id/action_location"
+        android:icon="@drawable/ic_action_place"
+        app:showAsAction="always"
+        android:title="Near By"/>
+
+    <!-- Weekly ads -->
+    <item
+        android:id="@+id/action_weekly_ads"
+        android:icon="@drawable/ic_action_view_as_grid"
+        app:showAsAction="always"
+        android:title="Weekly ads"/>
+
+    <!-- Weekly ads info -->
+    <item
+        android:id="@+id/action_weekly_ads_info"
+        android:icon="@drawable/ic_action_view_as_grid"
+        app:showAsAction="ifRoom"
+        android:title="Weekly ads Info"/>
+
+    <!-- share -->
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_action_view_as_grid"
+        app:showAsAction="ifRoom"
+        android:title="Share"/>
+
+</menu>

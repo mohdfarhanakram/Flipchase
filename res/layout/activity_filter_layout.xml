@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         layout="@layout/custom_spinner" />
 
-                    <!-- <com.flipchase.android.view.widget.CustomFontTextView
+                    <com.flipchase.android.view.widget.CustomFontTextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/filter_by_margin_top"
@@ -63,13 +63,26 @@
                     <View
                         android:layout_width="fill_parent"
                         android:layout_height="2dp"
-                        android:background="#cccccc" /> -->
+                        android:background="#cccccc" />
 
                     <LinearLayout
                         android:id="@+id/all_filter_layout"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" >
+
+                        <com.flipchase.android.view.widget.CustomFontTextView
+                            android:id="@+id/txtv_multiselection_selection"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                           android:clickable="false"
+                            android:ellipsize="end"
+                            android:focusable="false"
+                            android:paddingLeft="@dimen/generic_page_margin_left"
+                            android:singleLine="true"
+                            android:text="Select Category"
+                            android:textColor="@color/txt_color_dark_grey"
+                            android:textSize="@dimen/text_size_spinner" />
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>

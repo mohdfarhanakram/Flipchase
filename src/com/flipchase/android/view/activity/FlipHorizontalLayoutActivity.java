@@ -5,7 +5,10 @@ import java.util.Stack;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
 
+import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
@@ -39,6 +42,20 @@ public class FlipHorizontalLayoutActivity extends BaseActivity {
 		}
 		setContentView(flipView);
 	}
+	
+	 @Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			
+			mMenu = menu;
+			mMenu.clear();
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.display_image_action_bar, menu);
+			
+			/* View customNav = LayoutInflater.from(this).inflate(R.layout.custom_action_menu, null);
+		     getSupportActionBar().setCustomView(customNav);*/
+		        
+			return super.onCreateOptionsMenu(menu);
+		}
 
 	public void loadMoreCataloguepagesChunk(int pageId) {
 		showProgressDialog("Loading More Catalogues Pages...");

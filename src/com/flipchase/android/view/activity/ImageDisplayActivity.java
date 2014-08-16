@@ -7,14 +7,19 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.flipchase.android.R;
 import com.flipchase.android.view.fragment.ExtensionPinFragment;
 
-public class ImageDisplayActivity extends FragmentActivity {
+public class ImageDisplayActivity extends BaseActivity{
 
     private static final String BUNDLE_POSITION = "position";
 
@@ -27,8 +32,11 @@ public class ImageDisplayActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.extension_activity);
-        getActionBar().setTitle("Image display");
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Image display");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayOptions(ActionBar.NAVIGATION_MODE_LIST);
+       
+        
         if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_POSITION)) {
             position = savedInstanceState.getInt(BUNDLE_POSITION);
         }
@@ -42,6 +50,21 @@ public class ImageDisplayActivity extends FragmentActivity {
         }
         updatePage();
     }
+  
+ 
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		mMenu = menu;
+		mMenu.clear();
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.display_image_action_bar, menu);
+		
+		 /*View customNav = LayoutInflater.from(this).inflate(R.layout.custom_action_menu, null);
+	     getSupportActionBar().setCustomView(customNav);*/
+	        
+		return super.onCreateOptionsMenu(menu);
+	}
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -51,7 +74,13 @@ public class ImageDisplayActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
+    	switch (item.getItemId()) {
+		case R.id.action_image_crop:
+			break;
+		default:
+			break;
+		}
+        //finish();
         return true;
     }
 
@@ -73,7 +102,9 @@ public class ImageDisplayActivity extends FragmentActivity {
         if (position > pages.size() - 1) {
             return;
         }
-        getActionBar().setSubtitle(pages.get(position).subtitle);
+
+        
+        getSupportActionBar().setSubtitle(pages.get(position).subtitle);
         try {
             getSupportFragmentManager()
                     .beginTransaction()

@@ -4,27 +4,41 @@
     <string name="app_name">Flipchase</string>
     <string name="hello_world">Farhan</string>
     <string name="action_settings">Settings</string>
-    
+
     <string-array name="home_tabs">
         <item>Catalogue</item>
         <item>Store</item>
         <item>List</item>
         <item>Coupons</item>
     </string-array>
-    
+
     <string name="search">Search</string>
     <string name="sort">Sorting</string>
     <string name="setting">Settings</string>
     <string name="location">Change Location</string>
     <string name="search_hint_text">Search on Flipchase</string>
-    
     <string name="city_validation_msg">Please select city.</string>
     <string name="location_validation_msg">Please select location</string>
-    
     <string name="filter_txt">Filter</string>
     <string name="sort_by">SORT BY</string>
     <string name="filter_by">FILTER BY</string>
     <string name="apply">Apply</string>
     <string name="txt_cancel">Cancel</string>
-    
+
+    <string-array name="sort_by_options">
+        <item>Near By</item>
+        <item>Popular</item>
+        <item>New</item>
+    </string-array>
+    <string-array name="filter_by_options">
+        <item>Home</item>
+        <item>Electronics</item>
+        <item>Automative</item>
+        <item>Sports</item>
+        <item>Toys</item>
+        <item>Fashion</item>
+        <item>Beauty</item>
+        <item>Other</item>
+    </string-array>
+
 </resources>
