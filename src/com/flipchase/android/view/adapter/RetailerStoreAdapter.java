@@ -3,14 +3,17 @@ package com.flipchase.android.view.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.domain.Store;
+import com.flipchase.android.util.PicassoEx;
 
 public class RetailerStoreAdapter extends BaseAdapter {
 
@@ -105,16 +108,20 @@ public class RetailerStoreAdapter extends BaseAdapter {
             holder = (ViewHolder) row.getTag();
         }
         Store itemDetail = items.get(position);
-        holder.textViewItem.setText(itemDetail.getName());
-//        picassoLoad(Utils.changeImageUrl(itemDetail.getImage(),mSuffix), holder.itemPic);
-        // picassoLoad(itemDetail.getImage(), holder.itemPic);
+        holder.storeTitle.setText(itemDetail.getName());
+        holder.storeAddress.setText("Delhi, 242 Rajiv Chownk Dummy");
+        holder.storeDistance.setText("9.5 km Dummy");
+        //picassoLoad();
         return row;
     }
 
     private View getRowView() {
         View row = inflater.inflate(R.layout.retailer_store_row_list_item, null, false);
         ViewHolder holder = new ViewHolder();
-        holder.textViewItem = (TextView) row.findViewById(R.id.textViewItem);
+        holder.storeTitle = (TextView) row.findViewById(R.id.storeTitle);
+        holder.storeThumbnail = (ImageView) row.findViewById(R.id.storeThumbnail);
+        holder.storeAddress = (TextView) row.findViewById(R.id.storeAddress);
+        holder.storeDistance = (TextView) row.findViewById(R.id.storeDistance);
         row.setTag(holder);
         return row;
     }
@@ -123,11 +130,18 @@ public class RetailerStoreAdapter extends BaseAdapter {
         mContext = context;
     }
 
+    private void picassoLoad(String url, ImageView imageView) {
+		PicassoEx.getPicasso(mContext).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
+	}
+    
     /**
      * View Holder for grid row view.
      */
     public static class ViewHolder {
-        public TextView textViewItem;
+    	public ImageView storeThumbnail;
+        public TextView storeTitle;
+        public TextView storeAddress;
+        public TextView storeDistance;
     }
 
     public void setImageHeightWidth(int imageHeight, int imageWidth) {

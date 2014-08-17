@@ -1,14 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp" >
+    android:layout_height="wrap_content"
+    android:padding="8dp" >
+
+    <!-- android:background="@drawable/list_row_selector" -->
+    <ImageView
+        android:id="@+id/retailerThumbnail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="20dp" />
 
     <TextView
-        android:id="@+id/textViewItem"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_alignParentTop="true"
-        android:text="Item name here..."
-        android:textSize="15dp" />
+        android:id="@+id/retailerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/retailerThumbnail"
+        android:layout_toRightOf="@+id/retailerThumbnail"
+        android:textSize="@dimen/retailerTitle"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/retailerTitle"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/retailerThumbnail"
+        android:textSize="@dimen/rating" />
+    
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rating"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/retailerThumbnail"
+        android:textSize="@dimen/distance" />
 
 </RelativeLayout>

@@ -25,5 +25,15 @@
     <dimen name="button_height">40dp</dimen>
     <dimen name="filter_header_txt_size">16dp</dimen>
     <dimen name="generic_page_margin_left">16dp</dimen>
+    
+    <!--  Retailer Page -->
+    <dimen name="retailerTitle">17dp</dimen>
+    <dimen name="rating">15dip</dimen>
+    <dimen name="distance">15dip</dimen>
+    
+    <!-- Store Page -->
+    <dimen name="storeTitle">17dp</dimen>
+    <dimen name="storeAddress">15dip</dimen>
+    <dimen name="storeDistance">15dip</dimen>
 
 </resources>

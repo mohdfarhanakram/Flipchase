@@ -1,14 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp" >
+    android:layout_height="wrap_content"
+    android:padding="8dp" >
+
+    <!-- Thumbnail Image -->
+    <ImageView
+        android:id="@+id/storeThumbnail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="20dp" />
 
     <TextView
-        android:id="@+id/textViewItem"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:text="Item name here..."
-        android:textSize="15dp" />
+        android:id="@+id/storeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/storeThumbnail"
+        android:layout_toRightOf="@+id/storeThumbnail"
+        android:textSize="@dimen/storeTitle"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/storeAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/storeTitle"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/storeThumbnail"
+        android:textSize="@dimen/storeAddress" />
+    
+    <TextView
+        android:id="@+id/storeDistance"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/storeAddress"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/storeThumbnail"
+        android:textSize="@dimen/storeDistance" />
 
 </RelativeLayout>

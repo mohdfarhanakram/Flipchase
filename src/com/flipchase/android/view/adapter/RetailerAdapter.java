@@ -3,14 +3,18 @@ package com.flipchase.android.view.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.Retailer;
+import com.flipchase.android.util.PicassoEx;
 
 public class RetailerAdapter extends BaseAdapter {
 
@@ -99,8 +103,11 @@ public class RetailerAdapter extends BaseAdapter {
             holder = (ViewHolder) row.getTag();
         }
         Retailer itemDetail = items.get(position);
-        holder.textViewItem.setText(itemDetail.getName());
-//        picassoLoad(Utils.changeImageUrl(itemDetail.getImage(),mSuffix), holder.itemPic);
+        holder.retailerTitle.setText(itemDetail.getName());
+        holder.rating.setText("8.1 Dummy");
+        holder.distance.setText("9.5 km Dummy");
+        picassoLoad(URLConstants.IMAGE_SERVER_URL + itemDetail.getPhoto_path(), holder.retailerThumbnail);
+
         // picassoLoad(itemDetail.getImage(), holder.itemPic);
         return row;
     }
@@ -108,7 +115,10 @@ public class RetailerAdapter extends BaseAdapter {
     private View getRowView() {
         View row = inflater.inflate(R.layout.retailer_row_list_item, null, false);
         ViewHolder holder = new ViewHolder();
-        holder.textViewItem = (TextView) row.findViewById(R.id.textViewItem);
+        holder.retailerTitle = (TextView) row.findViewById(R.id.retailerTitle);
+        holder.retailerThumbnail = (ImageView) row.findViewById(R.id.retailerThumbnail);
+        holder.rating = (TextView) row.findViewById(R.id.rating);
+        holder.distance = (TextView) row.findViewById(R.id.distance);
         row.setTag(holder);
         return row;
     }
@@ -117,11 +127,18 @@ public class RetailerAdapter extends BaseAdapter {
         mContext = context;
     }
 
+    private void picassoLoad(String url, ImageView imageView) {
+		PicassoEx.getPicasso(mContext).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
+	}
+
     /**
      * View Holder for grid row view.
      */
     public static class ViewHolder {
-        public TextView textViewItem;
+    	public ImageView retailerThumbnail;
+        public TextView retailerTitle;
+        public TextView rating;
+        public TextView distance;
     }
 
     public void setImageHeightWidth(int imageHeight, int imageWidth) {
