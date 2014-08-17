@@ -13,7 +13,7 @@
 
     <!-- Image Crop -->
     <item
-        android:id="@+id/action_image_crop"
+        android:id="@+id/show_image_crop_window"
         android:icon="@drawable/ic_action_crop"
         app:showAsAction="always"
         android:title="Image Crop"/>

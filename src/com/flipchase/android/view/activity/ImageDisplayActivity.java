@@ -4,6 +4,11 @@ package com.flipchase.android.view.activity;
 import java.util.Arrays;
 import java.util.List;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,8 +21,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.edmodo.cropper.cropwindow.CropOverlayView;
+import com.edmodo.cropper.util.ImageViewUtil;
 import com.flipchase.android.R;
 import com.flipchase.android.view.fragment.ExtensionPinFragment;
+
+import com.flipchase.android.view.widget.FlipchaseCropImageView;
+
+import com.flipchase.android.view.widget.TouchImageView;
+import com.edmodo.cropper.CropImageView;
 
 public class ImageDisplayActivity extends BaseActivity{
 
@@ -28,16 +40,23 @@ public class ImageDisplayActivity extends BaseActivity{
     private List<Page> pages;
 
     private String selectedImageURL = null;
+    
+    private boolean mIsCropWindowVisible = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.extension_activity);
         getSupportActionBar().setTitle("Image display");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayOptions(ActionBar.NAVIGATION_MODE_LIST);
+        
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.violetsky);
+
+        
+        ((FlipchaseCropImageView)findViewById(R.id.cropImageView)).setImageBitmap(bitmap);
+
        
         
-        if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_POSITION)) {
+        /*if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_POSITION)) {
             position = savedInstanceState.getInt(BUNDLE_POSITION);
         }
         pages = Arrays.asList(
@@ -48,7 +67,7 @@ public class ImageDisplayActivity extends BaseActivity{
         if (extras != null) {
         	selectedImageURL = extras.getString("selectedImageURL");
         }
-        updatePage();
+        updatePage();*/
     }
   
  
@@ -58,11 +77,11 @@ public class ImageDisplayActivity extends BaseActivity{
 		mMenu = menu;
 		mMenu.clear();
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.display_image_action_bar, menu);
-		
-		 /*View customNav = LayoutInflater.from(this).inflate(R.layout.custom_action_menu, null);
-	     getSupportActionBar().setCustomView(customNav);*/
-	        
+		if(mIsCropWindowVisible)
+		   inflater.inflate(R.menu.crop_window_actionbar, menu);
+		else
+		  inflater.inflate(R.menu.display_image_action_bar, menu);
+	   
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -75,8 +94,13 @@ public class ImageDisplayActivity extends BaseActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
+    	case R.id.show_image_crop_window:
+    		showCropWindow(true);
+    		break;
 		case R.id.action_image_crop:
 			break;
+		case android.R.id.home:
+			onBackPressed();
 		default:
 			break;
 		}
@@ -124,5 +148,35 @@ public class ImageDisplayActivity extends BaseActivity{
             this.clazz = clazz;
         }
     }
-
+    
+    
+    private void showCropWindow(boolean isCropWindowVisible){
+    	mIsCropWindowVisible = isCropWindowVisible;
+    	
+    	if(isCropWindowVisible){
+    		
+    		TouchImageView imageview = (TouchImageView)findViewById(R.id.zoomImage);
+			final Rect result = new Rect(0, 0,imageview.getWidth(),imageview.getHeight());
+			CropOverlayView cropImageView = (CropOverlayView)findViewById(R.id.cropOverlayView);
+			cropImageView.setVisibility(View.VISIBLE);
+			cropImageView.setBitmapRect(result);
+    		
+    	}else{
+    		findViewById(R.id.cropOverlayView).setVisibility(View.GONE);
+    	}
+    	
+    	supportInvalidateOptionsMenu();
+    	
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	if(mMenu!=null && mMenu.size()==1){
+    		showCropWindow(false);
+    		supportInvalidateOptionsMenu();
+    		return;
+    	}
+    	finish();
+    }
+    
 }

@@ -100,8 +100,8 @@ public class CatalogueAdapter extends BaseAdapter{
 
 	private void picassoLoad(String url, ImageView imageView) {
 		PicassoEx.getPicasso(mContext).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
+		//PicassoEx.getPicasso(mContext).load(url).get()
 	}
-
 	public class ViewHolder{
 		public ImageView catalogueImageView;
 		public CustomFontTextView catalogueName;
