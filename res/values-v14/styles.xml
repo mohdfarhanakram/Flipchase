@@ -11,4 +11,8 @@
         <item name="android:actionBarTabTextStyle">@style/CustomActionBarTabText</item>
     </style>
 
+     <style name="SwitchTextAppearance" parent="AppBaseTheme">
+        <item name="textColor">@color/white</item>
+        <item name="textSize">16sp</item>
+    </style>
 </resources>

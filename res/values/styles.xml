@@ -58,5 +58,10 @@
       <item name="android:maxLines">2</item>
       <item name="android:maxWidth">180dip</item>
   </style>
+  
+     <style name="SwitchTextAppearance" parent="AppBaseTheme">
+        <item name="textColor">@color/white</item>
+        <item name="textSize">16sp</item>
+    </style>
 
 </resources>

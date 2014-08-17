@@ -51,6 +51,7 @@ public class TouchImageView extends ImageView {
 
 	private void sharedConstructing(Context context) {
 		super.setClickable(true);
+		setDrawingCacheEnabled(true);
 		this.context = context;
 		mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 		matrix = new Matrix();

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:apps="http://schemas.android.com/apk/res/com.flipchase.android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/itmeImage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scaleType="centerInside" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp" >
+
+            <com.flipchase.android.view.widget.CustomFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item title"
+                android:textSize="14sp" />
+
+            <com.flipchase.android.view.widget.CustomFontEditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="e.g. milk"
+                android:paddingLeft="10dp"
+                android:textSize="14sp" >
+            </com.flipchase.android.view.widget.CustomFontEditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp" >
+
+            <com.flipchase.android.view.widget.CustomFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Set Reminder"
+                android:textSize="14sp" />
+
+            <de.ankri.views.Switch
+                android:id="@+id/set_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="0"
+                android:textColor="@color/white"
+                apps:textOff="NO"
+                apps:textOn="YES" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp" >
+
+            <com.flipchase.android.view.widget.CustomFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:textSize="14sp" />
+
+            <com.flipchase.android.view.widget.CustomFontEditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="2"
+                android:hint="1"
+                android:paddingLeft="10dp"
+                android:textSize="14sp" >
+            </com.flipchase.android.view.widget.CustomFontEditText>
+
+            <com.flipchase.android.view.widget.CustomFontEditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:hint="Item"
+                android:paddingLeft="10dp"
+                android:textSize="14sp" >
+            </com.flipchase.android.view.widget.CustomFontEditText>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
