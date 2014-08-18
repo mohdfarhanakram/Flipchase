@@ -35,6 +35,8 @@ import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
 import com.edmodo.cropper.util.ImageViewUtil;
 import com.flipchase.android.R;
+import com.flipchase.android.util.PicassoEx;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.FlipchaseCropImageView;
 import com.flipchase.android.view.widget.TouchImageView;
 
@@ -70,12 +72,13 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
         pages = Arrays.asList(
                // new Page("Large images", ImageDisplayLargeFragment.class)
         		 new Page("Large images", ExtensionPinFragment.class)
-        );
+        );*/
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
         	selectedImageURL = extras.getString("selectedImageURL");
+        	picassoLoad(selectedImageURL, (TouchImageView)findViewById(R.id.zoomImage));
         }
-        updatePage();*/
+        //updatePage();
 	}
 
 
@@ -222,7 +225,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		int width = display.getWidth();
 		int height = ((TouchImageView)findViewById(R.id.zoomImage)).getMeasuredHeight();
 		
-		Bitmap imageViewBitmap = getBitmapFromView(findViewById(R.id.zoomImage), height, width);
+		Bitmap imageViewBitmap = Utils.getBitmapFromView(findViewById(R.id.zoomImage), height, width);
 
 		final Rect displayedImageRect = new Rect(0, 0,imageViewBitmap.getWidth(),imageViewBitmap.getHeight());
 		
@@ -261,61 +264,12 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		
 	}
 	
+	private void picassoLoad(String url, ImageView imageView) {
+		PicassoEx.getPicasso(this).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
+		//PicassoEx.getPicasso(mContext).load(url).get()
+	}
 	
-	/*
-	 *  Create image and save in file system.
-	 */
-	public File createImage(int height, int width, View view, String fileName) {
-	    Bitmap bitmapCategory = getBitmapFromView(view, height, width);
-	    return createFile(bitmapCategory, fileName);
-	}
-
-	/*
-	 *  save bitmap image in phone memory
-	 */
-	public File createFile(Bitmap bitmap, String fileName) {
-
-	    File externalStorage = Environment.getExternalStorageDirectory();
-	    String sdcardPath = externalStorage.getAbsolutePath();
-	    File reportImageFile = new File(sdcardPath + "/YourFolderName" + fileName + ".jpg");
-	    try {
-	        if (reportImageFile.isFile()) {
-	            reportImageFile.delete();
-	        }
-	        if (reportImageFile.createNewFile()) {
-	            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-	            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-	            FileOutputStream fo = new FileOutputStream(reportImageFile);
-	            fo.write(bytes.toByteArray());
-	            bytes.close();
-	            fo.close();
-
-	            return reportImageFile;
-	        }
-	    } catch (Exception e) {
-	        Toast.makeText(this, "Unable to create Image.Try again", Toast.LENGTH_SHORT).show();
-	    }
-	    return null;
-	}
-
-	/*
-	 *  Take view screen shots
-	 */
-	public Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
-
-	    Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
-	    Canvas canvas = new Canvas(returnedBitmap);
-	    Drawable bgDrawable = view.getBackground();
-	    if (bgDrawable != null)
-	        bgDrawable.draw(canvas);
-	    else
-	        canvas.drawColor(Color.WHITE);
-
-	    view.measure(MeasureSpec.makeMeasureSpec(totalWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(totalHeight, MeasureSpec.EXACTLY));
-	    view.layout(0, 0, totalWidth, totalHeight);
-	    view.draw(canvas);
-	    return returnedBitmap;
-	}
+	
 	
 
 }

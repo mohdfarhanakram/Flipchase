@@ -141,6 +141,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	}
 	
 	private void showCitiesPopup() {
+		
+		if(locationService==null || locationService.getAllCities()==null)
+			return;
+		
 		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, locationService.getAllCities());
         ListView listViewCityItems = new ListView(this);
         listViewCityItems.setAdapter(adapter);
@@ -160,6 +164,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	}
 	
 	private void showLocationPopup() {
+		
+		if(mCity==null || locationService==null || locationService.getAllCities()==null)
+			return;
+		
 		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, 
 				locationService.getLocationsForCity(mCity));
         ListView listViewLocationItems = new ListView(this);
