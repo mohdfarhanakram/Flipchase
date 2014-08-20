@@ -3,8 +3,11 @@ package com.flipchase.android.view.activity;
 import java.util.Collections;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.flipchase.android.R;
@@ -32,6 +35,7 @@ public class RetailerStoresActivity  extends BaseActivity implements View.OnClic
         listview = (ListView) findViewById(R.id.store_list_view);
         retailerStoreAdapter = new RetailerStoreAdapter(this, Collections.EMPTY_LIST);
         listview.setAdapter(retailerStoreAdapter);
+        setStoreItemClick();
 	}
 	
 	/**
@@ -69,6 +73,24 @@ public class RetailerStoresActivity  extends BaseActivity implements View.OnClic
         }
     }
 	
+	/**
+     * set item click listener
+     */
+    private void setStoreItemClick() {
+    	listview.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View arg1, int position,
+            		long arg3) {
+            	Intent i = new Intent(RetailerStoresActivity.this,
+    					StoreMapViewActivity.class);
+            	Store store = (Store) adapterView.getItemAtPosition(position);
+            	i.putExtra("storeId", store.getId());
+            	startActivity(i);
+            }
+        });
+    }
+    
 	@Override
 	public void onClick(View v) {
 	}

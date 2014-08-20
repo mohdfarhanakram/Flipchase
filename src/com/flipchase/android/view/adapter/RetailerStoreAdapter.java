@@ -74,7 +74,7 @@ public class RetailerStoreAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
-        return null;
+    	return items.get(position);
     }
 
     @Override

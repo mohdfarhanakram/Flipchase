@@ -223,7 +223,7 @@ public class StoreFragment extends BaseFragment {
     }
     
     /**
-     * set grid item click listener
+     * set item click listener
      */
     private void setStoreItemClick() {
     	mItemsListView.setOnItemClickListener(new OnItemClickListener() {
