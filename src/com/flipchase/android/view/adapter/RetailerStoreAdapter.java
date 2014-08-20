@@ -110,7 +110,11 @@ public class RetailerStoreAdapter extends BaseAdapter {
         Store itemDetail = items.get(position);
         holder.storeTitle.setText(itemDetail.getName());
         holder.storeAddress.setText("Delhi, 242 Rajiv Chownk Dummy");
-        holder.storeDistance.setText("9.5 km Dummy");
+        if(itemDetail.getDistance() != null) {
+        	holder.storeDistance.setText(itemDetail.getDistance().toString());
+        } else {
+        	holder.storeDistance.setText("Distance not found...");
+        }
         //picassoLoad();
         return row;
     }
