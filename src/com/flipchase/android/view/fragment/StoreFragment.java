@@ -234,7 +234,7 @@ public class StoreFragment extends BaseFragment {
             	Intent i = new Intent(getActivity(),
     					RetailerStoresActivity.class);
             	Retailer retailer = (Retailer) adapterView.getItemAtPosition(position);
-            	i.putExtra("retailerId", retailer.getId());
+            	i.putExtra("retailer", retailer); 
             	startActivity(i);
             }
         });

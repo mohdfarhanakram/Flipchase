@@ -278,8 +278,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	private void updateAppSharedPreferenceForLocations() {
 		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY, mCity.getId(), this);
 		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION, mLocation.getId(), this);
-		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, Float.parseFloat(mCity.getLatitude().toString()) , this);
-		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, Float.parseFloat(mCity.getLongitude().toString()) , this);
+		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, Float.parseFloat(mLocation.getLatitude().toString()) , this);
+		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, Float.parseFloat(mLocation.getLongitude().toString()) , this);
 	}
 	
 	/***********************************  Google Maps START  ***************************/

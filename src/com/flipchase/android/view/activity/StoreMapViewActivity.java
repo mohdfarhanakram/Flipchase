@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.flipchase.android.R;
+import com.flipchase.android.domain.Store;
 import com.flipchase.android.persistance.AppSharedPreference;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,11 +16,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class StoreMapViewActivity extends BaseActivity {
 
 	private GoogleMap googleMap;
-		
+	private Store store = null;	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_store_map_layout);
+		
+		this.store = (Store) getIntent().getSerializableExtra("store");
 	}
 	
 	/**
@@ -52,8 +55,8 @@ public class StoreMapViewActivity extends BaseActivity {
 		// Hide the zoom controls as the button panel will cover it.
 		googleMap.getUiSettings().setZoomControlsEnabled(false);
 		
-		final LatLng USER_CURRENT_LOCATION = new LatLng(AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE, 0, this),
-				AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, 0, this));
+		final LatLng USER_CURRENT_LOCATION = new LatLng(store.getLatitude() ,
+				store.getLongitude());
 
 		Marker hamburg = googleMap.addMarker(new MarkerOptions().position(USER_CURRENT_LOCATION)
 		        .title("Flipchase"));

@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.flipchase.android.R;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.view.adapter.RetailerStoreAdapter;
@@ -28,9 +29,9 @@ public class RetailerStoresActivity  extends BaseActivity implements View.OnClic
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_retailer_stores);
 		
-		Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-        	retailerId = extras.getString("retailerId");
+		Retailer retailer = (Retailer) getIntent().getSerializableExtra("retailer");
+        if (retailer != null) {
+        	retailerId = retailer.getId();
         }
         listview = (ListView) findViewById(R.id.store_list_view);
         retailerStoreAdapter = new RetailerStoreAdapter(this, Collections.EMPTY_LIST);
@@ -85,7 +86,7 @@ public class RetailerStoresActivity  extends BaseActivity implements View.OnClic
             	Intent i = new Intent(RetailerStoresActivity.this,
     					StoreMapViewActivity.class);
             	Store store = (Store) adapterView.getItemAtPosition(position);
-            	i.putExtra("storeId", store.getId());
+            	i.putExtra("store", store);  
             	startActivity(i);
             }
         });
