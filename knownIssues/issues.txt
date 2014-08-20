@@ -1,0 +1,4 @@
+1) Multiple times click City and Locations
+2) Get Density Specifics Images
+3) First Time Map not comes
+4) Progress popups
