@@ -1,43 +1,30 @@
 
 package com.flipchase.android.view.activity;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
-import com.edmodo.cropper.util.ImageViewUtil;
 import com.flipchase.android.R;
+import com.flipchase.android.domain.Store;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.util.Utils;
-import com.flipchase.android.view.widget.FlipchaseCropImageView;
 import com.flipchase.android.view.widget.TouchImageView;
 
 public class ImageDisplayActivity extends BaseActivity implements DialogInterface.OnClickListener{
@@ -49,7 +36,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	private List<Page> pages;
 
 	private String selectedImageURL = null;
-
+	private Store store;
 	private boolean mIsCropWindowVisible = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +45,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		setContentView(R.layout.extension_activity);
 		getSupportActionBar().setTitle("Image display");
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+		this.store = (Store) getIntent().getSerializableExtra("store");
 		/*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.violetsky);
 
 
@@ -113,12 +100,21 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 			break;
 		case android.R.id.home:
 			onBackPressed();
+		case R.id.action_location:
+			showStoreLocation();
 		default:
 			break;
 		}
 		return true;
 	}
 
+	private void showStoreLocation() {
+		Intent i = new Intent(ImageDisplayActivity.this,
+				NearestCatalogueStoreActivity.class);
+    	i.putExtra("store", store);  
+    	startActivity(i);
+	}
+	
 	public String getSelectedImageName() {
 		return selectedImageURL;
 	}

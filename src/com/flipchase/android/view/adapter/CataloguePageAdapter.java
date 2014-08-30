@@ -12,154 +12,156 @@ import android.widget.ImageView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Store;
 import com.flipchase.android.extlibpro.FlipBookLog;
 import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.view.activity.ImageDisplayActivity;
 
 public class CataloguePageAdapter extends BaseAdapter {
 
-  private LayoutInflater inflater;
+	private LayoutInflater inflater;
 
-  private int repeatCount = 1;
+	private int repeatCount = 1;
 
-  private List<CataloguePageItem> catalogueData;
+	private List<CataloguePageItem> catalogueData;
+	private Store store;
+	private Context activityContext;
 
-  private Context activityContext;
-  
-  private int pageId;
-  private boolean isAllItemsLoaded = false;
-  
-  public CataloguePageAdapter(Context context, List<CataloguePageItem> catalogueData, int pageId) {
-	activityContext = context;
-    inflater = LayoutInflater.from(context);
-    this.catalogueData = catalogueData;
-    this.pageId = pageId;
-  }
+	private int pageId;
+	private boolean isAllItemsLoaded = false;
 
-  public CataloguePageAdapter(Context context) {
+	public CataloguePageAdapter(Context context,
+			List<CataloguePageItem> catalogueData, int pageId) {
 		activityContext = context;
-	    inflater = LayoutInflater.from(context);
-  }
-  
-  public void setItems(List<CataloguePageItem> items, int pageId) {
-      this.catalogueData = items;
-      this.pageId = pageId;
-      notifyDataSetChanged();
-  }
-  
-  @Override
-  public int getCount() {
-	  return catalogueData == null ? 0 : catalogueData.size() * repeatCount;
-    //return catalogueData.size() * repeatCount;
-  }
+		inflater = LayoutInflater.from(context);
+		this.catalogueData = catalogueData;
+		this.pageId = pageId;
+	}
 
-  public int getRepeatCount() {
-    return repeatCount;
-  }
+	public CataloguePageAdapter(Context context) {
+		activityContext = context;
+		inflater = LayoutInflater.from(context);
+	}
 
-  public void setRepeatCount(int repeatCount) {
-    this.repeatCount = repeatCount;
-  }
+	public void setStore(Store store) {
+		this.store = store;
+	}
 
-  @Override
-  public Object getItem(int position) {
-    return position;
-  }
+	public void setItems(List<CataloguePageItem> items, int pageId) {
+		this.catalogueData = items;
+		this.pageId = pageId;
+		notifyDataSetChanged();
+	}
 
-  @Override
-  public long getItemId(int position) {
-    return position;
-  }
+	@Override
+	public int getCount() {
+		return catalogueData == null ? 0 : catalogueData.size() * repeatCount;
+		// return catalogueData.size() * repeatCount;
+	}
 
-  @Override
-  public View getView(int position, View convertView, ViewGroup parent) {
-    View layout = convertView;
-    if (convertView == null) {
-      layout = inflater.inflate(R.layout.horizontal_flip_book_layout, null);
-      FlipBookLog.d("created new view from adapter: %d", position);
-    }
+	public int getRepeatCount() {
+		return repeatCount;
+	}
 
-    final CataloguePageItem data = catalogueData.get(position % catalogueData.size());
+	public void setRepeatCount(int repeatCount) {
+		this.repeatCount = repeatCount;
+	}
 
-    ImageView iv =(ImageView) layout.findViewById(R.id.photo);
-    iv.setImageBitmap(data.getcBitmap());
-    //picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(), iv);
-    /*
-    UI
-    .<ImageView>findViewById(layout, R.id.photo)
-    .setImageBitmap(IO.readBitmap(inflater.getContext().getAssets(), data.imageFilename));
-    */
-    iv.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-        	Intent i = new Intent(activityContext, ImageDisplayActivity.class);      
-        	i.putExtra("selectedImageURL", URLConstants.IMAGE_SERVER_URL + data.getPhoto_path());
-        	activityContext.startActivity(i);
-        }
-    });
-    /*
-    if(position == catalogueData.size() -1 && !isAllItemsLoaded) {
-    	((FlipHorizontalLayoutActivity) activityContext).loadMoreCataloguepagesChunk(pageId + 1);
-    }
-    */
-    /*
-    UI
-        .<TextView>findViewById(layout, R.id.title)
-        .setText(AphidLog.format("%d. %s", position, data.title));
+	@Override
+	public Object getItem(int position) {
+		return position;
+	}
 
-    
-    UI
-        .<ImageView>findViewById(layout, R.id.photo)
-        .setImageBitmap(IO.readBitmap(inflater.getContext().getAssets(), data.imageFilename));
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
 
-    UI
-        .<TextView>findViewById(layout, R.id.description)
-        .setText(Html.fromHtml(data.description));
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View layout = convertView;
+		if (convertView == null) {
+			layout = inflater.inflate(R.layout.horizontal_flip_book_layout,
+					null);
+			FlipBookLog.d("created new view from adapter: %d", position);
+		}
 
-    UI
-        .<Button>findViewById(layout, R.id.wikipedia)
-        .setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            Intent intent = new Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(data.link)
-            );
-            inflater.getContext().startActivity(intent);
-          }
-        });
-    */
-    return layout;
-  }
+		final CataloguePageItem data = catalogueData.get(position
+				% catalogueData.size());
 
-  
-  /*
-  private void picassoLoad(String url, ImageView imageView) {
-	  //PicassoEx.getPicasso(activityContext).load(url).fit().into(imageView);
-	PicassoEx.getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565).placeholder( android.R.drawable.dark_header).
-	fit().into(imageView);
-  }
-  */
-  
-  public int getPageId() {
-	return pageId;
-  }
+		ImageView iv = (ImageView) layout.findViewById(R.id.photo);
+		iv.setImageBitmap(data.getcBitmap());
+		// picassoLoad(URLConstants.IMAGE_SERVER_URL + data.getPhoto_path(),
+		// iv);
+		/*
+		 * UI .<ImageView>findViewById(layout, R.id.photo)
+		 * .setImageBitmap(IO.readBitmap(inflater.getContext().getAssets(),
+		 * data.imageFilename));
+		 */
+		iv.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent i = new Intent(activityContext,
+						ImageDisplayActivity.class);
+				i.putExtra("selectedImageURL", URLConstants.IMAGE_SERVER_URL
+						+ data.getPhoto_path());
+				i.putExtra("store", store);
+				activityContext.startActivity(i);
+			}
+		});
+		/*
+		 * if(position == catalogueData.size() -1 && !isAllItemsLoaded) {
+		 * ((FlipHorizontalLayoutActivity)
+		 * activityContext).loadMoreCataloguepagesChunk(pageId + 1); }
+		 */
+		/*
+		 * UI .<TextView>findViewById(layout, R.id.title)
+		 * .setText(AphidLog.format("%d. %s", position, data.title));
+		 * 
+		 * 
+		 * UI .<ImageView>findViewById(layout, R.id.photo)
+		 * .setImageBitmap(IO.readBitmap(inflater.getContext().getAssets(),
+		 * data.imageFilename));
+		 * 
+		 * UI .<TextView>findViewById(layout, R.id.description)
+		 * .setText(Html.fromHtml(data.description));
+		 * 
+		 * UI .<Button>findViewById(layout, R.id.wikipedia)
+		 * .setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { Intent intent = new Intent(
+		 * Intent.ACTION_VIEW, Uri.parse(data.link) );
+		 * inflater.getContext().startActivity(intent); } });
+		 */
+		return layout;
+	}
 
-  public void setPageId(int pageId) {
-	this.pageId = pageId;
-  }
+	/*
+	 * private void picassoLoad(String url, ImageView imageView) {
+	 * //PicassoEx.getPicasso(activityContext).load(url).fit().into(imageView);
+	 * PicassoEx
+	 * .getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565
+	 * ).placeholder( android.R.drawable.dark_header). fit().into(imageView); }
+	 */
 
-  
-  public boolean isAllItemsLoaded() {
-	return isAllItemsLoaded;
-  }
+	public int getPageId() {
+		return pageId;
+	}
 
-  public void setAllItemsLoaded(boolean isAllItemsLoaded) {
-	this.isAllItemsLoaded = isAllItemsLoaded;
-  }
+	public void setPageId(int pageId) {
+		this.pageId = pageId;
+	}
 
-  public void removeData(int index) {
-    if (catalogueData.size() > 1) {
-    	catalogueData.remove(index);
-    }
-  }
+	public boolean isAllItemsLoaded() {
+		return isAllItemsLoaded;
+	}
+
+	public void setAllItemsLoaded(boolean isAllItemsLoaded) {
+		this.isAllItemsLoaded = isAllItemsLoaded;
+	}
+
+	public void removeData(int index) {
+		if (catalogueData.size() > 1) {
+			catalogueData.remove(index);
+		}
+	}
 }
