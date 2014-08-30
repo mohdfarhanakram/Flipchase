@@ -1,5 +1,8 @@
 package com.flipchase.android.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Location extends BaseDomain {
 
 	private Long city;

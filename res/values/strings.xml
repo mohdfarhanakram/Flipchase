@@ -24,6 +24,7 @@
     <string name="filter_by">FILTER BY</string>
     <string name="apply">Apply</string>
     <string name="txt_cancel">Cancel</string>
+	<string name="nearest_store_tittle">Nearest Store</string>
 
     <string-array name="sort_by_options">
         <item>Near By</item>

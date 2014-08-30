@@ -33,5 +33,8 @@ public class AppConstants {
     public static final String NETWORK_CONNECTION_ERROR = "Please Check your network connection";
     
     public static final int MAX_CATALOG_STACK_SIZE = 3;
+    
+    public static final String STORE_DISTANCE_PRECISION_FOR_KM = "%.2f";
+    public static final String DISTANCE_IN_KM = " Km.";
 
 }

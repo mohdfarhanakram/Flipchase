@@ -1,6 +1,8 @@
 package com.flipchase.android.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Catalogue extends BaseDomain {
 
 	private String status;

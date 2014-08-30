@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.domain.Store;
 import com.flipchase.android.extlibpro.FlipViewController;
 import com.flipchase.android.extlibpro.FlipViewController.ViewFlipListener;
 import com.flipchase.android.model.ServiceResponse;
@@ -33,14 +36,14 @@ import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CataloguePageAdapter;
-import com.flipchase.android.view.widget.TouchImageView;
 
 public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFlipListener,DialogInterface.OnClickListener {
   
 
 	private FlipViewController flipView;
 	private CataloguePageAdapter cataloguePageAdapter;
-	private String catalogueId;
+	private Catalogue catalogue;
+	private Store store;
 	private Stack<CataloguePagesChunk> mProductDataStack;
 	
 	private View currentlyVisibleView=null;
@@ -61,15 +64,9 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		flipView.setOnViewFlipListener(this);
 		cataloguePageAdapter = new CataloguePageAdapter(this);
 		flipView.setAdapter(cataloguePageAdapter);
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			catalogueId = extras.getString("catalogueId");
-		}
 		
-		//setContentView(flipView);
-		
-
-		
+		this.catalogue = (Catalogue) getIntent().getSerializableExtra("catalogue");
+		this.store = (Store) getIntent().getSerializableExtra("store");
 	}
 	
 	@Override
@@ -87,28 +84,36 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 	}
 
 	 
-	 @Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-			case R.id.show_image_crop_window:
-				showCropWindow(true);
-				break;
-			case R.id.action_image_crop:
-				createFormDialog(getCroppedImage()).show();
-				break;
-			case android.R.id.home:
-				onBackPressed();
-			default:
-				break;
-			}
-			return true;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.show_image_crop_window:
+			showCropWindow(true);
+			break;
+		case R.id.action_image_crop:
+			createFormDialog(getCroppedImage()).show();
+			break;
+		case android.R.id.home:
+			onBackPressed();
+		case R.id.action_location:
+			showStoreLocation();
+		default:
+			break;
 		}
+		return true;
+	}
 
-
+	private void showStoreLocation() {
+		Intent i = new Intent(FlipHorizontalLayoutActivity.this,
+				NearestCatalogueStoreActivity.class);
+    	i.putExtra("store", store);  
+    	startActivity(i);
+	}
+	
 	public void loadMoreCataloguepagesChunk(int pageId) {
 		showProgressDialog("Loading More Catalogues Pages...");
 		String refinedURL = URLConstants.GET_CATALOGUE_PAGES_FOR_CATEGORY_URL
-				.replace("{catalogueid}", catalogueId);
+				.replace("{catalogueid}", catalogue.getId());
 		refinedURL = refinedURL + "?pageid=" + pageId;
 		fetchData(refinedURL,
 		FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE, null);
@@ -121,7 +126,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		switch (event) {
 		default:
 			showProgressDialog("Loading Catalogues Pages...");
-			String refinedURL = URLConstants.GET_CATALOGUE_PAGES_FOR_CATEGORY_URL.replace("{catalogueid}", catalogueId);
+			String refinedURL = URLConstants.GET_CATALOGUE_PAGES_FOR_CATEGORY_URL.replace("{catalogueid}", catalogue.getId());
 			refinedURL = refinedURL + "?pageid=1";
 			fetchData(refinedURL,FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE, null);
 			break;

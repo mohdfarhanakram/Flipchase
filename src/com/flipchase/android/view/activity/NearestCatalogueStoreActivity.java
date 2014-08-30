@@ -1,10 +1,13 @@
 package com.flipchase.android.view.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.domain.Store;
+import com.flipchase.android.util.StringUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -12,16 +15,38 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class StoreMapViewActivity extends BaseActivity {
+public class NearestCatalogueStoreActivity extends BaseActivity {
 
 	private GoogleMap googleMap;
 	private Store store = null;	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_store_map_layout);
+		setContentView(R.layout.activity_catalogue_nearest_store_layout);
 		
 		this.store = (Store) getIntent().getSerializableExtra("store");
+		initializeUI();
+	}
+	
+	private void initializeUI() {
+		TextView nearestCatalogueStoreAddress =(TextView)findViewById(R.id.nearestCatalogueStoreAddress);
+		TextView nearestCatalogueStoreDistance =(TextView)findViewById(R.id.nearestCatalogueStoreDistance);
+		TextView nearestCatalogueStorePhoneNumber =(TextView)findViewById(R.id.nearestCatalogueStorePhoneNumber);
+		TextView nearestCatalogueStoreWorkingHours =(TextView)findViewById(R.id.nearestCatalogueStoreWorkingHours);
+		TextView nearestCatalogueStoreName =(TextView)findViewById(R.id.nearestCatalogueStoreName);
+		
+		nearestCatalogueStoreName.setText(store.getName());
+		if(StringUtils.isNullOrEmpty(store.getName())) {
+			nearestCatalogueStoreName.setText("Store");
+		}
+		nearestCatalogueStoreAddress.setText(store.getAddress_line1());
+		if(store.getDistance() != null) {
+        	String distanceAsString = String.format(AppConstants.STORE_DISTANCE_PRECISION_FOR_KM, store.getDistance());
+        	nearestCatalogueStoreDistance.setText(distanceAsString + AppConstants.DISTANCE_IN_KM);
+        }
+		nearestCatalogueStorePhoneNumber.setText(store.getPhonenumber1());
+		nearestCatalogueStoreWorkingHours.setText(store.getStoreHours());
 	}
 	
 	/**

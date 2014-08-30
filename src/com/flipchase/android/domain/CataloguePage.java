@@ -1,5 +1,7 @@
 package com.flipchase.android.domain;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -9,7 +11,7 @@ import com.flipchase.android.util.PicassoEx;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CataloguePage extends BaseDomain {
 
 	public Bitmap cBitmap;

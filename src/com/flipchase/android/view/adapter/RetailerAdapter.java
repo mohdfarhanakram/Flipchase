@@ -104,8 +104,6 @@ public class RetailerAdapter extends BaseAdapter {
         }
         Retailer itemDetail = items.get(position);
         holder.retailerTitle.setText(itemDetail.getName());
-        holder.rating.setText("8.1 Dummy");
-        holder.distance.setText("9.5 km Dummy");
         picassoLoad(URLConstants.IMAGE_SERVER_URL + itemDetail.getPhoto_path(), holder.retailerThumbnail);
 
         // picassoLoad(itemDetail.getImage(), holder.itemPic);
@@ -117,8 +115,8 @@ public class RetailerAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder();
         holder.retailerTitle = (TextView) row.findViewById(R.id.retailerTitle);
         holder.retailerThumbnail = (ImageView) row.findViewById(R.id.retailerThumbnail);
-        holder.rating = (TextView) row.findViewById(R.id.rating);
-        holder.distance = (TextView) row.findViewById(R.id.distance);
+        //holder.rating = (TextView) row.findViewById(R.id.rating);
+        //holder.distance = (TextView) row.findViewById(R.id.distance);
         row.setTag(holder);
         return row;
     }
@@ -137,8 +135,8 @@ public class RetailerAdapter extends BaseAdapter {
     public static class ViewHolder {
     	public ImageView retailerThumbnail;
         public TextView retailerTitle;
-        public TextView rating;
-        public TextView distance;
+        //public TextView rating;
+        //public TextView distance;
     }
 
     public void setImageHeightWidth(int imageHeight, int imageWidth) {

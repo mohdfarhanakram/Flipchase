@@ -2,6 +2,9 @@ package com.flipchase.android.domain;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserLocation implements Serializable {
 
 	private static final long serialVersionUID = -7730127277030227473L;

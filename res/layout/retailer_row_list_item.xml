@@ -20,7 +20,7 @@
         android:layout_toRightOf="@+id/retailerThumbnail"
         android:textSize="@dimen/retailerTitle"
         android:textStyle="bold" />
-
+<!-- 
     <TextView
         android:id="@+id/rating"
         android:layout_width="fill_parent"
@@ -38,5 +38,5 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/retailerThumbnail"
         android:textSize="@dimen/distance" />
-
+ -->
 </RelativeLayout>

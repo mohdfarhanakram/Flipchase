@@ -38,5 +38,24 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/storeThumbnail"
         android:textSize="@dimen/storeDistance" />
+    
+    <TextView
+        android:id="@+id/storePhoneNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/storeDistance"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/storeThumbnail"
+        android:textSize="@dimen/storeDistance" />
+    
+    <TextView
+        android:id="@+id/storeWorkingHours"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/storePhoneNumber"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/storeThumbnail"
+        android:textSize="@dimen/storeDistance" />
+    
 
 </RelativeLayout>

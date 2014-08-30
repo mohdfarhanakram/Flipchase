@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.util.PicassoEx;
 
@@ -109,13 +110,15 @@ public class RetailerStoreAdapter extends BaseAdapter {
         }
         Store itemDetail = items.get(position);
         holder.storeTitle.setText(itemDetail.getName());
-        holder.storeAddress.setText("Delhi, 242 Rajiv Chownk Dummy");
+        holder.storeAddress.setText(itemDetail.getAddress_line1());
         if(itemDetail.getDistance() != null) {
-        	holder.storeDistance.setText(itemDetail.getDistance().toString());
+        	String distanceAsString = String.format(AppConstants.STORE_DISTANCE_PRECISION_FOR_KM, itemDetail.getDistance());
+        	holder.storeDistance.setText(distanceAsString + AppConstants.DISTANCE_IN_KM);
         } else {
         	holder.storeDistance.setText("Distance not found...");
         }
-        //picassoLoad();
+        holder.phoneNumber.setText(itemDetail.getPhonenumber1());
+        holder.storeWorkingHours.setText(itemDetail.getStoreHours());
         return row;
     }
 
@@ -126,6 +129,8 @@ public class RetailerStoreAdapter extends BaseAdapter {
         holder.storeThumbnail = (ImageView) row.findViewById(R.id.storeThumbnail);
         holder.storeAddress = (TextView) row.findViewById(R.id.storeAddress);
         holder.storeDistance = (TextView) row.findViewById(R.id.storeDistance);
+        holder.phoneNumber = (TextView) row.findViewById(R.id.storePhoneNumber);
+        holder.storeWorkingHours = (TextView) row.findViewById(R.id.storeWorkingHours);
         row.setTag(holder);
         return row;
     }
@@ -146,6 +151,8 @@ public class RetailerStoreAdapter extends BaseAdapter {
         public TextView storeTitle;
         public TextView storeAddress;
         public TextView storeDistance;
+        public TextView phoneNumber;
+        public TextView storeWorkingHours;
     }
 
     public void setImageHeightWidth(int imageHeight, int imageWidth) {

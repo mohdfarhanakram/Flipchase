@@ -32,6 +32,7 @@
     <dimen name="distance">15dip</dimen>
     
     <!-- Store Page -->
+    <dimen name="nearestStoreTitle">25dp</dimen>
     <dimen name="storeTitle">17dp</dimen>
     <dimen name="storeAddress">15dip</dimen>
     <dimen name="storeDistance">15dip</dimen>

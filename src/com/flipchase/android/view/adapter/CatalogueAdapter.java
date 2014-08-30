@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CatalogueDisplay;
+import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
 import com.flipchase.android.view.widget.CustomFontTextView;
@@ -75,12 +76,12 @@ public class CatalogueAdapter extends BaseAdapter{
 			holder.catalogueExpiry = (CustomFontTextView)row.findViewById(R.id.cata_expiry_time_txtv);
 			row.setTag(holder);
 			
-			//DK:
 			ImageView iv = holder.catalogueImageView;
 		    iv.setOnClickListener(new View.OnClickListener() {
 		        public void onClick(View v) {
 		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class);  
-		        	i.putExtra("catalogueId", catalogue.getCatalogue().getId());
+		        	i.putExtra("catalogue", catalogue.getCatalogue());
+		        	i.putExtra("store", catalogue.getStore());
 		        	mContext.startActivity(i);
 		        }
 		    });

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <TextView
+                    android:id="@+id/nearestCatalogueStoreTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nearest_store_tittle"
+                    android:textSize="@dimen/nearestStoreTitle"
+                    android:textStyle="bold" 
+                    android:layout_marginTop="15dip"
+                    android:layout_marginLeft="10dip"/>
+            
+            <LinearLayout
+                android:id="@+id/find_location_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/nearestCatalogueStoreTitle" >
+
+                <fragment
+                    android:id="@+id/map"
+                    android:layout_width="fill_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="15dip"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+
+            	<TextView
+                    android:id="@+id/nearestCatalogueStoreName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/storeTitle"
+                    android:textStyle="bold" 
+                    android:layout_marginTop="5dip"
+                    android:layout_marginLeft="10dip"/>
+            
+                <TextView
+                    android:id="@+id/nearestCatalogueStoreAddress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip" 
+                    android:layout_marginLeft="10dip"/>
+
+                <TextView
+                    android:id="@+id/nearestCatalogueStoreDistance"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" 
+                    android:layout_marginLeft="10dip"/>
+
+                <TextView
+                    android:id="@+id/nearestCatalogueStorePhoneNumber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" 
+                    android:layout_marginLeft="10dip"/>
+
+                <TextView
+                    android:id="@+id/nearestCatalogueStoreWorkingHours"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" 
+                    android:layout_marginLeft="10dip"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
