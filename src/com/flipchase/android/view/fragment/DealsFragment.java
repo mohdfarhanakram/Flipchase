@@ -17,9 +17,12 @@ import android.widget.GridView;
 import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.parcels.CatalogueChunk;
+import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.FilterActivity;
 import com.flipchase.android.view.activity.HomeActivity;
 import com.flipchase.android.view.adapter.CatalogueAdapter;
@@ -83,7 +86,9 @@ public class DealsFragment extends BaseFragment {
 		
 		if(requestCode == FILTER_URL_REQUEST_CODE){
 			if(resultCode == getActivity().RESULT_OK){
-				String filterUrl = data.getStringExtra(AppConstants.FILTER_URL);
+				String jsonString = data.getStringExtra(AppConstants.FILTER_URL);
+				
+				((BaseActivity)getActivity()).postData(URLConstants.GET_LATEST_CATEGORY_URL, FlipchaseApi.GET_LATEST_CATALOGUES, jsonString, VolleyGenericRequest.ContentType.JSON, null);
 			}
 		}
 	}
