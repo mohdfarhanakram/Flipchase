@@ -45,7 +45,7 @@ public class FilterBy implements Serializable {
 		selectedString = selectedString.trim();
 		
 		if(!StringUtils.isNullOrEmpty(selectedString))
-			selectedString = selectedString.substring(0, selectedString.length()-2);
+			selectedString = selectedString.substring(0, selectedString.length()-1);
 		
 		return selectedString.trim();
 

@@ -34,15 +34,15 @@ public class SortBy implements Serializable {
 	}
     
     public int getSortBySelectedIndex(){
-    	int selectedIndex = 0;
+
 		String[] sortOptions = new String[getSortOptions().size()];
 		for(int i = 0; i < getSortOptions().size(); i++){
 			SortByData option = getSortOptions().get(i);
 			if(option.getSelected())
-			     return selectedIndex;
+			     return i;
 		}
 		
-		return selectedIndex;
+		return 0;
 	}
     
 	public List<SortByData> getSortOptions() {
