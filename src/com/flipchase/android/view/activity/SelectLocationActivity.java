@@ -296,7 +296,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			/** For Now we are assuming that the location saves correctly, so send user to next page. **/
 			Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			//i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(i);
 			finish();
 			break;

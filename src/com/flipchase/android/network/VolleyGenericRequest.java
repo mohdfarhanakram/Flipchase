@@ -107,8 +107,8 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
         HashMap<String, String> headers = new HashMap<String, String>();
         
        headers.put("SESSION_ID", Utils.getDeviceIMEINo(mContext));  // set device imei no as a session id
-       headers.put("SELECTED_CITY", AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY,"",mContext));
-       headers.put("SELECTED_LOCATION", AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION,"",mContext));
+       headers.put("SELECTED_CITY_ID", AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY_ID,"",mContext));
+       headers.put("SELECTED_LOCATION_ID", AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION_ID,"",mContext));
        float lat = AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE,0,mContext);
        headers.put("USER_LATITUDE", lat+"");
        float lon = AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE,0,mContext);
