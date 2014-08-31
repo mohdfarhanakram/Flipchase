@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.model.ServiceResponse;
@@ -32,6 +33,10 @@ public class DealsFragment extends BaseFragment {
 	private GridView catalogGridView;
 	private CatalogueAdapter catalogueAdapter;
 	
+	private int FILTER_URL_REQUEST_CODE = 1000;
+	
+	private CatalogueChunk catalogueChunk;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_deal, container, false);
@@ -43,8 +48,13 @@ public class DealsFragment extends BaseFragment {
 		view.findViewById(R.id.filterButton).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getActivity(),FilterActivity.class);
-				startActivity(i);
+				if(catalogueChunk!=null && catalogueChunk.getSortBy()!=null && catalogueChunk.getFilterBy()!=null){
+					Intent i = new Intent(getActivity(),FilterActivity.class);
+					i.putExtra("sortby", catalogueChunk.getSortBy());
+					i.putExtra("filterby", catalogueChunk.getFilterBy());
+					startActivityForResult(i, FILTER_URL_REQUEST_CODE);
+				}
+				
 			}
 		});
 		((HomeActivity) getActivity()).updateDealsCatalogueData("refinedURLWithPageIds");
@@ -56,7 +66,7 @@ public class DealsFragment extends BaseFragment {
 		super.updateUi(response);
 		switch (response.getEventType()) {
 		case FlipchaseApi.GET_LATEST_CATALOGUES:
-			CatalogueChunk catalogueChunk = (CatalogueChunk)response.getResponseObject();
+			catalogueChunk = (CatalogueChunk)response.getResponseObject();
 			if(catalogueChunk != null) {
 				List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
 				catalogueAdapter.setItems(latestCatalogues);
@@ -64,6 +74,17 @@ public class DealsFragment extends BaseFragment {
 			break;
 		default:
 			break;
+		}
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == FILTER_URL_REQUEST_CODE){
+			if(resultCode == getActivity().RESULT_OK){
+				String filterUrl = data.getStringExtra(AppConstants.FILTER_URL);
+			}
 		}
 	}
 } 

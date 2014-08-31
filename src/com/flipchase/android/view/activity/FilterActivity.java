@@ -4,10 +4,13 @@
 package com.flipchase.android.view.activity;
 
 
+import java.util.Calendar;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +20,12 @@ import android.view.View.OnClickListener;
 
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.AppConstants;
+import com.flipchase.android.parcels.CatalogueChunk;
+import com.flipchase.android.parcels.FilterBy;
+import com.flipchase.android.parcels.SortBy;
+import com.flipchase.android.parcels.SortBy.SortByData;
+import com.flipchase.android.parcels.SortOption;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.CustomFontTextView;
@@ -34,6 +43,11 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 	private String[] mFilterByOptions;
 
 	private boolean[] mFilterBySelected;
+	
+	private CatalogueChunk catalogueChunk;
+	
+	private SortBy sortBy;
+	private FilterBy filterBy;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +57,10 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 		findViewById(R.id.txtv_multiselection_selection).setOnClickListener(this);
 		findViewById(R.id.applyFilterButton).setOnClickListener(this);
 		findViewById(R.id.cancelFilterButton).setOnClickListener(this);
-
-		mSortByFilterDialog = createSortByDialog();
-		mFilterByDialog = createFilterByDialog();
+		
+		sortBy = (SortBy)getIntent().getSerializableExtra("sortby");
+		filterBy = (FilterBy)getIntent().getSerializableExtra("filterby");
+		
 	}
 
 	@Override
@@ -73,13 +88,12 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 	}
 
 	private final Dialog createSortByDialog() {
-		//To Do : Option would come from server as of now it is hard coded.
-		mSortByOptions = (String[]) getResources().getStringArray(R.array.sort_by_options);
 
-		//To Do : Default selected index set from server as of now it is 0 ;
-		mSortBySelectedOptionIndex = 0;  //To Do : handle it from server response
+		mSortByOptions = sortBy.getSortByArray();
 
-		((CustomFontTextView)findViewById(R.id.txtv_single_selection)).setText(mSortByOptions[0]);
+		mSortBySelectedOptionIndex = sortBy.getSortBySelectedIndex(); 
+
+		((CustomFontTextView)findViewById(R.id.txtv_single_selection)).setText(mSortByOptions[mSortBySelectedOptionIndex]);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getResources().getString(R.string.sort_by));
@@ -91,19 +105,9 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 
 	private final Dialog createFilterByDialog() {
 		//To Do : Option would come from server as of now it is hard coded.
-		mFilterByOptions = (String[]) getResources().getStringArray(R.array.filter_by_options);
+		mFilterByOptions = filterBy.getFilterByArray();
 
-		mFilterBySelected = new boolean[mFilterByOptions.length]; 
-
-		//To Do : Default selected values set from server as of now it is hard coded ;
-		for(int i = 0; i<mFilterByOptions.length; i++){
-			/*if(i==0)
-				mFilterBySelected[0] = true;
-			else
-				mFilterBySelected[i] = false;*/
-
-			mFilterBySelected[i] = false;
-		}
+		mFilterBySelected = filterBy.getSelectedFilterBooleanArray(); 
 
 		updateMultiselectionUI();
 
@@ -119,14 +123,21 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.txtv_single_selection:
+			mSortByFilterDialog = createSortByDialog();
 			mSortByFilterDialog.show();
 			break;
 		case R.id.txtv_multiselection_selection:
+			mFilterByDialog = createFilterByDialog();
 			mFilterByDialog.show();
 			break;
 		case R.id.applyFilterButton:
+			Intent intent = getIntent();
+			intent.putExtra(AppConstants.FILTER_URL, getComposedFilterUrl());
+			setResult(RESULT_OK, intent);
+			finish();
 			break;
 		case R.id.cancelFilterButton:
+			setResult(RESULT_CANCELED,getIntent());
 			finish();
 			break;
 		default:
@@ -146,13 +157,17 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 
 		case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
 			dialog.dismiss();
+			
+			String id = sortBy.getSortOptions().get(mSortBySelectedOptionIndex).getId();
+            sortBy.setSelected(id);
+            filterBy.setSelected(mFilterBySelected);
 			updateMultiselectionUI();
 			((CustomFontTextView)findViewById(R.id.txtv_single_selection)).setText(mSortByOptions[mSortBySelectedOptionIndex]);
 			break;
 
 		default: // choice item selected
 			mSortBySelectedOptionIndex = which;
-
+			
 			break;
 		}
 	}
@@ -203,10 +218,12 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 		}
 	}
 	
-	private String composeUrl(){
+	private String getComposedFilterUrl(){
 		String url="";
 		return url;
 	}
+	
+	
 	
 	
 }

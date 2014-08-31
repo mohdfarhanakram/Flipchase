@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -51,6 +52,8 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
     protected LocationManager locationManager;
     
     private FlipchaseLocationListener listener;
+    
+    private String provider;
  
     public FlipchaseLocationTracker(Context context,FlipchaseLocationListener listener) {
         this.mContext = context;
@@ -61,7 +64,22 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
- 
+            
+         // Get the location manager
+            //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            // Define the criteria how to select the locatioin provider -> use
+            // default
+            Criteria criteria = new Criteria();
+            provider = locationManager.getBestProvider(criteria, false);
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                listener.onGetLocation(latitude, longitude);
+            }else{
+            	listener.onLocationError("Unable to find your location");
+            }
+ /*
             // getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
  
@@ -89,27 +107,9 @@ public class FlipchaseLocationTracker extends Service implements LocationListene
                 }else{
                 	listener.onLocationError("Unable to find your location");
                 }
-                // if GPS Enabled get lat/long using GPS Services
-                /*if (isGPSEnabled) {
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
-                        }
-                    }
-                }*/
                 
                
-            }
+            }*/
  
         } catch (Exception e) {
         	listener.onLocationError(e.getMessage());

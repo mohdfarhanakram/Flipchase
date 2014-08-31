@@ -1,45 +1,50 @@
 package com.flipchase.android.parcels;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SortBy implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	
 
-	public static enum SortByOption {
-		NEAR_BY("Near By"), NEW("New"), POPULAR("Popular");
-		
-		private final String value;
-		
-		private SortByOption(String value) {
-			this.value = value;
-		}
-		
-		@Override
-		public String toString() {
-			return value;
-		}
-	};
-	
-	public SortBy() {}
-	
-	public SortBy(SortByOption sortByOption) {
-		sortOptions = new ArrayList<SortByData>();
-		for(SortByOption sortOption :SortByOption.values()) {
-			SortByData sortByData = null;
-			if(sortByOption == sortOption) {
-				sortByData = new SortByData(sortOption.value, true, sortOption.name());
-			} else {
-				sortByData = new SortByData(sortOption.name(), false, sortOption.name());
-			}
-			sortOptions.add(sortByData);
-		}
-	}
-	
     private List<SortByData> sortOptions;
 	
+    public void setSelected(String id) {
+    	for(SortByData sortByData : sortOptions) {
+    		if(sortByData.getId().equalsIgnoreCase(id)) {
+    			sortByData.setSelected(true);
+    		} else {
+    			sortByData.setSelected(false);
+    		}
+    	}
+    }
+    
+    public String[] getSortByArray() {
+		String[] sortOptions = new String[getSortOptions().size()];
+		for(int i = 0; i < getSortOptions().size(); i++){
+			SortByData option = getSortOptions().get(i);
+			sortOptions[i] = option.getName();
+		}
+		
+		return sortOptions;
+	}
+    
+    public int getSortBySelectedIndex(){
+    	int selectedIndex = 0;
+		String[] sortOptions = new String[getSortOptions().size()];
+		for(int i = 0; i < getSortOptions().size(); i++){
+			SortByData option = getSortOptions().get(i);
+			if(option.getSelected())
+			     return selectedIndex;
+		}
+		
+		return selectedIndex;
+	}
+    
 	public List<SortByData> getSortOptions() {
 		return sortOptions;
 	}
@@ -48,7 +53,7 @@ public class SortBy implements Serializable {
 		this.sortOptions = sortOptions;
 	}
 
-	public static class SortByData {
+	public static class SortByData implements Serializable{
 
 		private String name;
 		
@@ -89,4 +94,8 @@ public class SortBy implements Serializable {
 		}
 		
 	}
+
+	
+
+	
 }

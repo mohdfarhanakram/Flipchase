@@ -37,5 +37,7 @@ public class AppConstants {
     
     public static final String STORE_DISTANCE_PRECISION_FOR_KM = "%.2f";
     public static final String DISTANCE_IN_KM = " Km.";
+    
+    public static final String FILTER_URL = "filter_url";
 
 }

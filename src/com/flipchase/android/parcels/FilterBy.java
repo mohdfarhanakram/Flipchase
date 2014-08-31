@@ -1,43 +1,48 @@
 package com.flipchase.android.parcels;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterBy implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static enum FilterByOption {
-		ALL("All"), ELECTRONICS("Electronics"), MEN_WOMEN_CLOTHING("Men Women Clothing"), FOOTWEAR("Footwear"), FURNITURE("Furniture");
-		
-		private final String value;
-		
-		private FilterByOption(String value) {
-			this.value = value;
-		}
-		
-		@Override
-		public String toString() {
-			return value;
-		}
-	};
-	
 	public FilterBy() {}
 	
-	public FilterBy(FilterByOption filterByOption) {
-		filterOptions = new ArrayList<FilterByData>();
-		for(FilterByOption filterOption :FilterByOption.values()) {
-			FilterByData filterByData = null;
-			if(filterByOption == filterOption) {
-				filterByData = new FilterByData(filterOption.value, true, filterOption.name());
-			} else {
-				filterByData = new FilterByData(filterOption.value, false, filterOption.name());
-			}
-			filterOptions.add(filterByData);
+	
+	public String[] getFilterByArray() {
+		String options[] = new String[getFilterOptions().size()];
+    	for(int i=0; i<getFilterOptions().size(); i++) {
+    		options[i] = getFilterOptions().get(i).getName();
+    	}
+    	
+    	return options;
+    }
+	
+	public boolean[] getSelectedFilterBooleanArray() {
+		boolean options[] = new boolean[getFilterOptions().size()];
+    	for(int i=0; i<getFilterOptions().size(); i++) {
+    		options[i] = getFilterOptions().get(i).getSelected();
+    	}
+    	
+    	return options;
+    }
+	
+	public void setSelected(boolean[] selectedBoolean) {
+		for(int i=0; i<getFilterOptions().size(); i++) {
+    		getFilterOptions().get(i).setSelected(selectedBoolean[i]);
+    	}
+    }
+	
+	public void selectAll(boolean selected) {
+		for(FilterByData filterByData : filterOptions) {
+			filterByData.setSelected(selected);
 		}
 	}
-	
+
     private List<FilterByData> filterOptions;
 	
     public List<FilterByData> getFilterOptions() {
@@ -48,7 +53,7 @@ public class FilterBy implements Serializable {
 		this.filterOptions = filterOptions;
 	}
 	
-	public static class FilterByData {
+	public static class FilterByData implements Serializable{
 		
 		private String name;
 		
