@@ -308,7 +308,6 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	
 	private void saveUserLocation() {
 		UserLocation userLocation = new UserLocation();
-		userLocation.setSession_id("session_d_u_m");
 		userLocation.setCity_id(Long.valueOf(mCity.getId()));
 		userLocation.setLocation_id(Long.valueOf(mLocation.getId()));
 		String jsonString = convertObjectToJsonString(userLocation);
