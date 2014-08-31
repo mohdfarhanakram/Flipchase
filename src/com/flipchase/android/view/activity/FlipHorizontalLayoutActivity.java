@@ -34,6 +34,7 @@ import com.flipchase.android.extlibpro.FlipViewController.ViewFlipListener;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
+import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CataloguePageAdapter;
 
@@ -45,6 +46,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 	private Catalogue catalogue;
 	private Store store;
 	private Stack<CataloguePagesChunk> mProductDataStack;
+	private CataloguePagesChunk productData;
 	
 	private View currentlyVisibleView=null;
 	private boolean mIsCropWindowVisible = false;
@@ -152,7 +154,8 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 				case FlipchaseApi.GET_CATALOGUE_PAGES_FOR_CATALOGUE:
 					CataloguePagesChunk cataloguePagesChunk = (CataloguePagesChunk) response
 							.getResponseObject();
-					updateStackCatalogItemChunkData(cataloguePagesChunk);
+					this.productData = cataloguePagesChunk;
+					//updateStackCatalogItemChunkData(cataloguePagesChunk);
 					handleCatalogueImageLoadingData(cataloguePagesChunk);
 					break;
 				default:
@@ -169,22 +172,22 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 			cataloguePageAdapter.setAllItemsLoaded(true);
 			return;
 		}
+		cataloguePageAdapter.setItems(items, cataloguePagesChunk.getPageId());
+		
 		CataloguePageItem c1 = items.get(0);
 		c1.loadBitmap(this);
-		/*
-		if (items.size() > 1) {
-			CataloguePageItem c2 = items.get(1);
-			c2.loadBitmap(this);
-		}
-		*/
+		
+		CataloguePageItem c2 = items.get(1);
+		c2.loadBitmap(this);
+		
 		showProgressDialog("Loading Catalogues Offers Images");
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
 				loadBitmaps(items);
-				cataloguePageAdapter.setItems(items, cataloguePagesChunk.getPageId());
 				removeProgressDialog();
 			}
-		}, 2000); // DK: Depending upon the network
+		}, 5000);
+		
 	}
 
 	private void loadBitmaps(List<CataloguePageItem> items) {
@@ -193,6 +196,16 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		}
 	}
 
+	public void updateView() {
+		int count = cataloguePageAdapter.getDownloadedImageCount();
+		if(count % 5 == 0 || count == cataloguePageAdapter.getCount() - 1) {
+			cataloguePageAdapter.notifyDataSetChanged();//setItems(productData.getItems(), productData.getPageId());
+		}
+		++count;
+		cataloguePageAdapter.setDownloadedImageCount(count);
+		
+	}
+	
 	/**
      * adds the product that the user has visited to the stack
      *

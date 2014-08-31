@@ -3,9 +3,12 @@ package com.flipchase.android.parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CataloguePagesChunk implements Parcelable {
 
 	private int total = 0;

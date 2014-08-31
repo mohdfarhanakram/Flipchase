@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CatalogueDisplay;
-import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
 import com.flipchase.android.view.widget.CustomFontTextView;
@@ -90,7 +89,7 @@ public class CatalogueAdapter extends BaseAdapter{
 			holder = (ViewHolder)convertView.getTag();
 		}
 
-		holder.catalogueName.setText(catalogue.getCatalogue().getDisplayName());
+		holder.catalogueName.setText(catalogue.getCatalogue().getName());
 		holder.catalogueExpiry.setText(catalogue.getCatalogue().getExpiryDate());
 		
 		picassoLoad(URLConstants.IMAGE_SERVER_URL + catalogue.getCatalogue().getPhoto_thumb_path(), holder.catalogueImageView);

@@ -3,8 +3,11 @@ package com.flipchase.android.parcels;
 import java.io.Serializable;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import com.flipchase.android.domain.CatalogueDisplay;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CatalogueChunk implements Serializable {
 
 	private static final long serialVersionUID = 1L;

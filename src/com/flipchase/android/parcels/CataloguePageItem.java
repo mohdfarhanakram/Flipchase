@@ -1,9 +1,6 @@
 package com.flipchase.android.parcels;
 
-import com.flipchase.android.constants.URLConstants;
-import com.flipchase.android.util.PicassoEx;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,20 +8,35 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.util.PicassoEx;
+import com.flipchase.android.view.activity.FlipHorizontalLayoutActivity;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CataloguePageItem implements Parcelable {
 
 	public Bitmap cBitmap;
-
+	public Context contextListener;
+	
+	private static int noOfImagesDownloaded = 0;
+	
+	public synchronized void updateImageDownloadCount() {
+		++noOfImagesDownloaded;
+	}
 	private Target target = new Target() {
 		@Override
 		public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 			cBitmap = bitmap;
+			updateImageDownloadCount();
+			((FlipHorizontalLayoutActivity) contextListener).updateView();
 		}
 
 		@Override
 		public void onBitmapFailed(Drawable arg0) {
-			System.out.println("faile");
+			updateImageDownloadCount();
+			System.out.println("failed");
 		}
 
 		@Override
@@ -251,10 +263,20 @@ public class CataloguePageItem implements Parcelable {
 		this.cBitmap = cBitmap;
 	}
 
+	
+	public Context getContextListener() {
+		return contextListener;
+	}
+
+	public void setContextListener(Context contextListener) {
+		this.contextListener = contextListener;
+	}
+
 	public void loadBitmap(Context activityContext) {
+		this.contextListener = activityContext;
 		if(cBitmap == null) {
 			PicassoEx.getPicasso(activityContext).with(activityContext).load
-			(URLConstants.IMAGE_SERVER_URL + this.photo_path).into(target);
+			(URLConstants.IMAGE_SERVER_URL + this.photo_thumb_path).into(target);
 		}
 	}
 	

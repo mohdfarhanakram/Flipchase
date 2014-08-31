@@ -30,6 +30,16 @@ public class CataloguePageAdapter extends BaseAdapter {
 	private int pageId;
 	private boolean isAllItemsLoaded = false;
 
+	private int downloadedImageCount = 0;
+	
+	public int getDownloadedImageCount() {
+		return downloadedImageCount;
+	}
+
+	public void setDownloadedImageCount(int downloadedImageCount) {
+		this.downloadedImageCount = downloadedImageCount;
+	}
+
 	public CataloguePageAdapter(Context context,
 			List<CataloguePageItem> catalogueData, int pageId) {
 		activityContext = context;
@@ -135,13 +145,9 @@ public class CataloguePageAdapter extends BaseAdapter {
 		return layout;
 	}
 
-	/*
-	 * private void picassoLoad(String url, ImageView imageView) {
-	 * //PicassoEx.getPicasso(activityContext).load(url).fit().into(imageView);
-	 * PicassoEx
-	 * .getPicasso(activityContext).load(url).config(Bitmap.Config.RGB_565
-	 * ).placeholder( android.R.drawable.dark_header). fit().into(imageView); }
-	 */
+	 private void picassoLoad(String url, ImageView imageView) {
+	
+	 }
 
 	public int getPageId() {
 		return pageId;

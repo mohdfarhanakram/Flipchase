@@ -23,13 +23,23 @@
              android:layout_weight="1"
              android:id="@+id/photo"
       />
-    -->
+   
+
+<ImageView
+        android:id="@+id/photo"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitStart"
+		android:adjustViewBounds="true" />
+ -->
 
     <ImageView
         android:id="@+id/photo"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY" 
+        android:adjustViewBounds="true"/>
+        
     <!--
   <Button android:layout_width="fill_parent"
           android:layout_height="wrap_content"
