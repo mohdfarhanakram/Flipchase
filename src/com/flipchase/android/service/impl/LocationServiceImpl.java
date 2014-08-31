@@ -18,10 +18,10 @@ public class LocationServiceImpl implements LocationService {
 	private CityLocationWrapper cityLocationWrapper ;
     
 	public LocationServiceImpl() {
-		this.cityLocationWrapper = FlipChaseObjectsCache.getInstance().getCityLocationWrapper();
+		/*this.cityLocationWrapper = FlipChaseObjectsCache.getInstance().getCityLocationWrapper();
 		if(cityLocationWrapper != null) {
 			prepareCityWiseLocatioMap(cityLocationWrapper);
-		}
+		}*/
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class LocationServiceImpl implements LocationService {
 	public void setCityLocationWrapper(CityLocationWrapper cityLocationWrapper) {
 		this.cityLocationWrapper = cityLocationWrapper;
 		prepareCityWiseLocatioMap(cityLocationWrapper);
-		FlipChaseObjectsCache.getInstance().setCityLocationWrapper(cityLocationWrapper);
+		//FlipChaseObjectsCache.getInstance().setCityLocationWrapper(cityLocationWrapper);
 	}
 
 	private void prepareCityWiseLocatioMap(CityLocationWrapper cityLocationWrapper) {
@@ -97,7 +97,7 @@ public class LocationServiceImpl implements LocationService {
 				return city;
 			}
 		}
-		return null;
+		return getFirstCity();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class LocationServiceImpl implements LocationService {
 				return location;
 			}
 		}
-		return null;
+		return getFirstLocationForCity(city);
 	}
 
 }

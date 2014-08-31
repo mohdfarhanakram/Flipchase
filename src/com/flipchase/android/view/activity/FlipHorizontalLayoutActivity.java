@@ -59,8 +59,8 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		setContentView(R.layout.activity_flip_horzontal_layout);
 		// setTitle(R.string.activity_title);
 		flipView = new FlipViewController(this, FlipViewController.HORIZONTAL);
+
 		((LinearLayout)findViewById(R.id.flip_layout)).addView(flipView);
-		
 		flipView.setOnViewFlipListener(this);
 		
 		this.catalogue = (Catalogue) getIntent().getSerializableExtra("catalogue");
@@ -69,6 +69,11 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		cataloguePageAdapter.setStore(store);
 		flipView.setAdapter(cataloguePageAdapter);
 		
+		/*setContentView(flipView);
+		
+		View view = LayoutInflater.from(this).inflate(R.layout.layout_crop_image, null);
+	    addContentView(view, null);*/
+				
 	}
 	
 	@Override

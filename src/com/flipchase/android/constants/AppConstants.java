@@ -28,6 +28,7 @@ public class AppConstants {
     public static String RESPONSE_GET_REATILERS = "response_get_retailers";
     
     public final static String STORES_FOR_RETAILER = "stores_for_retailer";
+    public final static String GET_ALL_CITIES_AND_LOCATIONS = "get_all_city_location";
     
     /** Alerts **/
     public static final String NETWORK_CONNECTION_ERROR = "Please Check your network connection";

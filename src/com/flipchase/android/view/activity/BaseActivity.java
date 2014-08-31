@@ -50,6 +50,7 @@ import com.flipchase.android.network.volley.VolleyError;
 import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.parser.BaseParser;
 import com.flipchase.android.parser.IParser;
+import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.FlipdchaseSearchView;
@@ -233,7 +234,7 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
                 break;
 
             case FlipchaseApi.GET_ALL_LOCATIONS:
-                request = AppConstants.RESPONSE_GET_LOCATIONS;
+                request = AppConstants.RESPONSE_GET_LOCATIONS; 
                 break;
             case FlipchaseApi.GET_LATEST_CATALOGUES:
                 request = AppConstants.RESPONSE_GET_LATEST_CATALOGUES;
@@ -241,14 +242,14 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
             case FlipchaseApi.GET_ALL_RETAILERS:
                 request = AppConstants.RESPONSE_GET_REATILERS;
                 break;
+            case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS: 
+            	request = AppConstants.GET_ALL_CITIES_AND_LOCATIONS;
+            	break;
             default:
                 return "";
         }
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (preferences.contains(request)) {
-            return preferences.getString(request, "");
-        }
-        return "";
+        return AppSharedPreference.getString(request, "", this);
+       
     }
 
     /**

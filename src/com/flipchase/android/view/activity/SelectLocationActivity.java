@@ -8,16 +8,22 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +43,7 @@ import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.service.LocationService;
 import com.flipchase.android.service.impl.LocationServiceImpl;
 import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,7 +60,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class SelectLocationActivity extends BaseActivity implements View.OnClickListener {
 
-	private LocationService locationService = new LocationServiceImpl();
+	//private LocationService locationService = new LocationServiceImpl();
+	
+	private LocationService mLocationService = new LocationServiceImpl();
 	private AlertDialog alertDialogCities;
 	private AlertDialog alertDialogLocations;
 	
@@ -75,22 +84,31 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		
 		mIsComingFromSplash = getIntent().getBooleanExtra(AppConstants.IS_COMING_FROM_SPLASH, true);
 		
-		if(mIsComingFromSplash){
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					searchUserCurrentCityAndLocation();
-					init();
-				}
-			}, AppConstants.SPLASH_WAITING_TIME);
-		} else {
-			String selectedCityId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "", this);
-			mCity = locationService.getCityWithId(selectedCityId);
-			String selectedLocationId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION, "", this);
-			mLocation = locationService.getLocationWithId(selectedLocationId, mCity);
-			isCityLocationsDataCached = true;
-			init();
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		buildActionBar(menu);
+		return super.onCreateOptionsMenu(menu);
+
+	} 
+
+	public void buildActionBar(Menu menu) {
+		if (null == menu) return;
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(true);
+		getSupportActionBar().setTitle("Location");
+		getSupportActionBar().setDisplayUseLogoEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setSubtitle(null);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			finish();
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void init(){
@@ -106,6 +124,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		locationSpinner.setOnClickListener(this);
 		citySpinner.setOnClickListener(this);
 		((Button)findViewById(R.id.done)).setOnClickListener(this);
+		
+		 
+		 boolean isUserCurrentLocationUsed = AppSharedPreference.getBoolean(AppSharedPreference.IS_USER_CURRENT_LOCATION_USED,false, this);
+		 ((CheckBox)findViewById(R.id.use_current_location_chk_box)).setChecked(isUserCurrentLocationUsed);
 
 		/* TODO : Future we will use this as selected in drop down */
 		if(!StringUtils.isNullOrEmpty(userCurrentPresentCity) && !StringUtils.isNullOrEmpty(userCurrentPresentLocation)){
@@ -126,7 +148,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 
 	private void refreshAddress(City selectedCity) {
 		mCity = selectedCity;
-		mLocation = locationService.getFirstLocationForCity(mCity);
+		mLocation = mLocationService.getFirstLocationForCity(mCity);
 		updateAppSharedPreferenceForLocations();
 		setUpMap();
 		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
@@ -142,10 +164,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	
 	private void showCitiesPopup() {
 		
-		if(locationService==null || locationService.getAllCities()==null)
+		if(mLocationService==null || mLocationService.getAllCities()==null)
 			return;
 		
-		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, locationService.getAllCities());
+		ArrayAdapter adapter = new CityListPopupAdapter(this, R.layout.list_view_row_item, mLocationService.getAllCities());
         ListView listViewCityItems = new ListView(this);
         listViewCityItems.setAdapter(adapter);
         listViewCityItems.setOnItemClickListener(new OnItemClickListener() {
@@ -165,11 +187,11 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	
 	private void showLocationPopup() {
 		
-		if(mCity==null || locationService==null || locationService.getAllCities()==null)
+		if(mCity==null || mLocationService==null || mLocationService.getAllCities()==null)
 			return;
 		
 		ArrayAdapter locationAdapter = new LocationListPopupAdapter(this, R.layout.list_view_row_item, 
-				locationService.getLocationsForCity(mCity));
+				mLocationService.getLocationsForCity(mCity));
         ListView listViewLocationItems = new ListView(this);
         listViewLocationItems.setAdapter(locationAdapter);
         listViewLocationItems.setOnItemClickListener(new OnItemClickListener() {
@@ -202,14 +224,10 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	@Override
     protected void requestData(int event, Object data) {
         super.requestData(event, data);
-        switch (event) {
+       switch (event) {
             default:
-            	/** SHOULD BE REMOVED  ... SHOULD USE isDataExists **/
-            	if(!isCityLocationsDataCached) {
-            		showProgressDialog("Loading...");
-                    fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
-            	}
-                break;
+            fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
+            break;
         }
     }
 
@@ -223,9 +241,29 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
             if (response.getFlipChaseBaseModel().isSuccess()) {
             	switch (response.getEventType()) {
         		case FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS:
+        			
         			CityLocationWrapper cityLocationWrapper = (CityLocationWrapper) response.getResponseObject();
-        			locationService.setCityLocationWrapper(cityLocationWrapper);
-        			setDefaultCityLocationsAfterFetchingData();
+
+        			if(cityLocationWrapper!=null && cityLocationWrapper.getCities()!=null && cityLocationWrapper.getCities().size()>0){
+                        // To cache the city json
+        				AppSharedPreference.putString(AppConstants.GET_ALL_CITIES_AND_LOCATIONS, response.getJsonResponse().toString(), this);
+        				mLocationService.setCityLocationWrapper(cityLocationWrapper);
+        				
+        				if(Utils.isLocationEnabled(getApplicationContext())){
+    						searchUserCurrentCityAndLocation();
+    					}else{
+    						promptGPSDisable();
+    					}
+        				
+        				String cityId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY_ID, "",SelectLocationActivity.this);
+        				String locationId = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION_ID, "",SelectLocationActivity.this);
+        				
+        				mCity = mLocationService.getCityWithId(cityId);
+        				mLocation = mLocationService.getLocationWithId(locationId, mCity);
+        				init();
+
+        			}
+
         			break;
         		case FlipchaseApi.SAVE_USER_CITY_AND_LOCATION:
         			break;
@@ -237,8 +275,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
     }
 	
 	private void setDefaultCityLocationsAfterFetchingData() {
-		mCity = locationService.getFirstCity();
-		mLocation = locationService.getFirstLocationForCity(mCity);
+		mCity = mLocationService.getFirstCity();
+		mLocation = mLocationService.getFirstLocationForCity(mCity);
 		((TextView)findViewById(R.id.select_city_list)).setText(mCity.getName());
 		((TextView)findViewById(R.id.select_location_list)).setText(mLocation.getName());
 	};
@@ -257,6 +295,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 			saveUserLocation();
 			/** For Now we are assuming that the location saves correctly, so send user to next page. **/
 			Intent i = new Intent(SelectLocationActivity.this, HomeActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(i);
 			finish();
 			break;
@@ -276,10 +316,15 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	}
 	
 	private void updateAppSharedPreferenceForLocations() {
-		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY, mCity.getId(), this);
-		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION, mLocation.getId(), this);
+		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY_ID, mCity.getId(), this);
+		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION_ID, mLocation.getId(), this);
 		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LATITUDE, Float.parseFloat(mLocation.getLatitude().toString()) , this);
 		AppSharedPreference.putFloat(AppSharedPreference.USER_DEVICE_LONGITUDE, Float.parseFloat(mLocation.getLongitude().toString()) , this);
+		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_CITY, mCity.getName(), this);
+		AppSharedPreference.putString(AppSharedPreference.USER_SELECTED_LOCATION, mLocation.getName(), this);
+		boolean isUserCurrentLocationUsed = ((CheckBox)findViewById(R.id.use_current_location_chk_box)).isChecked();
+		AppSharedPreference.putBoolean(AppSharedPreference.IS_USER_CURRENT_LOCATION_USED, isUserCurrentLocationUsed, this);
+		
 	}
 	
 	/***********************************  Google Maps START  ***************************/
@@ -372,5 +417,32 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void promptGPSDisable(){
+		LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setTitle("GPS not found");  // GPS not found
+	        builder.setMessage("GPS is disable. Do you want to enable?"); // Want to enable?
+	        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialogInterface, int i) {
+	            	startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 1000);
+	            }
+	        });
+	        builder.setNegativeButton("No", null);
+	        builder.create().show();
+	        return;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1000) {
+	        	searchUserCurrentCityAndLocation();
+				init();
+	    }
+
+	}
+	
+
+	
 }
 

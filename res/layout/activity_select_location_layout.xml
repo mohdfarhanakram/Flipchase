@@ -31,8 +31,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:padding="15dp"
-                    />
+                    android:padding="15dp" />
 
                 <TextView
                     android:id="@+id/select_city_list"
@@ -49,6 +48,13 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/apptheme_spinner_default_holo_light"
                     android:text="Select Location" />
+
+                <CheckBox
+                    android:layout_margin="5dp"
+                    android:id="@+id/use_current_location_chk_box"
+                    android:text="Use my current location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
                 <Button
                     android:id="@+id/done"

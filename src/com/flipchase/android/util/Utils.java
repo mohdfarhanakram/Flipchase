@@ -13,10 +13,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.Toast;
@@ -160,6 +162,43 @@ public class Utils {
 	    view.layout(0, 0, totalWidth, totalHeight);
 	    view.draw(canvas);
 	    return returnedBitmap;
+	}
+	
+	
+	public static boolean isLocationEnabled(Context context) {
+		
+		final LocationManager manager = (LocationManager)context.getSystemService( Context.LOCATION_SERVICE );
+		
+		return manager!=null && manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+	   /* if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+	       
+	    }*/
+	    /*int locationMode = 0;
+	    String locationProviders;
+
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+	        try {
+	            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+	        } catch (SettingNotFoundException e) {
+	            e.printStackTrace();
+	        }
+
+	        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+	    }else{
+	        locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+	        return !TextUtils.isEmpty(locationProviders);
+	    }*/
+
+
+	} 
+	
+	
+	public static String getDeviceIMEINo(Context context){
+		TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+		return telephonyManager.getDeviceId();
 	}
 	
     

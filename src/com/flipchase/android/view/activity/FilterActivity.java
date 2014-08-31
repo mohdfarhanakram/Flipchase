@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 
 
 import com.flipchase.android.R;
+import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.CustomFontTextView;
 
@@ -24,7 +25,7 @@ import com.flipchase.android.view.widget.CustomFontTextView;
  * @author m.farhan
  *
  */
-public class FilterActivity extends BaseActivity implements OnClickListener,DialogInterface.OnClickListener,OnMultiChoiceClickListener{
+public class FilterActivity extends BaseActivity implements OnClickListener,DialogInterface.OnClickListener,DialogInterface.OnMultiChoiceClickListener{
 
 	private int mSortBySelectedOptionIndex = 0;
 	private Dialog mSortByFilterDialog;
@@ -40,9 +41,11 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 		setContentView(R.layout.activity_filter_layout);
 		findViewById(R.id.txtv_single_selection).setOnClickListener(this);
 		findViewById(R.id.txtv_multiselection_selection).setOnClickListener(this);
+		findViewById(R.id.applyFilterButton).setOnClickListener(this);
+		findViewById(R.id.cancelFilterButton).setOnClickListener(this);
 
 		mSortByFilterDialog = createSortByDialog();
-		//mFilterByDialog = createFilterByDialog();*/
+		mFilterByDialog = createFilterByDialog();
 	}
 
 	@Override
@@ -121,6 +124,11 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 		case R.id.txtv_multiselection_selection:
 			mFilterByDialog.show();
 			break;
+		case R.id.applyFilterButton:
+			break;
+		case R.id.cancelFilterButton:
+			finish();
+			break;
 		default:
 			break;
 		}
@@ -138,6 +146,7 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 
 		case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
 			dialog.dismiss();
+			updateMultiselectionUI();
 			((CustomFontTextView)findViewById(R.id.txtv_single_selection)).setText(mSortByOptions[mSortBySelectedOptionIndex]);
 			break;
 
@@ -157,8 +166,8 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 			break;
 
 		case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+
 			dialog.dismiss();
-			updateMultiselectionUI();
 			break;
 
 		default: // choice item selected
@@ -176,18 +185,28 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 				selectedString = selectedString + " "+mFilterByOptions[i]+",";
 			}
 		}
-		selectedString = selectedString.trim();
-		return selectedString.substring(0, selectedString.length()-2);
+		
+		if(!StringUtils.isNullOrEmpty(selectedString))
+			selectedString = selectedString.substring(0, selectedString.length()-2);
+		
+		return selectedString;
 
 	}
 
 	private void updateMultiselectionUI(){
 		String selectedString = getSelectedString().trim();
 
-		if(selectedString.equalsIgnoreCase("")){
+		if(StringUtils.isNullOrEmpty(selectedString)){
 			((CustomFontTextView)findViewById(R.id.txtv_multiselection_selection)).setText("Selecte Category");
 		}else{
 			((CustomFontTextView)findViewById(R.id.txtv_multiselection_selection)).setText(selectedString);
 		}
 	}
+	
+	private String composeUrl(){
+		String url="";
+		return url;
+	}
+	
+	
 }

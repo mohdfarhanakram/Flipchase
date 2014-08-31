@@ -16,6 +16,9 @@ public class AppSharedPreference {
 	
 	public final static String USER_SELECTED_CITY = "user_selected_city";
 	public final static String USER_SELECTED_LOCATION = "user_selected_location";
+	public final static String USER_SELECTED_CITY_ID = "user_selected_city_id";
+	public final static String USER_SELECTED_LOCATION_ID = "user_selected_location_id";
+	public final static String IS_USER_CURRENT_LOCATION_USED = "is_user_current_location_used";
 
 	public static int getInt(String key, int defValue,Context context)
 	{

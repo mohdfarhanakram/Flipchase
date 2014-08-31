@@ -22,6 +22,8 @@ import com.flipchase.android.network.volley.VolleyError;
 import com.flipchase.android.network.volley.VolleyLog;
 import com.flipchase.android.network.volley.toolbox.HttpHeaderParser;
 import com.flipchase.android.parser.IParser;
+import com.flipchase.android.persistance.AppSharedPreference;
+import com.flipchase.android.util.Utils;
 
 /**
  * @author m.farhan
@@ -103,7 +105,16 @@ public class VolleyGenericRequest extends Request<Object> implements IRequest {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         HashMap<String, String> headers = new HashMap<String, String>();
-       // headers.put("device", "android");
+        
+       headers.put("SESSION_ID", Utils.getDeviceIMEINo(mContext));  // set device imei no as a session id
+       headers.put("SELECTED_CITY", AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY,"",mContext));
+       headers.put("SELECTED_LOCATION", AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION,"",mContext));
+       float lat = AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LATITUDE,0,mContext);
+       headers.put("USER_LATITUDE", lat+"");
+       float lon = AppSharedPreference.getFloat(AppSharedPreference.USER_DEVICE_LONGITUDE,0,mContext);
+       headers.put("USER_LONGITUDE", lon+"");
+       String isCurrentLocUsed = AppSharedPreference.getBoolean(AppSharedPreference.IS_USER_CURRENT_LOCATION_USED,false, mContext)==true?"true":"false";
+       headers.put("IS_USER_CURRENT_LOCATION_USED",isCurrentLocUsed);
         
         return headers;
     }
