@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import com.flipchase.android.util.StringUtils;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterBy implements Serializable {
 
@@ -30,6 +32,25 @@ public class FilterBy implements Serializable {
     	
     	return options;
     }
+	
+	public String getSelectedString(){
+		String selectedString = "";
+		
+		for(int i=0; i<getFilterOptions().size(); i++) {
+    		if(getFilterOptions().get(i).getSelected()){
+    			selectedString = selectedString + " "+getFilterOptions().get(i).getName()+",";
+    		}
+    	}
+		
+		selectedString = selectedString.trim();
+		
+		if(!StringUtils.isNullOrEmpty(selectedString))
+			selectedString = selectedString.substring(0, selectedString.length()-2);
+		
+		return selectedString.trim();
+
+	}
+
 	
 	public void setSelected(boolean[] selectedBoolean) {
 		for(int i=0; i<getFilterOptions().size(); i++) {

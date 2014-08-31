@@ -4,30 +4,23 @@
 package com.flipchase.android.view.activity;
 
 
-import java.util.Calendar;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.parcels.CatalogueChunk;
 import com.flipchase.android.parcels.FilterBy;
 import com.flipchase.android.parcels.SortBy;
-import com.flipchase.android.parcels.SortBy.SortByData;
-import com.flipchase.android.parcels.SortOption;
 import com.flipchase.android.util.StringUtils;
-import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.CustomFontTextView;
 
 /**
@@ -60,6 +53,9 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 		
 		sortBy = (SortBy)getIntent().getSerializableExtra("sortby");
 		filterBy = (FilterBy)getIntent().getSerializableExtra("filterby");
+		
+		mSortByFilterDialog = createSortByDialog();
+		mFilterByDialog = createFilterByDialog();
 		
 	}
 
@@ -123,11 +119,9 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.txtv_single_selection:
-			mSortByFilterDialog = createSortByDialog();
 			mSortByFilterDialog.show();
 			break;
 		case R.id.txtv_multiselection_selection:
-			mFilterByDialog = createFilterByDialog();
 			mFilterByDialog.show();
 			break;
 		case R.id.applyFilterButton:
@@ -162,7 +156,7 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
             sortBy.setSelected(id);
             filterBy.setSelected(mFilterBySelected);
 			updateMultiselectionUI();
-			((CustomFontTextView)findViewById(R.id.txtv_single_selection)).setText(mSortByOptions[mSortBySelectedOptionIndex]);
+			((CustomFontTextView)findViewById(R.id.txtv_single_selection)).setText(sortBy.getSortOptions().get(mSortBySelectedOptionIndex).getName());
 			break;
 
 		default: // choice item selected
@@ -193,23 +187,9 @@ public class FilterActivity extends BaseActivity implements OnClickListener,Dial
 
 	}
 
-	private String getSelectedString(){
-		String selectedString = "";
-		for(int i=0; i<mFilterBySelected.length; i++){
-			if(mFilterBySelected[i]){
-				selectedString = selectedString + " "+mFilterByOptions[i]+",";
-			}
-		}
-		
-		if(!StringUtils.isNullOrEmpty(selectedString))
-			selectedString = selectedString.substring(0, selectedString.length()-2);
-		
-		return selectedString;
-
-	}
-
+	
 	private void updateMultiselectionUI(){
-		String selectedString = getSelectedString().trim();
+		String selectedString = filterBy.getSelectedString();
 
 		if(StringUtils.isNullOrEmpty(selectedString)){
 			((CustomFontTextView)findViewById(R.id.txtv_multiselection_selection)).setText("Selecte Category");
