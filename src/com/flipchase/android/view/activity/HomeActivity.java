@@ -112,14 +112,6 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	
 	public void updateRetailerCatalogData(String refineUrl) {
         showProgressDialog("Loading Retailer Data...");
-        /*
-        if(mItemsGridFragment==null)
-        {
-            if(getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY) != null && getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY_EXTRA) != null)
-                Utils.postExceptionOnGA("Error in updateCatalogData of CatalogActivity \r\n mItemsGridFragment=null  \r\n Calling Activity: "+getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY)+" \r\n Extras: "+getIntent().getExtras().getString(Constants.INTENT_SOURCE_ACTIVITY_EXTRA)+" \n sessionid: "+getSessionId(),false);
-        }
-        mItemsGridFragment.setRefineFilterUrl(refineUrl, "");
-        */
         fetchData(URLConstants.GET_ALL_RETAILERS_URL, FlipchaseApi.GET_ALL_RETAILERS, null);
     }
 

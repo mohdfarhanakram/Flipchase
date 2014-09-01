@@ -34,7 +34,6 @@ import com.flipchase.android.extlibpro.FlipViewController.ViewFlipListener;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
-import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CataloguePageAdapter;
 
@@ -203,7 +202,6 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		}
 		++count;
 		cataloguePageAdapter.setDownloadedImageCount(count);
-		
 	}
 	
 	/**

@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.util.PicassoEx;
@@ -73,6 +74,7 @@ public class CatalogueAdapter extends BaseAdapter{
 			holder.catalogueImageView = (ImageView)row.findViewById(R.id.catalogImg);
 			holder.catalogueName = (CustomFontTextView)row.findViewById(R.id.catalog_item_name);
 			holder.catalogueExpiry = (CustomFontTextView)row.findViewById(R.id.cata_expiry_time_txtv);
+			holder.distance = (CustomFontTextView)row.findViewById(R.id.cata_store_distance);
 			row.setTag(holder);
 			
 			ImageView iv = holder.catalogueImageView;
@@ -91,6 +93,12 @@ public class CatalogueAdapter extends BaseAdapter{
 
 		holder.catalogueName.setText(catalogue.getCatalogue().getName());
 		holder.catalogueExpiry.setText(catalogue.getCatalogue().getExpiryDate());
+		if(catalogue.getStore().getDistance() != null) {
+        	String distanceAsString = String.format(AppConstants.STORE_DISTANCE_PRECISION_FOR_KM, catalogue.getStore().getDistance());
+        	holder.distance.setText(distanceAsString + AppConstants.DISTANCE_IN_KM);
+        } else {
+        	holder.distance.setText("Distance not found...");
+        }
 		
 		picassoLoad(URLConstants.IMAGE_SERVER_URL + catalogue.getCatalogue().getPhoto_thumb_path(), holder.catalogueImageView);
 
@@ -106,6 +114,7 @@ public class CatalogueAdapter extends BaseAdapter{
 		public ImageView catalogueImageView;
 		public CustomFontTextView catalogueName;
 		public CustomFontTextView catalogueExpiry;
+		public CustomFontTextView distance;
 	}
 
 }

@@ -7,10 +7,10 @@
     <!-- Thumbnail Image -->
     <ImageView
         android:id="@+id/storeThumbnail"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="10dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="20dp" />
+        android:layout_height="10dp"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:id="@+id/storeTitle"

@@ -6,7 +6,8 @@
     <dimen name="tab_host_default_height">48dp</dimen>
     <dimen name="catalog_row_height">150dp</dimen>
     <dimen name="catalog_text_size">16sp</dimen>
-    <dimen name="catalog_expiry_time_text_size">14sp</dimen>
+    <dimen name="catalog_expiry_time_text_size">10sp</dimen>
+    <dimen name="catalog_store_distance_text_size">14sp</dimen>
     <dimen name="catalog_page_refine_button_height">28dp</dimen>
     <dimen name="catalog_page_refine_button_width">84dp</dimen>
     <dimen name="catalog_page_refine_button_text_size">14sp</dimen>
