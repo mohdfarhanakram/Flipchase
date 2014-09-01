@@ -179,10 +179,10 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		CataloguePageItem c2 = items.get(1);
 		c2.loadBitmap(this);
 		
+		loadBitmaps(items);
 		showProgressDialog("Loading Catalogues Offers Images");
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
-				loadBitmaps(items);
 				removeProgressDialog();
 			}
 		}, 5000);

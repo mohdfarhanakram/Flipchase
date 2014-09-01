@@ -27,24 +27,23 @@
             android:textStyle="bold" >
         </com.flipchase.android.view.widget.CustomFontTextView>
 
-         
         <com.flipchase.android.view.widget.CustomFontTextView
             android:id="@+id/cata_expiry_time_txtv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="2dp"
             android:textColor="@color/catalog_expiry_color"
             android:textSize="@dimen/catalog_expiry_time_text_size" />
         
-        <com.flipchase.android.view.widget.CustomFontTextView
+         <com.flipchase.android.view.widget.CustomFontTextView
             android:id="@+id/cata_store_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="2dp"
             android:textColor="@color/catalog_expiry_color"
-            android:textSize="@dimen/catalog_store_distance_text_size"/>
+            android:textSize="@dimen/catalog_expiry_time_text_size" />
     </LinearLayout>
 
 </LinearLayout>
