@@ -1,5 +1,6 @@
 package com.flipchase.android.parcels;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import android.content.Context;
@@ -18,24 +19,18 @@ import com.squareup.picasso.Target;
 public class CataloguePageItem implements Parcelable {
 
 	public Bitmap cBitmap;
+	
 	public Context contextListener;
 	
-	private static int noOfImagesDownloaded = 0;
-	
-	public synchronized void updateImageDownloadCount() {
-		++noOfImagesDownloaded;
-	}
 	private Target target = new Target() {
 		@Override
 		public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 			cBitmap = bitmap;
-			updateImageDownloadCount();
 			((FlipHorizontalLayoutActivity) contextListener).updateView();
 		}
 
 		@Override
 		public void onBitmapFailed(Drawable arg0) {
-			updateImageDownloadCount();
 			System.out.println("failed");
 		}
 
@@ -263,7 +258,6 @@ public class CataloguePageItem implements Parcelable {
 		this.cBitmap = cBitmap;
 	}
 
-	
 	public Context getContextListener() {
 		return contextListener;
 	}

@@ -1,5 +1,6 @@
 package com.flipchase.android.view.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -28,6 +29,7 @@ import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.Catalogue;
+import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.extlibpro.FlipViewController;
 import com.flipchase.android.extlibpro.FlipViewController.ViewFlipListener;
@@ -166,26 +168,40 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 
 	/** Load 2 Images and wait for some time so that these images loads successfully **/
 	private void handleCatalogueImageLoadingData(final CataloguePagesChunk cataloguePagesChunk) {
-		final List<CataloguePageItem> items = cataloguePagesChunk.getItems();
+		final List<CataloguePage> items = cataloguePagesChunk.getItems();
 		if (items == null || items.size() == 0) {
 			cataloguePageAdapter.setAllItemsLoaded(true);
 			return;
 		}
-		cataloguePageAdapter.setItems(items, cataloguePagesChunk.getPageId());
+		List<CataloguePageItem> cataloguePageItems = new ArrayList<CataloguePageItem>();
+		for(CataloguePage cp : items) {
+			CataloguePageItem cpi = new CataloguePageItem();
+			cpi.setCatalogue_id(cp.getCatalogue_id());
+			cpi.setCount(cp.getCount());
+			cpi.setDisplayName(cp.getDisplayName());
+			cpi.setId(cp.getId());
+			cpi.setName(cp.getName());
+			cpi.setPagenum(cp.getPagenum());
+			cpi.setPhoto_mini_path(cp.getPhoto_mini_path());
+			cpi.setPhoto_path(cp.getPhoto_path());
+			cpi.setPhoto_thumb_path(cp.getPhoto_thumb_path());
+			cataloguePageItems.add(cpi);
+		}
+		cataloguePageAdapter.setItems(cataloguePageItems, cataloguePagesChunk.getPageId());
 		
-		CataloguePageItem c1 = items.get(0);
+		CataloguePageItem c1 = cataloguePageItems.get(0);
 		c1.loadBitmap(this);
 		
-		CataloguePageItem c2 = items.get(1);
+		CataloguePageItem c2 = cataloguePageItems.get(1);
 		c2.loadBitmap(this);
 		
-		loadBitmaps(items);
-		showProgressDialog("Loading Catalogues Offers Images");
+		loadBitmaps(cataloguePageItems);
+		showProgressDialog("Loading more offers...");
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
 				removeProgressDialog();
 			}
-		}, 5000);
+		}, 3000);
 		
 	}
 

@@ -8,12 +8,14 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.flipchase.android.domain.CataloguePage;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CataloguePagesChunk implements Parcelable {
 
 	private int total = 0;
     private String headerText;
-    private List<CataloguePageItem> items = new ArrayList<CataloguePageItem>();
+    private List<CataloguePage> items = new ArrayList<CataloguePage>();
     private int pageId = 0;
     private boolean filterData = false;
     private String refineUrl;
@@ -131,7 +133,7 @@ public class CataloguePagesChunk implements Parcelable {
         total = in.readInt();
         String temp = in.readString();
         if (temp.equalsIgnoreCase("products")) {
-            items = new ArrayList<CataloguePageItem>();
+            items = new ArrayList<CataloguePage>();
             in.readTypedList(items, CataloguePageItem.CREATOR);
         }
         pageId = in.readInt();
@@ -145,14 +147,6 @@ public class CataloguePagesChunk implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(total);
-        if (null != items) {
-            parcel.writeString("products");
-            parcel.writeTypedList(items);
-        } else {
-            parcel.writeString("no_producst");
-        }
-        parcel.writeInt(pageId);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -182,11 +176,11 @@ public class CataloguePagesChunk implements Parcelable {
         this.total = total;
     }
 
-    public List<CataloguePageItem> getItems() {
+    public List<CataloguePage> getItems() {
         return items;
     }
 
-    public void setItems(List<CataloguePageItem> items) {
+    public void setItems(List<CataloguePage> items) {
         this.items = items;
     }
 
