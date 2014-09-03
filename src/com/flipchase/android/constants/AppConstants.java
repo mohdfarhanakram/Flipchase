@@ -16,9 +16,10 @@ public class AppConstants {
 	public final static String STORE_FRAGMENT   = "Store";
 	public final static String LIST_FRAGMENT    = "List";
 	public final static String COUPANS_FRAGMENT = "Coupons";
-	
+
 	public final static String IS_COMING_FROM_SPLASH = "coming_from_splash";
-	
+	public final static String USER_CURRENT_LATITUDE  = "user_current_lat" ;
+	public final static String USER_CURRENT_LONGITUDE = "user_current_long" ;
 	public static String RESPONSE_INIT= "response_init";
     public static String RESPONSE_GET_CITIES = "response_get_cities";
     public static String RESPONSE_GET_LOCATIONS = "response_get_locations";

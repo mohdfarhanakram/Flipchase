@@ -71,16 +71,17 @@ public class CatalogueAdapter extends BaseAdapter{
 			row = mInflater.inflate(R.layout.layout_catalog_grid_view, null, false);
 			holder = new ViewHolder();
 
-			holder.catalogueImageView = (ImageView)row.findViewById(R.id.catalogImg);
 			holder.catalogueName = (CustomFontTextView)row.findViewById(R.id.catalog_item_name);
 			holder.catalogueExpiry = (CustomFontTextView)row.findViewById(R.id.cata_expiry_time_txtv);
 			holder.distance = (CustomFontTextView)row.findViewById(R.id.cata_store_distance);
 			row.setTag(holder);
 			
-			ImageView iv = holder.catalogueImageView;
-		    iv.setOnClickListener(new View.OnClickListener() {
+			holder.catalogueImageView = (ImageView)row.findViewById(R.id.catalogImg);
+			holder.catalogueImageView.setTag(catalogue);
+			holder.catalogueImageView.setOnClickListener(new View.OnClickListener() {
 		        public void onClick(View v) {
-		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class);  
+		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class); 
+		        	CatalogueDisplay catalogue = (CatalogueDisplay)v.getTag();
 		        	i.putExtra("catalogue", catalogue.getCatalogue());
 		        	i.putExtra("store", catalogue.getStore());
 		        	mContext.startActivity(i);
