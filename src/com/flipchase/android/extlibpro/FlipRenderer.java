@@ -1,5 +1,14 @@
 package com.flipchase.android.extlibpro;
 
+import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
+import android.view.View;
+
+import java.util.LinkedList;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
 import static javax.microedition.khronos.opengles.GL10.GL_AMBIENT;
 import static javax.microedition.khronos.opengles.GL10.GL_COLOR_BUFFER_BIT;
 import static javax.microedition.khronos.opengles.GL10.GL_DEPTH_BUFFER_BIT;
@@ -14,15 +23,22 @@ import static javax.microedition.khronos.opengles.GL10.GL_POSITION;
 import static javax.microedition.khronos.opengles.GL10.GL_PROJECTION;
 import static javax.microedition.khronos.opengles.GL10.GL_SMOOTH;
 
-import java.util.LinkedList;
+/*
+Copyright 2012 Aphid Mobile
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+	 http://www.apache.org/licenses/LICENSE-2.0
 
-import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
-import android.view.View;
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
+ */
 public class FlipRenderer implements GLSurfaceView.Renderer {
 
   private FlipViewController flipViewController;
@@ -97,10 +113,6 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
 
   @Override
   public void onDrawFrame(GL10 gl) {
-    if (cards.isVisible() && cards.isFirstDrawFinished())
-      gl.glClearColor(1f, 1f, 1f, 1f);
-    else
-      gl.glClearColor(0f, 0f, 0f, 0f);
     gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     synchronized (postDestroyTextures) {

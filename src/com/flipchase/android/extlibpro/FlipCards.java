@@ -1,11 +1,16 @@
 
 package com.flipchase.android.extlibpro;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import junit.framework.Assert;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.flipchase.android.extlibpro.FlipBookLog;
+import com.flipchase.android.extlibpro.TextureUtils;
+import com.flipchase.android.extlibpro.UI;
+
+import junit.framework.Assert;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class FlipCards {
 
@@ -33,8 +38,6 @@ public class FlipCards {
   private FlipViewController controller;
 
   private volatile boolean visible = false;
-  
-  private volatile boolean firstDrawFinished = false;
 
   private int maxIndex = 0;
 
@@ -54,14 +57,6 @@ public class FlipCards {
 
   public void setVisible(boolean visible) {
     this.visible = visible;
-  }
-
-  public boolean isFirstDrawFinished() {
-    return firstDrawFinished;
-  }
-
-  public void setFirstDrawFinished(boolean firstDrawFinished) {
-    this.firstDrawFinished = firstDrawFinished;
   }
 
   boolean refreshPageView(View view) {
@@ -139,8 +134,8 @@ public class FlipCards {
     frontCards.buildTexture(renderer, gl);
     backCards.buildTexture(renderer, gl);
 
-    if (!TextureUtils.isValidTexture(frontCards.getTexture()) &&
-        !TextureUtils.isValidTexture(backCards.getTexture())) {
+    if (!TextureUtils.isValidTexture(frontCards.getTexture()) && !TextureUtils
+        .isValidTexture(backCards.getTexture())) {
       return;
     }
 
@@ -241,11 +236,6 @@ public class FlipCards {
         backCards.getBottomCard().draw(gl);
       }
     }
-    
-    if ((frontCards.getView() == null || TextureUtils.isValidTexture(frontCards.getTexture())) &&
-        (backCards.getView() == null || TextureUtils.isValidTexture(backCards.getTexture()))
-        )
-      firstDrawFinished = true;
   }
 
   public void invalidateTexture() {
@@ -365,8 +355,8 @@ public class FlipCards {
 
   private void setState(int state) {
     if (this.state != state) {                        /*
-			if (AphidLog.ENABLE_DEBUG)
-				AphidLog.i("setState: from %d, to %d; angle %.1f", this.state, state, angle);
+			if (FlipBookLog.ENABLE_DEBUG)
+				FlipBookLog.i("setState: from %d, to %d; angle %.1f", this.state, state, angle);
 			*/
       this.state = state;
       animatedFrame = 0;

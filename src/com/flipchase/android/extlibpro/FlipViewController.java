@@ -24,13 +24,12 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 
 public class FlipViewController extends AdapterView<Adapter> {
-	public static final int[] FlipViewController = {
-        0x7f010000, 0x7f010001
-    };
+
   public static final int VERTICAL = 0;
   public static final int HORIZONTAL = 1;
 
   public static interface ViewFlipListener {
+
     void onViewFlipped(View view, int position);
   }
 
@@ -47,7 +46,6 @@ public class FlipViewController extends AdapterView<Adapter> {
         requestLayout();
         return true;
       } else {
-        FlipBookLog.w("Unknown msg.what: " + msg.what);
       }
       return false;
     }
@@ -106,17 +104,27 @@ public class FlipViewController extends AdapterView<Adapter> {
 
     int orientation = VERTICAL;
 
+    /** DK
     TypedArray
         a =
-        context.getTheme().obtainStyledAttributes(attrs, FlipViewController, 0, 0);
-
+        context.getTheme().obtainStyledAttributes(attrs, R.styleable.FlipViewController, 0, 0);
+	**/
+    final int[] my_FlipViewController = {
+        0x7f010000, 0x7f010001
+    };
+    TypedArray
+    a =
+    context.getTheme().obtainStyledAttributes(attrs, my_FlipViewController, 0, 0);
+    
     try {
       int value = a.getInteger(0, VERTICAL);
       if (value == HORIZONTAL) {
         orientation = HORIZONTAL;
       }
 
-      value = a.getInteger(1, 0);
+      //value = a.getInteger(R.styleable.FlipViewController_animationBitmapFormat, 0);
+      final int my_FlipViewController_animationBitmapFormat = 1;
+      value = a.getInteger(my_FlipViewController_animationBitmapFormat, 0);
       if (value == 1) {
         setAnimationBitmapFormat(Bitmap.Config.ARGB_4444);
       } else if (value == 2) {
@@ -465,7 +473,7 @@ public class FlipViewController extends AdapterView<Adapter> {
 
   private void updateVisibleView(int index) {
     for (int i = 0; i < bufferedViews.size(); i++) {
-      bufferedViews.get(i).setVisibility(index == i ? VISIBLE : GONE);
+      bufferedViews.get(i).setVisibility(index == i ? VISIBLE : INVISIBLE);
     }
   }
 
@@ -506,7 +514,7 @@ public class FlipViewController extends AdapterView<Adapter> {
           }
           bufferIndex = bufferedViews.indexOf(old) + 1;
           requestLayout();
-          updateVisibleView(bufferIndex);
+          updateVisibleView(inFlipAnimation ? -1 : bufferIndex);
         }
       } else if (indexInAdapter == adapterIndex - 1) {
         if (adapterIndex > 0) {
@@ -520,7 +528,7 @@ public class FlipViewController extends AdapterView<Adapter> {
           }
           bufferIndex = bufferedViews.indexOf(old) - 1;
           requestLayout();
-          updateVisibleView(bufferIndex);
+          updateVisibleView(inFlipAnimation ? -1 : bufferIndex);
         }
       } else {
         FlipBookLog.e("Should not happen: indexInAdapter %d, adapterIndex %d", indexInAdapter,
@@ -537,7 +545,6 @@ public class FlipViewController extends AdapterView<Adapter> {
       inFlipAnimation = true;
 
       cards.setVisible(true);
-      cards.setFirstDrawFinished(false);
       surfaceView.requestRender();
     }
   }

@@ -1,6 +1,12 @@
 
 package com.flipchase.android.extlibpro;
 
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import static android.util.FloatMath.cos;
 import static android.util.FloatMath.sin;
 import static com.flipchase.android.extlibpro.FlipRenderer.checkError;
@@ -26,10 +32,6 @@ import static javax.microedition.khronos.opengles.GL10.GL_TRIANGLES;
 import static javax.microedition.khronos.opengles.GL10.GL_UNSIGNED_SHORT;
 import static javax.microedition.khronos.opengles.GL10.GL_VERTEX_ARRAY;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 public class Card {
 
   public static final int AXIS_TOP = 0;

@@ -77,7 +77,7 @@ public class CatalogueAdapter extends BaseAdapter{
 			row.setTag(holder);
 			
 			holder.catalogueImageView = (ImageView)row.findViewById(R.id.catalogImg);
-			holder.catalogueImageView.setTag(catalogue);
+			//holder.catalogueImageView.setTag(catalogue);
 			holder.catalogueImageView.setOnClickListener(new View.OnClickListener() {
 		        public void onClick(View v) {
 		        	Intent i = new Intent(mContext, FlipHorizontalLayoutActivity.class); 
@@ -100,7 +100,7 @@ public class CatalogueAdapter extends BaseAdapter{
         } else {
         	holder.distance.setText("Distance not found...");
         }
-		
+		holder.catalogueImageView.setTag(catalogue);
 		picassoLoad(URLConstants.IMAGE_SERVER_URL + catalogue.getCatalogue().getPhoto_thumb_path(), holder.catalogueImageView);
 
 		return row;

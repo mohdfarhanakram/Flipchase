@@ -213,7 +213,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 
 	public void updateView() {
 		int count = cataloguePageAdapter.getDownloadedImageCount();
-		if(count % 5 == 0 || count == cataloguePageAdapter.getCount() - 1) {
+		if(count % 10 == 0 || count == cataloguePageAdapter.getCount() - 1) {
 			cataloguePageAdapter.notifyDataSetChanged();//setItems(productData.getItems(), productData.getPageId());
 		}
 		++count;
