@@ -1,6 +1,7 @@
 package com.flipchase.android.parser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,6 +70,35 @@ public class FlipChaseJsonParser {
     	CityLocationWrapper cityLocationWrapper = null;
     	if (Utils.isJsonObject(jsonObjectData, "response")) {
     		JSONObject itemJsonObject = jsonObjectData.getJSONObject("response");
+    		JSONArray cities = itemJsonObject.getJSONArray("cities");
+    		JSONArray locations = itemJsonObject.getJSONArray("locations");
+    		
+    		cityLocationWrapper = new CityLocationWrapper();
+    		List<City> cityList = new ArrayList<City>();
+    		List<Location> locationList = new ArrayList<Location>();
+    		
+    		cityLocationWrapper.setCities(cityList);
+    		cityLocationWrapper.setLocations(locationList);
+			for (int i = 0; i < cities.length(); i++) {
+				JSONObject childJSONObject = cities.getJSONObject(i);
+				City city = new City();
+				city.setId(childJSONObject.getString("id"));
+				city.setName(childJSONObject.getString("name"));
+				city.setLongitude(childJSONObject.getDouble("longitude"));
+				city.setLatitude(childJSONObject.getDouble("latitude"));
+				cityList.add(city);
+			}
+			for (int i = 0; i < locations.length(); i++) {
+				JSONObject childJSONObject = locations.getJSONObject(i);
+				Location location = new Location();
+				location.setId(childJSONObject.getString("id"));
+				location.setName(childJSONObject.getString("name"));
+				location.setLongitude(childJSONObject.getDouble("longitude"));
+				location.setLatitude(childJSONObject.getDouble("latitude"));
+				location.setCity(childJSONObject.getLong("city"));
+				locationList.add(location);
+			}
+			/*
             String json = itemJsonObject.toString();
             JsonFactory jsonFactory = new JsonFactory();
             try {
@@ -79,6 +109,7 @@ public class FlipChaseJsonParser {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			*/
         }
     	return cityLocationWrapper;
     }
