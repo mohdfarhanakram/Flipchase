@@ -1,6 +1,7 @@
 
 package com.flipchase.android.view.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -60,12 +61,12 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
                // new Page("Large images", ImageDisplayLargeFragment.class)
         		 new Page("Large images", ExtensionPinFragment.class)
         );*/
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-        	selectedImageURL = extras.getString("selectedImageURL");
-        	picassoLoad(selectedImageURL, (TouchImageView)findViewById(R.id.zoomImage));
-        }
-        //updatePage();
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			selectedImageURL = extras.getString("selectedImageURL");
+			picassoLoad(selectedImageURL, (TouchImageView)findViewById(R.id.zoomImage));
+		}
+		//updatePage();
 	}
 
 
@@ -111,10 +112,10 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	private void showStoreLocation() {
 		Intent i = new Intent(ImageDisplayActivity.this,
 				NearestCatalogueStoreActivity.class);
-    	i.putExtra("store", store);  
-    	startActivity(i);
+		i.putExtra("store", store);  
+		startActivity(i);
 	}
-	
+
 	public String getSelectedImageName() {
 		return selectedImageURL;
 	}
@@ -184,7 +185,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		}
 		finish();
 	}
-	
+
 	/*
 	 *  Save list item dialog to save selected items from the image.
 	 */
@@ -207,65 +208,82 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		// TODO Auto-generated method stub
+		switch (which) {
+		case Dialog.BUTTON_NEGATIVE:
+            dialog.dismiss();
+			break;
+		case Dialog.BUTTON_POSITIVE:
+			createAndSaveList();
+			break;
+
+		default:
+			break;
+		}
 
 	}
 
-    /*
-     *  Cropped selected area of the image.
-     */
-	private Bitmap getCroppedImage(){
+	private void createAndSaveList() {
+    
+		ArrayList<String> dataList = new ArrayList<String>();
 		
+	}
+
+
+	/*
+	 *  Cropped selected area of the image.
+	 */
+	private Bitmap getCroppedImage(){
+
 		Display display = getWindowManager().getDefaultDisplay();
 		@SuppressWarnings("deprecation")
 		int width = display.getWidth();
 		int height = ((TouchImageView)findViewById(R.id.zoomImage)).getMeasuredHeight();
-		
+
 		Bitmap imageViewBitmap = Utils.getBitmapFromView(findViewById(R.id.zoomImage), height, width);
 
 		final Rect displayedImageRect = new Rect(0, 0,imageViewBitmap.getWidth(),imageViewBitmap.getHeight());
-		
-		 // Get the scale factor between the actual Bitmap dimensions and the
-        // displayed dimensions for width.
-        final float actualImageWidth = imageViewBitmap.getWidth();
-        final float displayedImageWidth = displayedImageRect.width();
-        final float scaleFactorWidth = actualImageWidth / displayedImageWidth;
 
-        // Get the scale factor between the actual Bitmap dimensions and the
-        // displayed dimensions for height.
-        final float actualImageHeight = imageViewBitmap.getHeight();
-        final float displayedImageHeight = displayedImageRect.height();
-        final float scaleFactorHeight = actualImageHeight / displayedImageHeight;
+		// Get the scale factor between the actual Bitmap dimensions and the
+		// displayed dimensions for width.
+		final float actualImageWidth = imageViewBitmap.getWidth();
+		final float displayedImageWidth = displayedImageRect.width();
+		final float scaleFactorWidth = actualImageWidth / displayedImageWidth;
 
-        // Get crop window position relative to the displayed image.
-        final float cropWindowX = Edge.LEFT.getCoordinate() - displayedImageRect.left;
-        final float cropWindowY = Edge.TOP.getCoordinate() - displayedImageRect.top;
-        final float cropWindowWidth = Edge.getWidth();
-        final float cropWindowHeight = Edge.getHeight();
+		// Get the scale factor between the actual Bitmap dimensions and the
+		// displayed dimensions for height.
+		final float actualImageHeight = imageViewBitmap.getHeight();
+		final float displayedImageHeight = displayedImageRect.height();
+		final float scaleFactorHeight = actualImageHeight / displayedImageHeight;
 
-        // Scale the crop window position to the actual size of the Bitmap.
-        final float actualCropX = cropWindowX * scaleFactorWidth;
-        final float actualCropY = cropWindowY * scaleFactorHeight;
-        final float actualCropWidth = cropWindowWidth * scaleFactorWidth;
-        final float actualCropHeight = cropWindowHeight * scaleFactorHeight;
+		// Get crop window position relative to the displayed image.
+		final float cropWindowX = Edge.LEFT.getCoordinate() - displayedImageRect.left;
+		final float cropWindowY = Edge.TOP.getCoordinate() - displayedImageRect.top;
+		final float cropWindowWidth = Edge.getWidth();
+		final float cropWindowHeight = Edge.getHeight();
 
-        // Crop the subset from the original Bitmap.
-        final Bitmap croppedBitmap = Bitmap.createBitmap(imageViewBitmap,
-                                                         (int) actualCropX,
-                                                         (int) actualCropY,
-                                                         (int) actualCropWidth,
-                                                         (int) actualCropHeight);
-        
-        return croppedBitmap;
-		
+		// Scale the crop window position to the actual size of the Bitmap.
+		final float actualCropX = cropWindowX * scaleFactorWidth;
+		final float actualCropY = cropWindowY * scaleFactorHeight;
+		final float actualCropWidth = cropWindowWidth * scaleFactorWidth;
+		final float actualCropHeight = cropWindowHeight * scaleFactorHeight;
+
+		// Crop the subset from the original Bitmap.
+		final Bitmap croppedBitmap = Bitmap.createBitmap(imageViewBitmap,
+				(int) actualCropX,
+				(int) actualCropY,
+				(int) actualCropWidth,
+				(int) actualCropHeight);
+
+		return croppedBitmap;
+
 	}
-	
+
 	private void picassoLoad(String url, ImageView imageView) {
 		PicassoEx.getPicasso(this).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
 		//PicassoEx.getPicasso(mContext).load(url).get()
 	}
-	
-	
-	
+
+
+
 
 }

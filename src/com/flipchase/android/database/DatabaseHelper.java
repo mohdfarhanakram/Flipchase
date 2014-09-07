@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	public static String DB_NAME = "zonesoft.db";*/
 	public static String DB_PATH = "/data/data/com.flipchase.android/databases/";
 //	public static String DB_UPLOAD_NAME = "upload.db";
-	public static String DB_NAME = "FlipchaseDb.db";
+	public static String DB_NAME = "FlipchaseDb";
 	private static int DB_VERSION = 1;
 	private final Context myContext;
 	private SQLiteDatabase myDataBase;

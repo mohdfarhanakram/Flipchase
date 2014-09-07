@@ -16,9 +16,16 @@ public class Item {
 	private String title;
 	private String subTitle;
 	private String quantity;
-	private boolean reminder;
+	private int reminder;
 	private String expiry;
+	private byte imageInByte[];
 	
+	public byte[] getImageInByte() {
+		return imageInByte;
+	}
+	public void setImageInByte(byte[] imageInByte) {
+		this.imageInByte = imageInByte;
+	}
 	private int count;
 	ArrayList<Item> subItemList = new ArrayList<Item>();
 	
@@ -65,9 +72,13 @@ public class Item {
 		this.quantity = quantity;
 	}
 	public boolean isReminder() {
+		return getReminder()==1?true:false;
+	}
+	
+	public int getReminder() {
 		return reminder;
 	}
-	public void setReminder(boolean reminder) {
+	public void setReminder(int reminder) {
 		this.reminder = reminder;
 	}
 	public String getExpiry() {

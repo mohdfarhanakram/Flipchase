@@ -12,9 +12,10 @@ import android.util.Log;
 import com.flipchase.android.database.FlipchaseDbOperation;
 import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.model.DbControllerResponse;
+import com.flipchase.android.model.Item;
 
 /**
- * @author 201101012
+ * @author m.farhan
  *
  */
 
@@ -24,14 +25,14 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 	private Context mContext;
 	private DbListener listener;
 	private int mEvent;
-    private ArrayList<Object> mDataList;
+    private Object mObject;
 	private DbControllerResponse response;
     private FlipchaseDbOperation mDb;
 	 
-	public DbController(Context context,ArrayList<Object> dataList,int event){
+	public DbController(Context context,Object object,int event,DbListener listener){
 		mContext = context;
 		mDb = new FlipchaseDbOperation(context);
-		mDataList = dataList;
+		mObject = object;
 		mEvent = event;
 		this.listener = listener;
 		response = new DbControllerResponse();
@@ -43,9 +44,11 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 
 		try{
 			switch (mEvent) {
-			case DbEvent.CREATE_LIST:
+			case DbEvent.FETCH_LIST:
 				response.setResponseObject(mDb.getItemList());
 				break;
+			case DbEvent.INSERT_LIST_DATA:	
+				response.setResponseObject(mDb.insertItemListTable((Item)mObject));
 			default:
 				break;
 			}
