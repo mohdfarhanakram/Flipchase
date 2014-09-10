@@ -11,11 +11,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +39,7 @@ import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
+import com.flipchase.android.domain.GCMUsers;
 import com.flipchase.android.domain.Location;
 import com.flipchase.android.domain.UserLocation;
 import com.flipchase.android.model.ServiceResponse;
@@ -46,6 +51,8 @@ import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CityListPopupAdapter;
 import com.flipchase.android.view.adapter.LocationListPopupAdapter;
+import com.gcm.Config;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -77,14 +84,15 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	private GoogleMap googleMap;
 	private boolean mIsComingFromSplash;
 	
+	//GCM
+	GoogleCloudMessaging gcm;
+	String registrationId;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_select_location_layout);
-		
 		mIsComingFromSplash = getIntent().getBooleanExtra(AppConstants.IS_COMING_FROM_SPLASH, true);
-		
-		
 	}
 	
 	@Override
@@ -267,6 +275,8 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
         			break;
         		case FlipchaseApi.SAVE_USER_CITY_AND_LOCATION:
         			break;
+        		case FlipchaseApi.SAVE_GSM_USER:
+        			break;
         		default:
         			break;
         		}
@@ -326,6 +336,96 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 		
 	}
 	
+	/********************************** GCM START **************************************/
+	
+	public String registerGCM() {
+
+		gcm = GoogleCloudMessaging.getInstance(this);
+		registrationId = getRegistrationId(getApplicationContext());
+
+		if (TextUtils.isEmpty(registrationId)) {
+			registerInBackground();
+			Log.d("RegisterActivity",
+					"registerGCM - successfully registered with GCM server - regId: "
+							+ registrationId);
+		} 
+		return registrationId;
+	}
+
+	private String getRegistrationId(Context context) {
+		String registrationId = AppSharedPreference.getString(AppSharedPreference.GCM_REGISTRATION_ID, "", this);
+		if (StringUtils.isNullOrEmpty(registrationId)) {
+			return "";
+		}
+		int registeredVersion = AppSharedPreference.getInt(AppSharedPreference.GCM_VERSION_ID, Integer.MIN_VALUE, this);
+		int currentVersion = getAppVersion(context);
+		if (registeredVersion != currentVersion) {
+			return "";
+		}
+		return registrationId;
+	}
+
+	private static int getAppVersion(Context context) {
+		try {
+			PackageInfo packageInfo = context.getPackageManager()
+					.getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionCode;
+		} catch (NameNotFoundException e) {
+			Log.d("RegisterActivity",
+					"I never expected this! Going down, going down!" + e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void registerInBackground() {
+		new AsyncTask<Void, Void, String>() {
+			@Override
+			protected String doInBackground(Void... params) {
+				String msg = "";
+				try {
+					if (gcm == null) {
+						gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+					}
+					registrationId = gcm.register(Config.GOOGLE_PROJECT_ID);
+					Log.d("RegisterActivity", "registerInBackground - regId: "
+							+ registrationId);
+					msg = "Device registered, registration ID=" + registrationId;
+
+					storeRegistrationId(getApplicationContext(), registrationId);
+				} catch (IOException ex) {
+					msg = "Error :" + ex.getMessage();
+					Log.d("RegisterActivity", "Error: " + msg);
+				}
+				Log.d("RegisterActivity", "AsyncTask completed: " + msg);
+				return msg;
+			}
+
+			@Override
+			protected void onPostExecute(String msg) {
+				Toast.makeText(getApplicationContext(),
+						"Registered with GCM Server." + msg, Toast.LENGTH_LONG)
+						.show();
+				shareGCMRegistrationId();
+				
+			}
+		}.execute(null, null, null);
+	}
+
+	private void shareGCMRegistrationId() {
+		GCMUsers gcmUsers = new GCMUsers();
+		gcmUsers.setGcmRegistrationId(registrationId);
+		String jsonString = convertObjectToJsonString(gcmUsers);
+		postData(URLConstants.SAVE_GSM_USER_URL, FlipchaseApi.SAVE_GSM_USER, jsonString, VolleyGenericRequest.ContentType.JSON, null);
+	}
+	
+	private void storeRegistrationId(Context context, String regId) {
+		int appVersion = getAppVersion(context);
+		AppSharedPreference.putString(AppSharedPreference.GCM_REGISTRATION_ID, regId, this);
+		AppSharedPreference.putInt(AppSharedPreference.GCM_VERSION_ID, appVersion, this);
+	}
+	
+	/***********************************  Google ENDS  ***************************/
+	
 	/***********************************  Google Maps START  ***************************/
 	private void searchUserCurrentCityAndLocation()
 	{
@@ -368,6 +468,7 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 	protected void onResume() {
 		super.onResume();
 		initilizeMap();
+		registerGCM();
 	}
 
 	private void setUpMap() {

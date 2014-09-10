@@ -19,6 +19,11 @@ public class AppSharedPreference {
 	public final static String USER_SELECTED_CITY_ID = "user_selected_city_id";
 	public final static String USER_SELECTED_LOCATION_ID = "user_selected_location_id";
 	public final static String IS_USER_CURRENT_LOCATION_USED = "is_user_current_location_used";
+	
+	 /** GCM **/
+    public static final String GCM_REGISTRATION_ID = "gcm_registration_id";
+    public static final String GCM_VERSION_ID = "gcm_version_id";
+    
 
 	public static int getInt(String key, int defValue,Context context)
 	{

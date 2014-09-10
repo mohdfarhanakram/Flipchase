@@ -11,6 +11,7 @@ public final class URLConstants {
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
 	public static final String BASE_LOCATION_URL = BASE_URL + "/location";
 	public static final String BASE_RETAILER_URL = BASE_URL + "/retailer";
+	public static final String BASE_GSM_URL = "http://10.0.2.2:8080" + "/gcm";
 	
 	
 	/************************** INIT WEBSERVICE FOR APP ***********************************************/
@@ -30,6 +31,9 @@ public final class URLConstants {
 	/************************** RETAILERS ***********************************************/
 	public static final String GET_ALL_RETAILERS_URL = BASE_RETAILER_URL + "/getAllRetailers";
 	public static final String GET_STORES_FOR_RETAILER_URL = BASE_RETAILER_URL + "/getStoresForRetailer/{retailerId}";
+	
+	/************************* GSM *******************************************************/
+	public static final String SAVE_GSM_USER_URL = BASE_GSM_URL + "/saveGCMUser";
 	
 	public static final String EXTRA_URL = "url";
 	public static final String INTENT_SOURCE_ACTIVITY = "source_activity";
