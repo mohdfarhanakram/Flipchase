@@ -12,6 +12,19 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <permission
+        android:name="com.javapapers.android.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.javapapers.android.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="20" />
@@ -21,14 +34,30 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBCm76uNTdpE6e-_GZB8Tj3tyl3bWXER-o" />
         
+        <!-- Farhan -->
         <!-- <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAV0lin3F_183sr5d_sJFNS4QErBzyNFIY" /> -->
+            android:value="AIzaSyBCm76uNTdpE6e-_GZB8Tj3tyl3bWXER-o" /> -->
+        
+        <!-- Deepak -->
+         <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAV0lin3F_183sr5d_sJFNS4QErBzyNFIY" />
 
+         <receiver
+            android:name="com.gcm.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.gcm.GCMNotificationIntentService" />
+        
         <activity
             android:name="com.flipchase.android.view.activity.SplashActivity"
             android:label="@string/app_name"

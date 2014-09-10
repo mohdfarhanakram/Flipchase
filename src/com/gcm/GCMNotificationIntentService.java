@@ -63,23 +63,24 @@ public class GCMNotificationIntentService extends IntentService {
 	}
 
 	private void sendNotification(String msg) {
+		//DK:
+		/*
 		Log.d(TAG, "Preparing to send notification...: " + msg);
 		mNotificationManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		//PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-			//	new Intent(this, MainActivity.class), 0);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				new Intent(this, MainActivity.class), 0);
 
-		//DK:
-		/*
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this).setSmallIcon(R.drawable.gcm_cloud)
 				.setContentTitle("GCM Notification")
 				.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
 				.setContentText(msg);
-	*/
-		//mBuilder.setContentIntent(contentIntent);
-		//mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+		mBuilder.setContentIntent(contentIntent);
+		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 		Log.d(TAG, "Notification sent successfully.");
+		*/
 	}
 }
