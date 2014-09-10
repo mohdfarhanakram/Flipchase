@@ -10,6 +10,8 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.flipchase.android.R;
+import com.flipchase.android.view.activity.SelectLocationActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GCMNotificationIntentService extends IntentService {
@@ -63,14 +65,12 @@ public class GCMNotificationIntentService extends IntentService {
 	}
 
 	private void sendNotification(String msg) {
-		//DK:
-		/*
 		Log.d(TAG, "Preparing to send notification...: " + msg);
 		mNotificationManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, MainActivity.class), 0);
+				new Intent(this, SelectLocationActivity.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this).setSmallIcon(R.drawable.gcm_cloud)
@@ -81,6 +81,5 @@ public class GCMNotificationIntentService extends IntentService {
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 		Log.d(TAG, "Notification sent successfully.");
-		*/
 	}
 }

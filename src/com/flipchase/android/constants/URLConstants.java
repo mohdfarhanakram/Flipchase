@@ -11,7 +11,7 @@ public final class URLConstants {
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
 	public static final String BASE_LOCATION_URL = BASE_URL + "/location";
 	public static final String BASE_RETAILER_URL = BASE_URL + "/retailer";
-	public static final String BASE_GSM_URL = "http://192.168.1.13:8080" + "/gcm";
+	public static final String BASE_GSM_URL = BASE_URL + "/gcm";
 	
 	
 	/************************** INIT WEBSERVICE FOR APP ***********************************************/
