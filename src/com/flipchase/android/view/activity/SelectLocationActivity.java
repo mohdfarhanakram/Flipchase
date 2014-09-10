@@ -406,7 +406,6 @@ public class SelectLocationActivity extends BaseActivity implements View.OnClick
 						"Registered with GCM Server." + msg, Toast.LENGTH_LONG)
 						.show();
 				shareGCMRegistrationId();
-				
 			}
 		}.execute(null, null, null);
 	}
