@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.flipchase.android.R;
-import com.flipchase.android.view.activity.SelectLocationActivity;
+import com.flipchase.android.view.activity.AlertsActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GCMNotificationIntentService extends IntentService {
@@ -70,7 +70,7 @@ public class GCMNotificationIntentService extends IntentService {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, SelectLocationActivity.class), 0);
+				new Intent(this, AlertsActivity.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this).setSmallIcon(R.drawable.gcm_cloud)
