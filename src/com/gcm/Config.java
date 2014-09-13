@@ -8,5 +8,6 @@ public interface Config {
 	// Google Project Number
 	static final String GOOGLE_PROJECT_ID = "720965521110";
 	static final String MESSAGE_KEY = "message";
+	static final String MESSAGE_TITLE = "title";
 
 }

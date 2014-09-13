@@ -11,7 +11,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.flipchase.android.R;
+import com.flipchase.android.domain.Store;
 import com.flipchase.android.view.activity.AlertsActivity;
+import com.flipchase.android.view.activity.RetailerStoresActivity;
+import com.flipchase.android.view.activity.StoreMapViewActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GCMNotificationIntentService extends IntentService {
@@ -36,11 +39,11 @@ public class GCMNotificationIntentService extends IntentService {
 		if (!extras.isEmpty()) {
 			if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
 					.equals(messageType)) {
-				sendNotification("Send error: " + extras.toString());
+				sendNotification("Send error: " + extras.toString(), "");
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
 					.equals(messageType)) {
 				sendNotification("Deleted messages on server: "
-						+ extras.toString());
+						+ extras.toString(), "");
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
 					.equals(messageType)) {
 
@@ -56,27 +59,31 @@ public class GCMNotificationIntentService extends IntentService {
 				}
 				Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
 
-				sendNotification("Message Received from Google GCM Server: "
-						+ extras.get(Config.MESSAGE_KEY));
+				sendNotification("Message Received from Flipchase GCM Server: "
+						+ extras.get(Config.MESSAGE_TITLE), "" + extras.get(Config.MESSAGE_KEY));
 				Log.i(TAG, "Received: " + extras.toString());
 			}
 		}
 		GcmBroadcastReceiver.completeWakefulIntent(intent);
 	}
 
-	private void sendNotification(String msg) {
+	private void sendNotification(String title, String msg) {
 		Log.d(TAG, "Preparing to send notification...: " + msg);
 		mNotificationManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
+		Intent alertActivity = new Intent(this,
+				AlertsActivity.class);
+		alertActivity.putExtra("alerts", msg);  
+    	
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, AlertsActivity.class), 0);
+				alertActivity, 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this).setSmallIcon(R.drawable.gcm_cloud)
-				.setContentTitle("GCM Notification")
-				.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-				.setContentText(msg);
+				.setContentTitle("Flipchase GCM Notification")
+				.setStyle(new NotificationCompat.BigTextStyle().bigText(title))
+				.setContentText(title);
 
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
