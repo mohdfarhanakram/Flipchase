@@ -217,6 +217,62 @@ public class FlipchaseDbOperation {
 	}
 	
 	
+	public boolean createListTable(Item item){
+
+		try{
+			
+			
+			dbHelper.openDataBase();
+			SQLiteDatabase database = dbHelper.getWritableDatabase();
+			
+			ContentValues contentValue = new ContentValues();  
+			contentValue.put("uid",  System.currentTimeMillis()+"");
+			contentValue.put("item_title", item.getTitle());
+			contentValue.put("item", item.getSubTitle());
+			contentValue.put("quantity", item.getQuantity());
+			contentValue.put("reminder", item.getReminder());
+			contentValue.put("expiry_date", item.getExpiry());
+			contentValue.put("image", item.getImageInByte());
+			contentValue.put("id",  item.getId());
+			
+			database.insert("Item_List_Table", null, contentValue);
+			
+			String query = "SELECT * FROM Item_List_Table  WHERE id="+item.getId();
+			
+			Log.e("Sql count query",query);
+			Cursor cursor = database.rawQuery(query, null);
+			
+			int count = 0;
+			if (cursor!=null && cursor.getCount() != 0) {
+				count = cursor.getCount();
+				cursor.close();
+			}
+			Log.e("Count : ",count+"");
+			
+			ContentValues contentMasterValue = new ContentValues(); 
+			if(count==1){
+				contentMasterValue.put("id",  item.getId());
+				contentMasterValue.put("list_name", item.getName()); 
+				contentMasterValue.put("list_count", count);
+				database.insert("Item_List_Master", null, contentMasterValue);
+			}else{
+				contentMasterValue.put("list_count", count);
+				database.update("Item_List_Master", contentMasterValue, "id="+item.getId(), null);
+			}
+			
+			  
+			
+			
+			dbHelper.close();
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 	
 
    

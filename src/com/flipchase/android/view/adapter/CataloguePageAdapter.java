@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.domain.Catalogue;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.extlibpro.FlipBookLog;
 import com.flipchase.android.parcels.CataloguePageItem;
@@ -31,6 +32,8 @@ public class CataloguePageAdapter extends BaseAdapter {
 	private boolean isAllItemsLoaded = false;
 
 	private int downloadedImageCount = 0;
+	
+	private Catalogue catalogue;
 	
 	public int getDownloadedImageCount() {
 		return downloadedImageCount;
@@ -55,6 +58,10 @@ public class CataloguePageAdapter extends BaseAdapter {
 
 	public void setStore(Store store) {
 		this.store = store;
+	}
+	
+	public void setCatalogue(Catalogue catalogue) {
+		this.catalogue = catalogue;
 	}
 
 	public void setItems(List<CataloguePageItem> items, int pageId) {
@@ -110,11 +117,10 @@ public class CataloguePageAdapter extends BaseAdapter {
 		 */
 		iv.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(activityContext,
-						ImageDisplayActivity.class);
-				i.putExtra("selectedImageURL", URLConstants.IMAGE_SERVER_URL
-						+ data.getPhoto_path());
+				Intent i = new Intent(activityContext,ImageDisplayActivity.class);
+				i.putExtra("selectedImageURL", URLConstants.IMAGE_SERVER_URL+ data.getPhoto_path());
 				i.putExtra("store", store);
+				i.putExtra("catalog", catalogue);
 				activityContext.startActivity(i);
 			}
 		});

@@ -25,10 +25,10 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 	private Context mContext;
 	private DbListener listener;
 	private int mEvent;
-    private Object mObject;
+	private Object mObject;
 	private DbControllerResponse response;
-    private FlipchaseDbOperation mDb;
-	 
+	private FlipchaseDbOperation mDb;
+
 	public DbController(Context context,Object object,int event,DbListener listener){
 		mContext = context;
 		mDb = new FlipchaseDbOperation(context);
@@ -49,10 +49,14 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 				break;
 			case DbEvent.INSERT_LIST_DATA:	
 				response.setResponseObject(mDb.insertItemListTable((Item)mObject));
+				break;
+			case DbEvent.CREATE_LIST_DATA:	
+				response.setResponseObject(mDb.createListTable((Item)mObject));
+				break;
 			default:
 				break;
 			}
-			
+
 		}catch(Exception e){
 			Log.e("Controller error", e.getMessage());
 			response.setResponseObject(null);

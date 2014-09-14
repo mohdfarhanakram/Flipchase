@@ -18,17 +18,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
 import com.flipchase.android.R;
+import com.flipchase.android.controller.DbController;
+import com.flipchase.android.controller.DbEvent;
+import com.flipchase.android.domain.Catalogue;
 import com.flipchase.android.domain.Store;
+import com.flipchase.android.listener.DbListener;
+import com.flipchase.android.model.DbControllerResponse;
+import com.flipchase.android.model.Item;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.util.Utils;
+import com.flipchase.android.view.widget.CustomFontEditText;
 import com.flipchase.android.view.widget.TouchImageView;
 
-public class ImageDisplayActivity extends BaseActivity implements DialogInterface.OnClickListener{
+import de.ankri.views.Switch;
+
+public class ImageDisplayActivity extends BaseActivity implements DialogInterface.OnClickListener,DbListener{
 
 	private static final String BUNDLE_POSITION = "position";
 
@@ -38,7 +52,14 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 
 	private String selectedImageURL = null;
 	private Store store;
+	private Catalogue catalogue;
 	private boolean mIsCropWindowVisible = false;
+
+	private View mFormView;
+	private ArrayList<Item> selectlist = new ArrayList<Item>();
+	
+	private String catalogId;
+	private String catalogName;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(R.style.AppThemeLight);
@@ -47,6 +68,15 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		getSupportActionBar().setTitle("Image display");
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		this.store = (Store) getIntent().getSerializableExtra("store");
+		this.catalogue = (Catalogue) getIntent().getSerializableExtra("catalog");
+		
+		catalogId = catalogue.getId();
+		catalogName = catalogue.getName();
+
+		showProgressDialog("Loading..");
+		DbController controller = new DbController(this, null, DbEvent.FETCH_LIST, this);
+		controller.execute();
+
 		/*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.violetsky);
 
 
@@ -192,16 +222,39 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	private final Dialog createFormDialog(Bitmap bitmp) {
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View layout = inflater.inflate(R.layout.layout_item_add_details, null);
-		ImageView imgView = (ImageView)layout.findViewById(R.id.itmeImage);
+		mFormView = inflater.inflate(R.layout.layout_item_add_details, null);
+		ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
 		if(bitmp!=null)
 			imgView.setImageBitmap(bitmp);
+
+		Spinner spinner = (Spinner)mFormView.findViewById(R.id.select_list_spinner);
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+              catalogId = selectlist.get(position).getId();
+              catalogName = selectlist.get(position).getName();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, getSelectList());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(dataAdapter);
+		
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("List: Add Details");
 		builder.setPositiveButton("Create",this);
 		builder.setNegativeButton("Cancel", this);
-		builder.setView(layout);
+		builder.setView(mFormView);
 		return builder.create();
 	}
 
@@ -210,7 +263,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 		case Dialog.BUTTON_NEGATIVE:
-            dialog.dismiss();
+			dialog.dismiss();
 			break;
 		case Dialog.BUTTON_POSITIVE:
 			createAndSaveList();
@@ -223,9 +276,30 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	}
 
 	private void createAndSaveList() {
-    
-		ArrayList<String> dataList = new ArrayList<String>();
-		
+
+		//ArrayList<Item> dataList = new ArrayList<Item>();
+
+		ImageView itemImage = (ImageView)mFormView.findViewById(R.id.itmeImage);
+		String itemTitle = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_title)).getText().toString();
+		int reminder = ((Switch)mFormView.findViewById(R.id.s_set_reminder)).isChecked()==true?1:0;
+		String quantity = ((CustomFontEditText)mFormView.findViewById(R.id.s_quantity)).getText().toString();
+		String subItem = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_name)).getText().toString();
+
+		Item item = new Item();
+		item.setQuantity(quantity);
+		item.setTitle(itemTitle);
+		item.setReminder(reminder);
+		item.setQuantity(quantity);
+		item.setSubTitle(subItem);
+		item.setId(catalogId);
+		item.setName(catalogName);
+
+		//dataList.add(item);
+
+		showProgressDialog("Loading..");
+		DbController controller = new DbController(this, item, DbEvent.CREATE_LIST_DATA, this);
+		controller.execute();
+
 	}
 
 
@@ -281,6 +355,51 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	private void picassoLoad(String url, ImageView imageView) {
 		PicassoEx.getPicasso(this).load(url).config(Bitmap.Config.RGB_565).placeholder(R.drawable.flip).fit().into(imageView);
 		//PicassoEx.getPicasso(mContext).load(url).get()
+	}
+
+
+	@Override
+	public void onDatabaseOperationDone(DbControllerResponse response) {
+		removeProgressDialog();
+		switch (response.getEvent()) {
+		case DbEvent.FETCH_LIST:
+			Item compareItem = new Item();
+			compareItem.setId(catalogue.getId());
+			compareItem.setName(catalogue.getName());
+			compareItem.setCount(0);
+
+			if((ArrayList<Item>)response.getResponseObject()!=null){
+				selectlist = (ArrayList<Item>)response.getResponseObject();
+			}
+
+			if(selectlist.indexOf(compareItem)==-1){
+				selectlist.add(0, compareItem);
+			}
+			break;
+		case DbEvent.CREATE_LIST_DATA:
+			boolean sucess = (Boolean)response.getResponseObject();
+			if(sucess){
+				Toast.makeText(this, "List is Created Successfully", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(ImageDisplayActivity.this, HomeActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				//i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(i);
+			}else{
+				Toast.makeText(this, "List is not created, please try again.", Toast.LENGTH_SHORT).show();
+			}
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	private ArrayList<String> getSelectList(){
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i=0; i<selectlist.size(); i++){
+			list.add(selectlist.get(i).getName());
+		}
+		return list;
 	}
 
 

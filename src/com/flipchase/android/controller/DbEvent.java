@@ -12,4 +12,5 @@ public interface DbEvent {
    public static int FETCH_SUB_LIST = 2;
    public static int INSERT_MASTER_LIST_DATA = 3;
    public static int INSERT_LIST_DATA = 4;
+   public static int CREATE_LIST_DATA = 5;
 }

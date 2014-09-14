@@ -70,6 +70,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		this.store = (Store) getIntent().getSerializableExtra("store");
 		cataloguePageAdapter = new CataloguePageAdapter(this);
 		cataloguePageAdapter.setStore(store);
+		cataloguePageAdapter.setCatalogue(catalogue);
 		flipView.setAdapter(cataloguePageAdapter);
 		
 		/*setContentView(flipView);
