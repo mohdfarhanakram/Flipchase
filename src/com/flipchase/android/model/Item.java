@@ -3,15 +3,24 @@
  */
 package com.flipchase.android.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * @author m.farhan
  *
  */
-public class Item {
+public class Item implements Serializable{
 	
 	
+
+	private String uid;
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
 
 	private String id;
 	private String name;

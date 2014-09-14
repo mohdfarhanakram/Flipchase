@@ -1,6 +1,7 @@
 
 package com.flipchase.android.view.activity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,8 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	
 	private String catalogId;
 	private String catalogName;
+	
+	private byte[] croppedImageByte;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(R.style.AppThemeLight);
@@ -284,6 +287,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		int reminder = ((Switch)mFormView.findViewById(R.id.s_set_reminder)).isChecked()==true?1:0;
 		String quantity = ((CustomFontEditText)mFormView.findViewById(R.id.s_quantity)).getText().toString();
 		String subItem = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_name)).getText().toString();
+		
 
 		Item item = new Item();
 		item.setQuantity(quantity);
@@ -293,6 +297,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		item.setSubTitle(subItem);
 		item.setId(catalogId);
 		item.setName(catalogName);
+		item.setImageInByte(croppedImageByte);
 
 		//dataList.add(item);
 
@@ -347,7 +352,13 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 				(int) actualCropY,
 				(int) actualCropWidth,
 				(int) actualCropHeight);
-
+		
+		Bitmap temp = croppedBitmap;
+		
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		temp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		croppedImageByte = stream.toByteArray();
+		
 		return croppedBitmap;
 
 	}

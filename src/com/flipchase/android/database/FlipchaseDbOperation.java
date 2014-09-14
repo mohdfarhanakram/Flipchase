@@ -100,14 +100,14 @@ public class FlipchaseDbOperation {
 				if (cursor.moveToFirst()) {
 					do {
 						Item item = new Item();
-						item.setId(cursor.getString(0));
-						item.setName(cursor.getString(1));
-						item.setTitle(cursor.getString(2));
-						item.setSubTitle(cursor.getString(3));
-						item.setQuantity(cursor.getString(4));
-						item.setReminder(cursor.getInt(5));
-						item.setExpiry(cursor.getString(6));
-						item.setImageInByte(cursor.getBlob(7));
+						item.setUid(cursor.getString(0));
+						item.setTitle(cursor.getString(1));
+						item.setSubTitle(cursor.getString(2));
+						item.setQuantity(cursor.getString(3));
+						item.setReminder(cursor.getInt(4));
+						item.setExpiry(cursor.getString(5));
+						item.setImageInByte(cursor.getBlob(6));
+						item.setId(cursor.getString(7));
 						subItemList.add(item);
 	                   
 					} while (cursor.moveToNext());

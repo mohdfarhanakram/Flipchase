@@ -6,6 +6,7 @@
     android:paddingTop="10dp" >
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"

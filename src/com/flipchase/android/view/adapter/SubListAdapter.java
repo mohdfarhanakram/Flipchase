@@ -7,13 +7,10 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.sax.StartElementListener;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,22 +18,27 @@ import android.widget.TextView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.view.activity.ListDetailActivity;
 import com.flipchase.android.view.activity.SubListActivity;
 
 /**
- * @author m.farhan
+ * @author FARHAN
  *
  */
-public class ListAdapter extends BaseAdapter{
+
+public class SubListAdapter extends BaseAdapter{
 	
 	private Context mContext;
 	private ArrayList<Item> mItemList;
 	private LayoutInflater mInflater;
+	private String name;
 	
-	public ListAdapter(Context context,ArrayList<Item> itemList){
+	public SubListAdapter(Context context,ArrayList<Item> itemList,String name){
 		mContext = context;
 		mItemList = itemList;
 		mInflater = LayoutInflater.from(mContext);
+		this.name = name;
 	}
 
 	@Override
@@ -64,11 +66,13 @@ public class ListAdapter extends BaseAdapter{
 		ViewHolder viewHolder;
 		if(convertView==null){
 			viewHolder = new ViewHolder();
-			convertView = mInflater.inflate(R.layout.row_list_layout, parent, false);
-			
-			viewHolder.imageView = (ImageView)convertView.findViewById(R.id.list_image_view);
+			convertView = mInflater.inflate(R.layout.row_sub_list_layout, parent, false);
+
+			viewHolder.imageView = (ImageView)convertView.findViewById(R.id.sub_list_image_view);
 			viewHolder.listNameTxtView = (TextView)convertView.findViewById(R.id.list_name_txtva);
-			viewHolder.itemNoTxtView = (TextView)convertView.findViewById(R.id.list_no_txtva);
+			viewHolder.itemTitleTxtView = (TextView)convertView.findViewById(R.id.list_title_name_txtv);
+			viewHolder.itemSubTitleTxtView = (TextView)convertView.findViewById(R.id.list_sub_title_txtv);
+			
 			viewHolder.mainLayout = (LinearLayout)convertView.findViewById(R.id.main_layout);
 			
 			convertView.setTag(viewHolder);
@@ -78,23 +82,37 @@ public class ListAdapter extends BaseAdapter{
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 		
+		
 		viewHolder.mainLayout.setTag(item);
 		viewHolder.mainLayout.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(mContext,SubListActivity.class);
+				Intent i = new Intent(mContext,ListDetailActivity.class);
 				Item item = (Item)v.getTag();
-				i.putExtra("catalogId", item.getId());
-				i.putExtra("catalogName",item.getName());
+				item.setName(name);
+				i.putExtra("item", item);
+				
 				mContext.startActivity(i);
 			}
 		});
 		
-		viewHolder.listNameTxtView.setText(item.getName());
-		viewHolder.itemNoTxtView.setText(item.getCount()+"");
+		viewHolder.listNameTxtView.setText(name);
+		if(!StringUtils.isNullOrEmpty(item.getTitle())){
+			viewHolder.itemTitleTxtView.setText(item.getTitle());
+			viewHolder.itemTitleTxtView.setVisibility(View.VISIBLE);
+		}else{
+			viewHolder.itemTitleTxtView.setVisibility(View.GONE);
+		}
 		
-		setBitmap(item.getImageInByte(),viewHolder.imageView);
+		if(!StringUtils.isNullOrEmpty(item.getSubTitle())){
+			viewHolder.itemSubTitleTxtView.setText(item.getSubTitle());
+			viewHolder.itemSubTitleTxtView.setVisibility(View.VISIBLE);
+		}else{
+			viewHolder.itemSubTitleTxtView.setVisibility(View.GONE);
+		}
+		
+		//setBitmap(item.getImageInByte(),viewHolder.imageView);
 		
 		return convertView;
 	}
@@ -105,11 +123,12 @@ public class ListAdapter extends BaseAdapter{
 		public LinearLayout mainLayout;
 		public ImageView imageView;
 		public TextView listNameTxtView;
-		public TextView itemNoTxtView;
+		public TextView itemTitleTxtView;
+		public TextView itemSubTitleTxtView;
 		
 	}
 	
-	public void setBitmap(byte[] bitmapdata,ImageView imagView){
+	/*public void setBitmap(byte[] bitmapdata,ImageView imagView){
 		if(bitmapdata==null)
 			return;
 		try{
@@ -121,5 +140,6 @@ public class ListAdapter extends BaseAdapter{
 		}
 		
 	}
-
+*/
 }
+

@@ -53,6 +53,9 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 			case DbEvent.CREATE_LIST_DATA:	
 				response.setResponseObject(mDb.createListTable((Item)mObject));
 				break;
+			case DbEvent.FETCH_SUB_LIST:
+				response.setResponseObject(mDb.getItemsBasedOnId((String)mObject));
+				break;
 			default:
 				break;
 			}
