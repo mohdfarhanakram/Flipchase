@@ -15,6 +15,7 @@ public class AppConstants {
 	public final static String CATALOGUE_FRAGMENT   = "Catalogue";
 	public final static String STORE_FRAGMENT   = "Store";
 	public final static String LIST_FRAGMENT    = "List";
+	public final static String ALERTS_FRAGMENT = "Alerts";
 	public final static String COUPANS_FRAGMENT = "Coupons";
 
 	public final static String IS_COMING_FROM_SPLASH = "coming_from_splash";

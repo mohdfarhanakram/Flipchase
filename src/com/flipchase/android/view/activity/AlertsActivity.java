@@ -9,13 +9,13 @@ import android.widget.ListView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.domain.MobileAlert;
-import com.flipchase.android.view.adapter.AlertListAdapter;
+import com.flipchase.android.view.adapter.AlertsNotificationsAdapter;
 
 public class AlertsActivity extends BaseActivity implements
 		View.OnClickListener {
 
 	private ListView listview;
-	private AlertListAdapter alertListAdapter;
+	private AlertsNotificationsAdapter alertListAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,7 @@ public class AlertsActivity extends BaseActivity implements
 		if (alerts != null) {
 			System.out.println(alerts);
 		}
-		alerts= "a,b,c,d";
-		alertListAdapter = new AlertListAdapter(this);
+		alertListAdapter = new AlertsNotificationsAdapter(this);
 		String[] alertsArray = alerts.split("\\s*,\\s*");
 		List<MobileAlert> alertItems = null;
 		if (alertsArray != null) {

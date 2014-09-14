@@ -9,6 +9,8 @@ public class GCMUsers implements Serializable {
 
 	private static final long serialVersionUID = 3239243444120804974L;
 
+	private String sessionId;
+	
 	private String gcmRegistrationId;
 	
 	private String email;
@@ -28,5 +30,14 @@ public class GCMUsers implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	
 	
 }

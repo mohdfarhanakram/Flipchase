@@ -30,7 +30,9 @@ public interface FlipchaseApi {
 	 public static final int GET_CATALOGUE_PAGES_FOR_CATALOGUE = 9;
 	 public static final int SAVE_USER_CITY_AND_LOCATION = 10;
 	 public static final int SAVE_GSM_USER = 11;
+	 public static final int GET_MOBILE_ALERTS = 12;
+	 public static final int SAVE_MOBILE_ALERT = 13;
 	 
-	 public static final int API_STORE_SHOW_MORE = 12;
+	 public static final int API_STORE_SHOW_MORE = 20;
 
 }

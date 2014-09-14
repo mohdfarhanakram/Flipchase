@@ -5,13 +5,14 @@ package com.flipchase.android.constants;
 public final class URLConstants {
 
 	//public static final String BASE_URL = "http://10.0.2.2:8080";
-	//public static final String BASE_URL = "http://192.168.43.214:8080";
+	//public static final String BASE_URL = "http://192.168.1.13:8080";
 	public static final String BASE_URL = "http://flipchase.in";
 	public static final String IMAGE_SERVER_URL = "http://flipchase.s3-website-ap-southeast-1.amazonaws.com/";	
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
 	public static final String BASE_LOCATION_URL = BASE_URL + "/location";
 	public static final String BASE_RETAILER_URL = BASE_URL + "/retailer";
 	public static final String BASE_GSM_URL = BASE_URL + "/gcm";
+	public static final String BASE_MOBILE_ALERTS_URL = BASE_URL + "/mobilealerts";
 	
 	
 	/************************** INIT WEBSERVICE FOR APP ***********************************************/
@@ -34,6 +35,10 @@ public final class URLConstants {
 	
 	/************************* GSM *******************************************************/
 	public static final String SAVE_GSM_USER_URL = BASE_GSM_URL + "/saveGCMUser";
+	
+	/************************* MOBILE ALERTS *******************************************************/
+	public static final String GET_MOBILE_ALERTS_URL = BASE_MOBILE_ALERTS_URL + "/getMobileAlertsForUser";
+	public static final String SAVE_MOBILE_ALERT_URL = BASE_MOBILE_ALERTS_URL + "/saveMobileAlert";
 	
 	public static final String EXTRA_URL = "url";
 	public static final String INTENT_SOURCE_ACTIVITY = "source_activity";

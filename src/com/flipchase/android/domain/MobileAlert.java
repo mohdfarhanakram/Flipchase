@@ -7,6 +7,8 @@ public class MobileAlert extends BaseDomain {
 
 	private static final long serialVersionUID = 3737859707687492068L;
 
+	private String sessionId;
+	
 	private Long cityId;
 	
 	private Long locationId;
@@ -66,4 +68,13 @@ public class MobileAlert extends BaseDomain {
 	public void setRetailerId(Long retailerId) {
 		this.retailerId = retailerId;
 	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	
 }

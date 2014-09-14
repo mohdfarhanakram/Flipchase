@@ -132,6 +132,9 @@ public class BaseParser implements IParser {
             case FlipchaseApi.SAVE_USER_CITY_AND_LOCATION:
             	// Nothing to do for now, but the service sends the updated user location object
             	break;
+            case FlipchaseApi.GET_MOBILE_ALERTS:
+            	response.setResponseObject(FlipChaseJsonParser.parseAlerts(jsonObjectData));
+            	break;
             default:
                 break;
         }

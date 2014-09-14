@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.view.fragment.AlertsFragment;
 import com.flipchase.android.view.fragment.BaseFragment;
 import com.flipchase.android.view.fragment.CouponFragment;
 import com.flipchase.android.view.fragment.DealsFragment;
@@ -26,6 +27,7 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 	private FragmentManager fragmentManager;
 	private StoreFragment storeFragment;
 	private DealsFragment dealsFragment;
+	private AlertsFragment alertsFragment;
 	
 	public HomeFragmentAdapter(FragmentManager fm,String[] tabOptionList) {
 		super(fm);
@@ -49,6 +51,9 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 			fragment = storeFragment;
 		}else if(tabOption.equalsIgnoreCase(AppConstants.LIST_FRAGMENT)){
 			fragment = new ListFragment();
+		}else if(tabOption.equalsIgnoreCase(AppConstants.ALERTS_FRAGMENT)){
+			alertsFragment = new AlertsFragment();
+			fragment = alertsFragment;
 		}else if(tabOption.equalsIgnoreCase(AppConstants.COUPANS_FRAGMENT)){
 			fragment = new CouponFragment();
 		}else{
@@ -72,6 +77,10 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 			break;
 		case FlipchaseApi.GET_LATEST_CATALOGUES:
 			dealsFragment.updateUi(response);
+			break;
+		case FlipchaseApi.GET_MOBILE_ALERTS:
+			alertsFragment.updateUi(response);
+			break;
 		default:
 			break;
 		}

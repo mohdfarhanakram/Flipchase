@@ -30,10 +30,12 @@ import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.domain.Catalogue;
 import com.flipchase.android.domain.CataloguePage;
+import com.flipchase.android.domain.MobileAlert;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.extlibpro.FlipViewController;
 import com.flipchase.android.extlibpro.FlipViewController.ViewFlipListener;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
 import com.flipchase.android.util.Utils;
@@ -106,14 +108,31 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 			break;
 		case android.R.id.home:
 			onBackPressed();
+			break;
 		case R.id.action_location:
 			showStoreLocation();
+			break;
+		case R.id.action_favourite:
+			saveAlert();
+			break;
 		default:
 			break;
 		}
 		return true;
 	}
 
+	private void saveAlert() {
+		showProgressDialog("Saving alert...");
+		MobileAlert mobileAlert = new MobileAlert();
+		mobileAlert.setName(catalogue.getName());
+		mobileAlert.setDisplayName(catalogue.getName());
+		mobileAlert.setCatalogueId(new Long(catalogue.getId()));
+		mobileAlert.setRetailerId(catalogue.getRetailer());
+		//cataloguePageAdapter.getCuurentCataloguePageId
+		String jsonString = convertObjectToJsonString(mobileAlert);
+		postData(URLConstants.SAVE_MOBILE_ALERT_URL, FlipchaseApi.SAVE_MOBILE_ALERT, jsonString, VolleyGenericRequest.ContentType.JSON, null);
+	}
+	
 	private void showStoreLocation() {
 		Intent i = new Intent(FlipHorizontalLayoutActivity.this,
 				NearestCatalogueStoreActivity.class);
@@ -159,6 +178,10 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 					this.productData = cataloguePagesChunk;
 					//updateStackCatalogItemChunkData(cataloguePagesChunk);
 					handleCatalogueImageLoadingData(cataloguePagesChunk);
+					break;
+				case FlipchaseApi.SAVE_MOBILE_ALERT:
+					removeProgressDialog();
+					showMessageDialog("Alert saved successfully.");
 					break;
 				default:
 					break;

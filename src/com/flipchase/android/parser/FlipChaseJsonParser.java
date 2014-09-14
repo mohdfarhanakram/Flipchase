@@ -20,6 +20,7 @@ import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.parcels.CatalogueChunk;
 import com.flipchase.android.parcels.CataloguePagesChunk;
+import com.flipchase.android.parcels.MobileAlertChunk;
 import com.flipchase.android.util.Utils;
 
 public class FlipChaseJsonParser {
@@ -184,5 +185,23 @@ public class FlipChaseJsonParser {
 			}
         }
     	return cataloguePagesChunk;
+    }
+    
+    public static MobileAlertChunk parseAlerts(JSONObject jsonObjectData) throws JSONException {
+    	MobileAlertChunk alerts = null;
+    	if (Utils.isJsonObject(jsonObjectData, "response")) {
+    		JSONObject itemsJsonObject = jsonObjectData.getJSONObject("response");
+            String json = itemsJsonObject.toString();
+            JsonFactory jsonFactory = new JsonFactory();
+            try {
+				JsonParser jp = jsonFactory.createJsonParser(json);
+				alerts = objectMapper.readValue(jp, MobileAlertChunk.class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        }
+    	return alerts;
     }
 }
