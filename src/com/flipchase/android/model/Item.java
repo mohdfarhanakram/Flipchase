@@ -12,8 +12,6 @@ import java.util.ArrayList;
  */
 public class Item implements Serializable{
 	
-	
-
 	private String uid;
 	public String getUid() {
 		return uid;

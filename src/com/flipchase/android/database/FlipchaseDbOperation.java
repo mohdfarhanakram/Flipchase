@@ -217,16 +217,18 @@ public class FlipchaseDbOperation {
 	}
 	
 	
-	public boolean createListTable(Item item){
-
+	public String createListTable(Item item){
+		String uid = "";
 		try{
 			
 			
 			dbHelper.openDataBase();
 			SQLiteDatabase database = dbHelper.getWritableDatabase();
 			
+			uid = System.currentTimeMillis()+"";
+			
 			ContentValues contentValue = new ContentValues();  
-			contentValue.put("uid",  System.currentTimeMillis()+"");
+			contentValue.put("uid",  uid);
 			contentValue.put("item_title", item.getTitle());
 			contentValue.put("item", item.getSubTitle());
 			contentValue.put("quantity", item.getQuantity());
@@ -268,10 +270,10 @@ public class FlipchaseDbOperation {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return false;
+			return "";
 		}
 		
-		return true;
+		return uid;
 	}
 	
 

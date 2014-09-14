@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.flipchase.android.R;
 import com.flipchase.android.model.Item;
 import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.ListDetailActivity;
 import com.flipchase.android.view.activity.SubListActivity;
 
@@ -111,6 +113,10 @@ public class SubListAdapter extends BaseAdapter{
 		}else{
 			viewHolder.itemSubTitleTxtView.setVisibility(View.GONE);
 		}
+		
+		Bitmap bitmap = ((BaseActivity)mContext).getBitmapFromMemCache(item.getUid());
+		if(bitmap!=null)
+			viewHolder.imageView.setImageBitmap(bitmap);
 		
 		//setBitmap(item.getImageInByte(),viewHolder.imageView);
 		

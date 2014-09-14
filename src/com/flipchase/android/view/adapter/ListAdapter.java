@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.SubListActivity;
 
 /**
@@ -94,7 +95,9 @@ public class ListAdapter extends BaseAdapter{
 		viewHolder.listNameTxtView.setText(item.getName());
 		viewHolder.itemNoTxtView.setText(item.getCount()+"");
 		
-		setBitmap(item.getImageInByte(),viewHolder.imageView);
+		
+		
+		//setBitmap(item.getImageInByte(),viewHolder.imageView);
 		
 		return convertView;
 	}

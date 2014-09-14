@@ -11,14 +11,17 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.util.LruCache;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -57,10 +60,12 @@ import com.flipchase.android.view.widget.FlipdchaseSearchView;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewCollapsedEventListener;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewExpandedEventListener;
 
+
 /**
  * @author m.farhan
  *
  */
+@SuppressLint("NewApi")
 public abstract class BaseActivity extends ActionBarActivity implements OnSearchViewCollapsedEventListener, OnSearchViewExpandedEventListener,
 	View.OnFocusChangeListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener ,
 	Response.Listener, Response.ErrorListener, IScreenView {
@@ -71,6 +76,8 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
 	private FlipdchaseSearchView mSearchView;
 	protected static HashMap<String, Object> mRetainedObjects = new HashMap<String, Object>();
 	public ProgressDialog mProgressDialog;
+	
+	private LruCache<String, Bitmap> mMemoryCache;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,23 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
         }
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
+		// Get max available VM memory, exceeding this amount will throw an
+	    // OutOfMemory exception. Stored in kilobytes as LruCache takes an
+	    // int in its constructor.
+	    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+	    // Use 1/8th of the available memory for this memory cache.
+	    final int cacheSize = maxMemory / 8;
+
+	    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+	        @Override
+	        protected int sizeOf(String key, Bitmap bitmap) {
+	            // The cache size will be measured in kilobytes rather than
+	            // number of items.
+	            return bitmap.getByteCount() / 1024;
+	        }
+	    };
 	}
 	
     @Override
@@ -647,5 +671,29 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
 		}
 		return null;
     }
+    
+    
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
+    }
+    
+    /*public void loadBitmap(int resId, ImageView imageView) {
+        final String imageKey = String.valueOf(resId);
+
+        final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+        if (bitmap != null) {
+            mImageView.setImageBitmap(bitmap);
+        } else {
+            mImageView.setImageResource(R.drawable.image_placeholder);
+            BitmapWorkerTask task = new BitmapWorkerTask(mImageView);
+            task.execute(resId);
+        }
+    }*/
     
 }

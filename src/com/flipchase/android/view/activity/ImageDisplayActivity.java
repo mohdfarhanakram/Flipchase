@@ -37,6 +37,7 @@ import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
 import com.flipchase.android.util.PicassoEx;
+import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.CustomFontEditText;
 import com.flipchase.android.view.widget.TouchImageView;
@@ -63,6 +64,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 	private String catalogName;
 	
 	private byte[] croppedImageByte;
+	private Bitmap saveImage;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(R.style.AppThemeLight);
@@ -298,7 +300,7 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		item.setId(catalogId);
 		item.setName(catalogName);
 		item.setImageInByte(croppedImageByte);
-
+		
 		//dataList.add(item);
 
 		showProgressDialog("Loading..");
@@ -353,11 +355,11 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 				(int) actualCropWidth,
 				(int) actualCropHeight);
 		
-		Bitmap temp = croppedBitmap;
+		saveImage = croppedBitmap;
 		
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		/*ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		temp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-		croppedImageByte = stream.toByteArray();
+		croppedImageByte = stream.toByteArray();*/
 		
 		return croppedBitmap;
 
@@ -388,12 +390,12 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 			}
 			break;
 		case DbEvent.CREATE_LIST_DATA:
-			boolean sucess = (Boolean)response.getResponseObject();
-			if(sucess){
+			String id = (String)response.getResponseObject();
+			if(!StringUtils.isNullOrEmpty(id)){
+				addBitmapToMemoryCache(id, saveImage);
 				Toast.makeText(this, "List is Created Successfully", Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(ImageDisplayActivity.this, HomeActivity.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				//i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				startActivity(i);
 			}else{
 				Toast.makeText(this, "List is not created, please try again.", Toast.LENGTH_SHORT).show();
