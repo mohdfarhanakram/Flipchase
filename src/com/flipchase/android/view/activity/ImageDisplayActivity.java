@@ -36,11 +36,13 @@ import com.flipchase.android.domain.Store;
 import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.ImageCacher;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.CustomFontEditText;
 import com.flipchase.android.view.widget.TouchImageView;
+import com.squareup.picasso.LruCache;
 
 import de.ankri.views.Switch;
 
@@ -392,7 +394,17 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		case DbEvent.CREATE_LIST_DATA:
 			String id = (String)response.getResponseObject();
 			if(!StringUtils.isNullOrEmpty(id)){
-				addBitmapToMemoryCache(id, saveImage);
+				
+				com.squareup.picasso.LruCache lcache = new LruCache(this);
+				lcache.set(id, saveImage);
+				
+				/*ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
+		        ImageCacher imageCacher=new ImageCacher(this, -1);
+		        imageCacher.loadImage("farhan", imgView);*/
+				
+				//addBitmapToMemoryCache(id, saveImage);
+				
+				
 				Toast.makeText(this, "List is Created Successfully", Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(ImageDisplayActivity.this, HomeActivity.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -19,10 +19,12 @@ import android.widget.TextView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.ImageCacher;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.ListDetailActivity;
 import com.flipchase.android.view.activity.SubListActivity;
+import com.squareup.picasso.LruCache;
 
 /**
  * @author FARHAN
@@ -114,9 +116,18 @@ public class SubListAdapter extends BaseAdapter{
 			viewHolder.itemSubTitleTxtView.setVisibility(View.GONE);
 		}
 		
-		Bitmap bitmap = ((BaseActivity)mContext).getBitmapFromMemCache(item.getUid());
+		
+		com.squareup.picasso.LruCache lcache = new LruCache(mContext);
+		Bitmap bitmap =lcache.get(item.getUid());
 		if(bitmap!=null)
 			viewHolder.imageView.setImageBitmap(bitmap);
+		
+		/*ImageCacher cacher = new ImageCacher(mContext, -1);
+		cacher.loadImage("farhan", viewHolder.imageView);*/
+		
+		/*Bitmap bitmap = ((BaseActivity)mContext).getBitmapFromMemCache(item.getUid());
+		if(bitmap!=null)
+			viewHolder.imageView.setImageBitmap(bitmap);*/
 		
 		//setBitmap(item.getImageInByte(),viewHolder.imageView);
 		
