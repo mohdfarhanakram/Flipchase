@@ -5,7 +5,7 @@ package com.flipchase.android.constants;
 public final class URLConstants {
 
 	//public static final String BASE_URL = "http://10.0.2.2:8080";
-	//public static final String BASE_URL = "http://192.168.1.13:8080";
+	//public static final String BASE_URL = "http://192.168.1.8:8080";
 	public static final String BASE_URL = "http://flipchase.in";
 	public static final String IMAGE_SERVER_URL = "http://flipchase.s3-website-ap-southeast-1.amazonaws.com/";	
 	public static final String BASE_CATALOGUE_URL = BASE_URL + "/catalogue";
@@ -38,6 +38,7 @@ public final class URLConstants {
 	
 	/************************* MOBILE ALERTS *******************************************************/
 	public static final String GET_MOBILE_ALERTS_URL = BASE_MOBILE_ALERTS_URL + "/getMobileAlertsForUser";
+	public static final String GET_MOBILE_ALERTS_CATALOGUES_URL = BASE_MOBILE_ALERTS_URL + "/getMobileAlertsCataloguesForUser";
 	public static final String SAVE_MOBILE_ALERT_URL = BASE_MOBILE_ALERTS_URL + "/saveMobileAlert";
 	
 	public static final String EXTRA_URL = "url";

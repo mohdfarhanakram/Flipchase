@@ -4,42 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/progress_bar_layout"
+    <GridView
+        android:id="@+id/alerts_grid_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-
-        <ProgressBar
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerInParent="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/empty_content_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="No Alerts" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/main_content_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-
-        <ListView
-            android:id="@+id/item_list_view"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-    </RelativeLayout>
-
+        android:layout_height="wrap_content"
+        android:numColumns="2" >
+    </GridView>
+    
 </RelativeLayout>

@@ -78,7 +78,7 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter{
 		case FlipchaseApi.GET_LATEST_CATALOGUES:
 			dealsFragment.updateUi(response);
 			break;
-		case FlipchaseApi.GET_MOBILE_ALERTS:
+		case FlipchaseApi.GET_MOBILE_ALERTS_CATALOGUES:
 			alertsFragment.updateUi(response);
 			break;
 		default:

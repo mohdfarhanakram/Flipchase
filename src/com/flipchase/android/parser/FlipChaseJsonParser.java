@@ -204,4 +204,22 @@ public class FlipChaseJsonParser {
         }
     	return alerts;
     }
+    
+    public static CatalogueChunk parseAlertsCatalogues(JSONObject jsonObjectData) throws JSONException {
+    	CatalogueChunk catalogues = null;
+    	if (Utils.isJsonObject(jsonObjectData, "response")) {
+    		JSONObject itemsJsonObject = jsonObjectData.getJSONObject("response");
+            String json = itemsJsonObject.toString();
+            JsonFactory jsonFactory = new JsonFactory();
+            try {
+				JsonParser jp = jsonFactory.createJsonParser(json);
+				catalogues = objectMapper.readValue(jp, CatalogueChunk.class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        }
+    	return catalogues;
+    }
 }

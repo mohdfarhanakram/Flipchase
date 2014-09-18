@@ -135,6 +135,9 @@ public class BaseParser implements IParser {
             case FlipchaseApi.GET_MOBILE_ALERTS:
             	response.setResponseObject(FlipChaseJsonParser.parseAlerts(jsonObjectData));
             	break;
+            case FlipchaseApi.GET_MOBILE_ALERTS_CATALOGUES:
+            	response.setResponseObject(FlipChaseJsonParser.parseAlertsCatalogues(jsonObjectData));
+            	break;
             default:
                 break;
         }
