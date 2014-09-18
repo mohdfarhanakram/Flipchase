@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/new_catalogues_alerts_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/alertsTitle"
+        android:textStyle="bold"
+        android:text="Reminder for new catalogues arrived :-"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp" />
+    
+    <GridView
+        android:id="@+id/new_catalogues_grid_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/new_catalogues_alerts_title"
+        android:numColumns="2" >
+    </GridView>
+
+</RelativeLayout>

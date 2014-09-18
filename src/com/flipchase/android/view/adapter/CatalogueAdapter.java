@@ -38,6 +38,11 @@ public class CatalogueAdapter extends BaseAdapter{
 		mInflater = LayoutInflater.from(context);
 	}
 
+	public CatalogueAdapter(Context context){
+		mContext = context;
+		mInflater = LayoutInflater.from(context);
+	}
+	
 	public void setItems(List<CatalogueDisplay> items) {
         this.mCataArrayList = items;
         notifyDataSetChanged();
@@ -94,7 +99,7 @@ public class CatalogueAdapter extends BaseAdapter{
 
 		holder.catalogueName.setText(catalogue.getCatalogue().getName());
 		holder.catalogueExpiry.setText(catalogue.getCatalogue().getExpiryDate());
-		if(catalogue.getStore().getDistance() != null) {
+		if(catalogue.getStore() != null && catalogue.getStore().getDistance() != null) {
         	String distanceAsString = String.format(AppConstants.STORE_DISTANCE_PRECISION_FOR_KM, catalogue.getStore().getDistance());
         	holder.distance.setText(distanceAsString + AppConstants.DISTANCE_IN_KM);
         } else {

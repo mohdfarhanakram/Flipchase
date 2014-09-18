@@ -37,5 +37,8 @@
     <dimen name="storeTitle">17dp</dimen>
     <dimen name="storeAddress">15dip</dimen>
     <dimen name="storeDistance">15dip</dimen>
+    
+     <!--  Alerts Page -->
+    <dimen name="alertsTitle">20dp</dimen>
 
 </resources>

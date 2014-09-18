@@ -11,10 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.flipchase.android.R;
-import com.flipchase.android.domain.Store;
-import com.flipchase.android.view.activity.AlertsActivity;
-import com.flipchase.android.view.activity.RetailerStoresActivity;
-import com.flipchase.android.view.activity.StoreMapViewActivity;
+import com.flipchase.android.view.activity.AlertsActivityForExpiredCatalogues;
+import com.flipchase.android.view.activity.AlertsActivityForNewCatalogues;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GCMNotificationIntentService extends IntentService {
@@ -59,8 +57,7 @@ public class GCMNotificationIntentService extends IntentService {
 				}
 				Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
 
-				sendNotification("Message Received from Flipchase GCM Server: "
-						+ extras.get(Config.MESSAGE_TITLE), "" + extras.get(Config.MESSAGE_KEY));
+				sendNotification("" + extras.get(Config.MESSAGE_TITLE), "" + extras.get(Config.MESSAGE_KEY));
 				Log.i(TAG, "Received: " + extras.toString());
 			}
 		}
@@ -72,9 +69,17 @@ public class GCMNotificationIntentService extends IntentService {
 		mNotificationManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Intent alertActivity = new Intent(this,
-				AlertsActivity.class);
-		alertActivity.putExtra("alerts", msg);  
+		Intent alertActivity = null;
+		if(title.equalsIgnoreCase("NEW_CATALOGUES_ARRIVED_GCM_KEY")) {
+			alertActivity = new Intent(this,
+					AlertsActivityForNewCatalogues.class);
+			alertActivity.putExtra("alerts", msg);
+		} else if(title.equalsIgnoreCase("EXPIRED_CATALOGUES_GCM_KEY")) {
+			alertActivity = new Intent(this,
+					AlertsActivityForExpiredCatalogues.class);
+			alertActivity.putExtra("alerts", msg);
+		}
+		  
     	
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				alertActivity, 0);
