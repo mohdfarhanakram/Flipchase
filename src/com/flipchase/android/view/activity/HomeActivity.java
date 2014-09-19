@@ -39,6 +39,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	private StoreCatalogue mLatestCatalogData;
 	private HomeFragmentAdapter homeFragmentAdapter;
 	
+	private int pagerIndex=0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,13 +55,23 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
 		mMenu = menu;
+		buildActionBar();
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	private void buildActionBar(){
 		mMenu.clear();
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.home_action_bar_menu, menu);
+		if(pagerIndex==0 || pagerIndex==1){
+			inflater.inflate(R.menu.home_action_bar_menu, mMenu);
+			buildSearchView(getString(R.string.search_hint_text),R.id.flipchase_action_search, mMenu, this, this, true);
+		}else if(pagerIndex==2){
+			inflater.inflate(R.menu.home_list_action_bar, mMenu);
+			buildSearchView("Add New List",R.id.flipchase_new_list, mMenu, this, this, true);
+		}else{
+			inflater.inflate(R.menu.home_action_default, mMenu);
+		}
 		
-		buildSearchView(R.id.flipchase_action_search, mMenu, this, this, true);
-		
-		return super.onCreateOptionsMenu(menu);
 	}
 	
 	public Stack<StoreCatalogue> getStoreCatalogueDataStack() {
@@ -79,6 +91,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	                    public void onPageSelected(int position) {
 	                        // When swiping between pages, select the
 	                        mBar.setSelectedNavigationItem(position);
+	                        pagerIndex = position;
+	                        buildActionBar();
 
 	                    }
 	                });

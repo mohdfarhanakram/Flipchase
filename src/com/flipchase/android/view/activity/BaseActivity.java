@@ -493,7 +493,7 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
      * @param listener           action expand listener
      * @param showSuggestions
      */
-    public void buildSearchView(int searchId, Menu menu, SearchView.OnQueryTextListener lstnr, SearchView.OnSuggestionListener suggestionListener, boolean showSuggestions) {
+    public void buildSearchView(String hintText,int searchId, Menu menu, SearchView.OnQueryTextListener lstnr, SearchView.OnSuggestionListener suggestionListener, boolean showSuggestions) {
 
         mSearchMenuItem = menu.findItem(searchId);
         if (null == mSearchMenuItem)
@@ -505,7 +505,7 @@ public abstract class BaseActivity extends ActionBarActivity implements OnSearch
         mSearchView.setOnSearchViewCollapsedEventListener(this);
         mSearchView.setOnSearchViewExpandedEventListener(this);
 
-        mSearchView.setQueryHint(getString(R.string.search_hint_text));
+        mSearchView.setQueryHint(hintText);
 
        /* if (this.getClass().getSimpleName().equalsIgnoreCase("HomeActivity")) {
             //TO-Do set search hint test based on activity ex:
