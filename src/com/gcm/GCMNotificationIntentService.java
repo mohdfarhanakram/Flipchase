@@ -85,7 +85,8 @@ public class GCMNotificationIntentService extends IntentService {
 				alertActivity, 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this).setSmallIcon(R.drawable.gcm_cloud)
+				//this).setSmallIcon(R.drawable.gcm_cloud)
+				this).setSmallIcon(R.drawable.flip)
 				.setContentTitle("Flipchase GCM Notification")
 				.setStyle(new NotificationCompat.BigTextStyle().bigText(title))
 				.setContentText(title);
