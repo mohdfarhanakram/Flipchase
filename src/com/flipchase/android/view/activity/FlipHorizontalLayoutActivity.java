@@ -19,8 +19,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
@@ -28,20 +34,30 @@ import com.flipchase.android.R;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
+import com.flipchase.android.controller.DbController;
+import com.flipchase.android.controller.DbEvent;
 import com.flipchase.android.domain.Catalogue;
 import com.flipchase.android.domain.CataloguePage;
 import com.flipchase.android.domain.MobileAlert;
 import com.flipchase.android.domain.Store;
 import com.flipchase.android.extlibpro.FlipViewController;
 import com.flipchase.android.extlibpro.FlipViewController.ViewFlipListener;
+import com.flipchase.android.listener.DbListener;
+import com.flipchase.android.model.DbControllerResponse;
+import com.flipchase.android.model.Item;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.parcels.CataloguePageItem;
 import com.flipchase.android.parcels.CataloguePagesChunk;
+import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.CataloguePageAdapter;
+import com.flipchase.android.view.widget.CustomFontEditText;
+import com.squareup.picasso.LruCache;
 
-public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFlipListener,DialogInterface.OnClickListener {
+import de.ankri.views.Switch;
+
+public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFlipListener,DialogInterface.OnClickListener,DbListener {
   
 
 	private FlipViewController flipView;
@@ -53,6 +69,12 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 	
 	private View currentlyVisibleView=null;
 	private boolean mIsCropWindowVisible = false;
+	private View mFormView;
+	private String catalogId;
+	private String catalogName;
+	
+	private ArrayList<Item> selectlist = new ArrayList<Item>();
+	private Bitmap saveImage;
 
 	/**
 	 * Called when the activity is first created.
@@ -74,6 +96,15 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 		cataloguePageAdapter.setStore(store);
 		cataloguePageAdapter.setCatalogue(catalogue);
 		flipView.setAdapter(cataloguePageAdapter);
+		
+
+		catalogId = catalogue.getId();
+		catalogName = catalogue.getName();
+
+		showProgressDialog("Loading..");
+		DbController controller = new DbController(this, null, DbEvent.FETCH_LIST, this);
+		controller.execute();
+
 		
 		/*setContentView(flipView);
 		
@@ -378,6 +409,8 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
                                                          (int) actualCropWidth,
                                                          (int) actualCropHeight);
         
+        saveImage = croppedBitmap;
+        
         return croppedBitmap;
 		
 	}
@@ -388,16 +421,39 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 	private final Dialog createFormDialog(Bitmap bitmp) {
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View layout = inflater.inflate(R.layout.layout_item_add_details, null);
-		ImageView imgView = (ImageView)layout.findViewById(R.id.itmeImage);
+		mFormView = inflater.inflate(R.layout.layout_item_add_details, null);
+		ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
 		if(bitmp!=null)
 			imgView.setImageBitmap(bitmp);
+
+		Spinner spinner = (Spinner)mFormView.findViewById(R.id.select_list_spinner);
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+              catalogId = selectlist.get(position).getId();
+              catalogName = selectlist.get(position).getName();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, getSelectList());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(dataAdapter);
+		
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("List: Add Details");
 		builder.setPositiveButton("Create",this);
 		builder.setNegativeButton("Cancel", this);
-		builder.setView(layout);
+		builder.setView(mFormView);
 		return builder.create();
 	}
 	
@@ -432,8 +488,102 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		// TODO Auto-generated method stub
+		switch (which) {
+		case Dialog.BUTTON_NEGATIVE:
+			dialog.dismiss();
+			break;
+		case Dialog.BUTTON_POSITIVE:
+			createAndSaveList();
+			break;
+
+		default:
+			break;
+		}
+
+	}
+	
+	
+	private void createAndSaveList() {
+
+		//ArrayList<Item> dataList = new ArrayList<Item>();
+
+		ImageView itemImage = (ImageView)mFormView.findViewById(R.id.itmeImage);
+		String itemTitle = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_title)).getText().toString();
+		int reminder = ((Switch)mFormView.findViewById(R.id.s_set_reminder)).isChecked()==true?1:0;
+		String quantity = ((CustomFontEditText)mFormView.findViewById(R.id.s_quantity)).getText().toString();
+		String subItem = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_name)).getText().toString();
 		
+
+		Item item = new Item();
+		item.setQuantity(quantity);
+		item.setTitle(itemTitle);
+		item.setReminder(reminder);
+		item.setQuantity(quantity);
+		item.setSubTitle(subItem);
+		item.setId(catalogId);
+		item.setName(catalogName);
+		//item.setImageInByte(croppedImageByte);
+		
+		//dataList.add(item);
+
+		showProgressDialog("Loading..");
+		DbController controller = new DbController(this, item, DbEvent.CREATE_LIST_DATA, this);
+		controller.execute();
+
+	}
+
+	@Override
+	public void onDatabaseOperationDone(DbControllerResponse response) {
+		removeProgressDialog();
+		switch (response.getEvent()) {
+		case DbEvent.FETCH_LIST:
+			Item compareItem = new Item();
+			compareItem.setId(catalogue.getId());
+			compareItem.setName(catalogue.getName());
+			compareItem.setCount(0);
+
+			if((ArrayList<Item>)response.getResponseObject()!=null){
+				selectlist = (ArrayList<Item>)response.getResponseObject();
+			}
+
+			if(selectlist.indexOf(compareItem)==-1){
+				selectlist.add(0, compareItem);
+			}
+			break;
+		case DbEvent.CREATE_LIST_DATA:
+			String id = (String)response.getResponseObject();
+			if(!StringUtils.isNullOrEmpty(id)){
+				
+				com.squareup.picasso.LruCache lcache = new LruCache(this);
+				lcache.set(id, saveImage);
+				
+				/*ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
+		        ImageCacher imageCacher=new ImageCacher(this, -1);
+		        imageCacher.loadImage("farhan", imgView);*/
+				
+				//addBitmapToMemoryCache(id, saveImage);
+				
+				
+				Toast.makeText(this, "List is Created Successfully", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(FlipHorizontalLayoutActivity.this, HomeActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(i);
+			}else{
+				Toast.makeText(this, "List is not created, please try again.", Toast.LENGTH_SHORT).show();
+			}
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	private ArrayList<String> getSelectList(){
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i=0; i<selectlist.size(); i++){
+			list.add(selectlist.get(i).getName());
+		}
+		return list;
 	}
 	
 }
