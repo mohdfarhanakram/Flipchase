@@ -207,10 +207,12 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
     }
 	
 	
-	public void doSearch(String searckKey){
+	public void doSearch(String searchKey){
 		BaseFragment baseFragment = (BaseFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
 		if(baseFragment instanceof DealsFragment || baseFragment instanceof StoreFragment){
-			// navigate to search screen
+			Intent i = new Intent(this,SearchActivity.class);
+			i.putExtra("SEARCH_KEY", searchKey);
+			startActivity(i);
 		}
 	}
 

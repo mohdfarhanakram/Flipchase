@@ -531,6 +531,7 @@ Response.Listener, Response.ErrorListener, IScreenView {
 				}else if(actionId == EditorInfo.IME_ACTION_SEARCH){
 					doSearch(v.getText().toString());
 				}
+				
 				return false;
 			}
 		});
