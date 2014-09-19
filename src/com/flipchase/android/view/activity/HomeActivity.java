@@ -193,6 +193,19 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		case R.id.flipchase_location:
+			Intent intent = new Intent(HomeActivity.this, SelectLocationActivity.class);
+			intent.putExtra(AppConstants.IS_COMING_FROM_SPLASH, false);
+			startActivity(intent);
+			break;
+		case R.id.flipchase_edit_list:
+			((ListFragment)getSupportFragmentManager().getFragments().get(pagerIndex)).startActionMode();
+			break;
+		default:
+			break;
+		}
 		if(item.getItemId()==R.id.flipchase_location){
 			Intent intent = new Intent(HomeActivity.this, SelectLocationActivity.class);
 			intent.putExtra(AppConstants.IS_COMING_FROM_SPLASH, false);
