@@ -11,6 +11,7 @@ import com.flipchase.android.controller.DbEvent;
 import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.adapter.ListAdapter;
 
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * @author m.farhan
@@ -27,6 +29,8 @@ import android.widget.ListView;
 public class ListFragment extends BaseFragment implements DbListener{
 	
 	private View mView;
+	private ArrayList<Item> mItemList = new ArrayList<Item>();
+	private ListAdapter mListAdapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		mView = inflater.inflate(R.layout.fragment_list_layout, container, false);
@@ -43,6 +47,7 @@ public class ListFragment extends BaseFragment implements DbListener{
 			case DbEvent.FETCH_LIST:
 				ArrayList<Item> itemList = (ArrayList<Item>)response.getResponseObject();
 				if(itemList!=null && itemList.size()>0){
+					mItemList = itemList;
 					mView.findViewById(R.id.empty_content_view).setVisibility(View.GONE);
 					mView.findViewById(R.id.main_content_view).setVisibility(View.VISIBLE);
 					
@@ -55,11 +60,43 @@ public class ListFragment extends BaseFragment implements DbListener{
 					mView.findViewById(R.id.main_content_view).setVisibility(View.GONE);
 				}
 				break;
-
+			case DbEvent.INSERT_IN_MASTER_TABLE:
+				removeProgressDialog();
+				String id = (String)response.getResponseObject();
+				if(!StringUtils.isNullOrEmpty(id)){
+					Item item = new Item();
+					item.setId(id);
+					item.setName(id);
+					item.setCount(0);
+					mItemList.add(item);
+					ListView listView = (ListView)mView.findViewById(R.id.item_list_view);
+					listView.setAdapter(new ListAdapter(getActivity(), mItemList));
+				}else{
+					
+				}
+				break;
 			default:
 				break;
 			}
 		}
 		
+	}
+	
+	
+	public void createList(String listName){
+		
+		Item item = new Item();
+		item.setId(listName);
+		item.setName(listName);
+		item.setCount(0);
+		
+		if(mItemList.indexOf(item)==-1){
+			showProgressDialog("List is being created.");
+			DbController controller = new DbController(getActivity(), listName, DbEvent.INSERT_IN_MASTER_TABLE,this);
+			controller.execute();
+			
+		}else{
+			Toast.makeText(getActivity(), listName +" is already persent in the list.", Toast.LENGTH_SHORT).show();
+		}
 	}
 }

@@ -56,6 +56,12 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 			case DbEvent.FETCH_SUB_LIST:
 				response.setResponseObject(mDb.getItemsBasedOnId((String)mObject));
 				break;
+				
+			case DbEvent.INSERT_IN_MASTER_TABLE:
+				response.setResponseObject(mDb.insertItemMasterTable((String)mObject));
+				break;
+				
+				
 			default:
 				break;
 			}

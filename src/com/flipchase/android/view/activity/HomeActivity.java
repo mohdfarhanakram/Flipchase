@@ -25,6 +25,10 @@ import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;
+import com.flipchase.android.view.fragment.BaseFragment;
+import com.flipchase.android.view.fragment.DealsFragment;
+import com.flipchase.android.view.fragment.ListFragment;
+import com.flipchase.android.view.fragment.StoreFragment;
 
 /**
  * @author m.farhan
@@ -64,10 +68,10 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 		MenuInflater inflater = getMenuInflater();
 		if(pagerIndex==0 || pagerIndex==1){
 			inflater.inflate(R.menu.home_action_bar_menu, mMenu);
-			buildSearchView(getString(R.string.search_hint_text),R.id.flipchase_action_search, mMenu, this, this, true);
+			buildSearchView(getString(R.string.search_hint_text),R.id.flipchase_action_search, mMenu, this, this, true,0);
 		}else if(pagerIndex==2){
 			inflater.inflate(R.menu.home_list_action_bar, mMenu);
-			buildSearchView("Add New List",R.id.flipchase_new_list, mMenu, this, this, true);
+			buildSearchView("Add New List",R.id.flipchase_new_list, mMenu,this, this, true,1);
 		}else{
 			inflater.inflate(R.menu.home_action_default, mMenu);
 		}
@@ -201,4 +205,20 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	public StoreCatalogue getCatalogDataIfDataIsExist() {
         return mLatestCatalogData;
     }
+	
+	
+	public void doSearch(String searckKey){
+		BaseFragment baseFragment = (BaseFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
+		if(baseFragment instanceof DealsFragment || baseFragment instanceof StoreFragment){
+			// navigate to search screen
+		}
+	}
+
+	public void createList(String listName){
+		if(getSupportFragmentManager().getFragments().get(pagerIndex) instanceof ListFragment){
+			ListFragment fragment = (ListFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
+			fragment.createList(listName);
+		}
+	}
+
 }

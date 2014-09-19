@@ -190,7 +190,7 @@ public class FlipchaseDbOperation {
 	}
 	
 	
-	public boolean insertItemMasterTable(String id){
+	public String insertItemMasterTable(String id){
 
 		try{
 			
@@ -210,10 +210,10 @@ public class FlipchaseDbOperation {
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return false;
+			return "";
 		}
 		
-		return true;
+		return id;
 	}
 	
 	
