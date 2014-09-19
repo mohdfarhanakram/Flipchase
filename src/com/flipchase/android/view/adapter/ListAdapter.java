@@ -13,13 +13,16 @@ import android.sax.StartElementListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.Item;
 import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.SubListActivity;
@@ -33,10 +36,16 @@ public class ListAdapter extends BaseAdapter{
 	private Context mContext;
 	private ArrayList<Item> mItemList;
 	private LayoutInflater mInflater;
+	private LongPressListener mListener;
+	private boolean mIsCheckBoxShown;
+	private int mSelectedIndex;
 	
-	public ListAdapter(Context context,ArrayList<Item> itemList){
+	public ListAdapter(Context context,LongPressListener listener,ArrayList<Item> itemList,boolean isCheckBoxShown,int selectedIndex){
 		mContext = context;
 		mItemList = itemList;
+		mListener = listener;
+		mSelectedIndex = selectedIndex;
+		mIsCheckBoxShown = isCheckBoxShown;
 		mInflater = LayoutInflater.from(mContext);
 	}
 
@@ -71,6 +80,7 @@ public class ListAdapter extends BaseAdapter{
 			viewHolder.listNameTxtView = (TextView)convertView.findViewById(R.id.list_name_txtva);
 			viewHolder.itemNoTxtView = (TextView)convertView.findViewById(R.id.list_no_txtva);
 			viewHolder.mainLayout = (LinearLayout)convertView.findViewById(R.id.main_layout);
+			viewHolder.checkBox = (CheckBox)convertView.findViewById(R.id.list_chk_box);
 			
 			convertView.setTag(viewHolder);
 			
@@ -92,8 +102,33 @@ public class ListAdapter extends BaseAdapter{
 			}
 		});
 		
+		viewHolder.mainLayout.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				Item item = (Item)v.getTag();
+				mListener.onLongPressed(item);
+				return true;
+			}
+		});
+		
 		viewHolder.listNameTxtView.setText(item.getName());
 		viewHolder.itemNoTxtView.setText(item.getCount()+"");
+		
+		if(mIsCheckBoxShown){
+			viewHolder.imageView.setVisibility(View.GONE);
+			viewHolder.checkBox.setVisibility(View.VISIBLE);
+		}else{
+			viewHolder.imageView.setVisibility(View.VISIBLE);
+			viewHolder.checkBox.setVisibility(View.GONE);
+		}
+		
+		
+		if(mSelectedIndex==position){
+			viewHolder.checkBox.setChecked(true);
+		}else{
+			viewHolder.checkBox.setChecked(false);
+		}
 		
 		
 		
@@ -109,6 +144,7 @@ public class ListAdapter extends BaseAdapter{
 		public ImageView imageView;
 		public TextView listNameTxtView;
 		public TextView itemNoTxtView;
+		public CheckBox checkBox;
 		
 	}
 	
