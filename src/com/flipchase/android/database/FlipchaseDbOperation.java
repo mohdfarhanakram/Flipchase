@@ -366,7 +366,7 @@ public class FlipchaseDbOperation {
 			
 			if(count==0){
 				contentValue.put("uid",  System.currentTimeMillis()+"");
-				database.insert("Item_List_Master", null, contentValue);
+				database.insert("Item_List_Table", null, contentValue);
 			}else{
 				database.update("Item_List_Table", contentValue, "uid="+item.getUid(),null);
 			}
