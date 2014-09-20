@@ -343,6 +343,18 @@ public class FlipchaseDbOperation {
 			dbHelper.openDataBase();
 			SQLiteDatabase database = dbHelper.getWritableDatabase();
 			
+			String query = "SELECT * FROM Item_List_Table  WHERE id="+item.getId();
+
+			Log.e("Sql count query",query);
+			Cursor cursor = database.rawQuery(query, null);
+
+			int count = 0;
+			if (cursor!=null && cursor.getCount() != 0) {
+				count = cursor.getCount();
+				cursor.close();
+			}
+			Log.e("Count : ",count+"");
+			
 			ContentValues contentValue = new ContentValues();  
 			contentValue.put("item_title", item.getTitle());
 			contentValue.put("item", item.getSubTitle());
@@ -351,8 +363,15 @@ public class FlipchaseDbOperation {
 			contentValue.put("expiry_date", item.getExpiry());
 			contentValue.put("image", item.getImageInByte());
 			contentValue.put("id",  item.getId());
+			
+			if(count==0){
+				contentValue.put("uid",  System.currentTimeMillis()+"");
+				database.insert("Item_List_Master", null, contentValue);
+			}else{
+				database.update("Item_List_Table", contentValue, "uid="+item.getUid(),null);
+			}
 
-			database.update("Item_List_Table", contentValue, "uid="+item.getUid(), null);
+			
 			
 			dbHelper.close();
 		}catch(Exception e){

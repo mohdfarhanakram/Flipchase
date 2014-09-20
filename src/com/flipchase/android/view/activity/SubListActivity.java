@@ -72,6 +72,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(R.style.AppThemeLight);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sub_list);
 		mListView = (ListView)findViewById(R.id.subListview);
@@ -257,6 +258,9 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
             	listAdapter.setSubTitle(item.getName());
             	cataloId  = item.getId();
             	catalogName = item.getName();
+            	
+            	 sCatalogName = catalogName;
+                 sCataloId = cataloId;
             	getDataBasedOnId(cataloId);
                 return true;
             }
@@ -295,7 +299,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 
 	@Override
 	public void onEditButtonClickListener(Item item) {
-		createFormDialog(item);
+		createFormDialog(item).show();
 		
 	}
 	
