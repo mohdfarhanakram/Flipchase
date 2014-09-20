@@ -286,12 +286,12 @@ public class FlipchaseDbOperation {
 			try{
 				database.delete("Item_List_Master", "id = ?",whrArgs);
 			}catch(Exception e){e.printStackTrace();}
-			
+
 			try{
 				database.delete("Item_List_Table", "id = ?",whrArgs);
 			}catch(Exception e){e.printStackTrace();}
-			
-			
+
+
 
 			dbHelper.close();
 
@@ -302,12 +302,12 @@ public class FlipchaseDbOperation {
 
 		return true;
 	}
-	
-	
+
+
 	public boolean deleteSelectedSubListTable(ArrayList<Object> data){
 
 		try{
-			
+
 			String[] whrArgs = (String[])data.get(0);
 			int count = (Integer)data.get(1);
 
@@ -321,9 +321,9 @@ public class FlipchaseDbOperation {
 					contentMasterValue.put("list_count", count-whrArgs.length);
 					database.update("Item_List_Master", contentMasterValue, "id="+whrArgs[0], null);
 				}
-				
+
 			}catch(Exception e){e.printStackTrace();}
-			
+
 
 			dbHelper.close();
 
@@ -332,6 +332,32 @@ public class FlipchaseDbOperation {
 			return false;
 		}
 
+		return true;
+	}
+
+
+	public boolean updateListTable(Item item){
+
+		try{
+
+			dbHelper.openDataBase();
+			SQLiteDatabase database = dbHelper.getWritableDatabase();
+			
+			ContentValues contentValue = new ContentValues();  
+			contentValue.put("item_title", item.getTitle());
+			contentValue.put("item", item.getSubTitle());
+			contentValue.put("quantity", item.getQuantity());
+			contentValue.put("reminder", item.getReminder());
+			contentValue.put("expiry_date", item.getExpiry());
+			contentValue.put("image", item.getImageInByte());
+			contentValue.put("id",  item.getId());
+
+			database.update("Item_List_Table", contentValue, "uid="+item.getUid(), null);
+			
+			dbHelper.close();
+		}catch(Exception e){
+           return false;
+		}
 		return true;
 	}
 

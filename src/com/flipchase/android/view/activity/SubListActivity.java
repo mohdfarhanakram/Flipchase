@@ -5,48 +5,70 @@ package com.flipchase.android.view.activity;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.flipchase.android.R;
 import com.flipchase.android.controller.DbController;
 import com.flipchase.android.controller.DbEvent;
 import com.flipchase.android.listener.DbListener;
+import com.flipchase.android.listener.EditButtonClickListener;
 import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.adapter.ActionBarListAdapter;
 import com.flipchase.android.view.adapter.ListAdapter;
 import com.flipchase.android.view.adapter.SubListAdapter;
+import com.flipchase.android.view.widget.CustomFontEditText;
+
+import de.ankri.views.Switch;
 
 /**
  * @author FARHAN
  *
  */
-public class SubListActivity extends BaseActivity implements DbListener,LongPressListener{
+public class SubListActivity extends BaseActivity implements DbListener,LongPressListener,EditButtonClickListener,DialogInterface.OnClickListener{
 
 	private ArrayList<Item> mSubItemList = new ArrayList<Item>();
 	private ListView mListView;
-	private String id;
-	private String name;
+	private String cataloId;
+	private String catalogName;
+	
+	private String sCataloId;
+	private String sCatalogName;
+	
 	private int selectedIndex = -1;
 	private ActionMode mActionMode ;
 	
 	private ActionBar mBar;
 	
 	private ArrayList<Item> itemList = new ArrayList<Item>();
+	
+	private String uId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +76,17 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		setContentView(R.layout.activity_sub_list);
 		mListView = (ListView)findViewById(R.id.subListview);
 
-		id = getIntent().getStringExtra("catalogId");
-		name = getIntent().getStringExtra("catalogName"); 
+		cataloId = getIntent().getStringExtra("catalogId");
+		catalogName = getIntent().getStringExtra("catalogName");
+		
+		sCatalogName = catalogName;
+		sCataloId = cataloId;
+		
 		itemList = (ArrayList<Item>)getIntent().getSerializableExtra("list"); 
 		mBar = getSupportActionBar();
 		
 		createActionSpinner();
-		 getDataBasedOnId(id);
+		 getDataBasedOnId(cataloId);
 		
 	}
 
@@ -102,7 +128,12 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 			selectedIndex = -1;
 			drawListView(false,selectedIndex);
 			break;
-
+		case DbEvent.UPDATE_SUB_LIST_DATA:
+			boolean success = (Boolean)response.getResponseObject();
+			if(success){
+				getDataBasedOnId(cataloId);
+			}
+			break;
 		default:
 			break;
 		}
@@ -117,7 +148,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	}
 
 	private void drawListView(boolean isCheckBoxShown,int selectedIndex){
-		mListView.setAdapter(new SubListAdapter(this,this, mSubItemList,name,isCheckBoxShown,selectedIndex));
+		mListView.setAdapter(new SubListAdapter(this,this,this, mSubItemList,catalogName,isCheckBoxShown,selectedIndex));
 	}
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -142,6 +173,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		// Called when the user selects a contextual menu item
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			mActionMode = mode;
 			switch (item.getItemId()) {
 			case R.id.action_delete:
 				deleteSelectedList();
@@ -160,6 +192,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 			mActionMode = null;
 		}
 	};
+	private View mFormView;
 	
 	
 	private void deleteSelectedList(){
@@ -211,7 +244,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	private void createActionSpinner() {
 		int index= getSelectedIndex();
 		Item item = itemList.get(index);
-		final ActionBarListAdapter listAdapter = new ActionBarListAdapter(this, itemList, name,item.getName());
+		final ActionBarListAdapter listAdapter = new ActionBarListAdapter(this,itemList,item.getName());
         mBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         //mBar.setListNavigationCallbacks(listAdapter,null);
         mBar.setListNavigationCallbacks(listAdapter, new ActionBar.OnNavigationListener() {
@@ -222,6 +255,9 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
             	
             	Item item = itemList.get(i);
             	listAdapter.setSubTitle(item.getName());
+            	cataloId  = item.getId();
+            	catalogName = item.getName();
+            	getDataBasedOnId(cataloId);
                 return true;
             }
         });
@@ -232,7 +268,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	private int getSelectedIndex(){
 		int index = 0;
 		for(int i =0; i<itemList.size(); i++){
-			if(itemList.get(i).getName().equals(name)){
+			if(itemList.get(i).getName().equals(catalogName)){
 				index = i;
 				break;
 			}
@@ -256,5 +292,110 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		DbController controller = new DbController(this, id, DbEvent.FETCH_SUB_LIST, this);
 		controller.execute();
 	}
+
+	@Override
+	public void onEditButtonClickListener(Item item) {
+		createFormDialog(item);
+		
+	}
+	
+	private final Dialog createFormDialog(Item item) {
+		mActionMode.finish();
+		uId = item.getUid();
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mFormView = inflater.inflate(R.layout.layout_item_add_details, null);
+		
+		((CustomFontEditText)mFormView.findViewById(R.id.s_item_title)).setText(item.getTitle());
+		((Switch)mFormView.findViewById(R.id.s_set_reminder)).setChecked(item.isReminder());
+		((CustomFontEditText)mFormView.findViewById(R.id.s_quantity)).setText(item.getQuantity());
+		((CustomFontEditText)mFormView.findViewById(R.id.s_item_name)).setText(item.getSubTitle());
+		
+		Spinner spinner = (Spinner)mFormView.findViewById(R.id.select_list_spinner);
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+              sCatalogName = itemList.get(position).getName();
+              sCataloId = itemList.get(position).getId();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, getSelectList());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(dataAdapter);
+		
+		spinner.setSelection(getSelectedIndex());
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("List: Add Details");
+		builder.setPositiveButton("Update",this);
+		builder.setNegativeButton("Cancel", this);
+		builder.setView(mFormView);
+		return builder.create();
+	}
+	
+	private ArrayList<String> getSelectList(){
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i=0; i<itemList.size(); i++){
+			list.add(itemList.get(i).getName());
+		}
+		return list;
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		switch (which) {
+		case Dialog.BUTTON_NEGATIVE:
+			dialog.dismiss();
+			break;
+		case Dialog.BUTTON_POSITIVE:
+			updateList();
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+	
+	private void updateList() {
+
+		//ArrayList<Item> dataList = new ArrayList<Item>();
+
+		ImageView itemImage = (ImageView)mFormView.findViewById(R.id.itmeImage);
+		String itemTitle = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_title)).getText().toString();
+		int reminder = ((Switch)mFormView.findViewById(R.id.s_set_reminder)).isChecked()==true?1:0;
+		String quantity = ((CustomFontEditText)mFormView.findViewById(R.id.s_quantity)).getText().toString();
+		String subItem = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_name)).getText().toString();
+		
+
+		Item item = new Item();
+
+		item.setTitle(itemTitle==null?"":itemTitle);
+		item.setReminder(reminder);
+		item.setQuantity(StringUtils.isNullOrEmpty(quantity)==true?"1":quantity);
+		item.setSubTitle(subItem==null?"":subItem);
+		item.setId(sCataloId);
+		item.setName(sCatalogName);
+		item.setImageInByte(null);
+		
+		item.setUid(uId);
+		
+		//dataList.add(item);
+
+		showProgressDialog("Loading..");
+		DbController controller = new DbController(this, item, DbEvent.UPDATE_SUB_LIST_DATA, this);
+		controller.execute();
+
+	}
+
 
 }

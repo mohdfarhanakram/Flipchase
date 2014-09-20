@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.listener.EditButtonClickListener;
 import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.Item;
 import com.flipchase.android.util.ImageCacher;
@@ -43,14 +44,16 @@ public class SubListAdapter extends BaseAdapter{
 	private boolean mIsCheckBoxShown;
 	private int mSelectedIndex;
 	private LongPressListener mListener;
+	private EditButtonClickListener mEditButtonListener;
 
-	public SubListAdapter(Context context,LongPressListener listener,ArrayList<Item> itemList,String name,boolean isCheckBoxShown,int selectedIndex){
+	public SubListAdapter(Context context,LongPressListener listener,EditButtonClickListener editButtonListener,ArrayList<Item> itemList,String name,boolean isCheckBoxShown,int selectedIndex){
 		mContext = context;
 		mItemList = itemList;
 		mInflater = LayoutInflater.from(mContext);
 		this.name = name;
 		mSelectedIndex = selectedIndex;
 		mIsCheckBoxShown = isCheckBoxShown;
+		mEditButtonListener = editButtonListener;
 		mListener = listener;
 	}
 
@@ -98,7 +101,16 @@ public class SubListAdapter extends BaseAdapter{
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 
+		viewHolder.editButton.setTag(item);
+		viewHolder.editButton.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				Item item = (Item)v.getTag();
+		        mEditButtonListener.onEditButtonClickListener(item);
+			}
+		});
+		
 		viewHolder.mainLayout.setTag(item);
 		viewHolder.mainLayout.setOnClickListener(new OnClickListener() {
 

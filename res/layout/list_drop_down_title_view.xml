@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <TextView
@@ -9,14 +9,9 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textColor="@color/black" />
+        android:text="jkhkj"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/subtitle_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/catalog_expiry_color"/>
-
+    
 </LinearLayout>

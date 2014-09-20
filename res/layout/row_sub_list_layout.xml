@@ -12,6 +12,7 @@
         
         <CheckBox
             android:layout_weight="0"
+            android:padding="3dp"
             android:id="@+id/sub_list_chk_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,8 +80,11 @@
 
         <ImageView
             android:layout_weight="0"
+            android:padding="5dp"
             android:layout_gravity="center_vertical"
             android:id="@+id/edit_button"
+            android:clickable="true"
+ 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_edit" />
