@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,7 +41,6 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 
 	private View mView;
 	private ArrayList<Item> mItemList = new ArrayList<Item>();
-	private ListAdapter mListAdapter;
 	private ListView mListView;
 	private ActionMode mActionMode ;
 	private int selectedIndex = -1;
@@ -54,7 +56,7 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 		return mView;
 	}
 
-	
+
 	@Override
 	public void onDatabaseOperationDone(DbControllerResponse response) {
 		mView.findViewById(R.id.progress_bar_layout).setVisibility(View.GONE);
@@ -86,7 +88,7 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 					mItemList.add(item);
 					selectedIndex = -1;
 					drawListView(false,selectedIndex);
-					
+
 				}else{
 
 				}
@@ -119,8 +121,8 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 
 	public void startActionMode(){
 		if (mActionMode != null) {
-            return;
-        }
+			return;
+		}
 		((BaseActivity)getActivity()).startSupportActionMode(mActionModeCallback);
 	}
 
@@ -149,7 +151,7 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.action_delete:
-				//shareCurrentItem();
+				deleteSelectedList();
 				mode.finish(); // Action picked, so close the CAB
 				return true;
 			default:
@@ -169,13 +171,52 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 	public void onLongPressed(Item item) {
 		selectedIndex = mItemList.indexOf(item);
 		startActionMode();
+
+	}
+
+	private void drawListView(boolean isCheckBoxShown,int selectedIndex){
+		mListView.setAdapter(new ListAdapter(getActivity(),this, mItemList,isCheckBoxShown,selectedIndex));
+	}
+
+
+	private void deleteSelectedList(){
+
+		int count = mListView.getChildCount();
+		ArrayList<String> stringList = new ArrayList<String>();
+		for(int i=0; i<count; i++ ){
+			View view = mListView.getChildAt(i);
+
+			CheckBox checkBox = (CheckBox)view.findViewById(R.id.list_chk_box);
+			if(checkBox.isChecked()){
+				LinearLayout layout = (LinearLayout)view.findViewById(R.id.main_layout);
+				Item item = (Item)layout.getTag();
+				stringList.add(item.getId());
+				mItemList.remove(item);
+			}
+
+		}
 		
+		if(stringList.size()>0){
+			
+			selectedIndex = -1;
+			drawListView(false,selectedIndex);
+			
+			String[] mStringArray = new String[stringList.size()];
+			mStringArray = stringList.toArray(mStringArray);
+			
+			DbController controller = new DbController(getActivity(), mStringArray, DbEvent.DELETE_SELECTED_LIST,this);
+			controller.execute();
+		}
 	}
 	
-	private void drawListView(boolean isCheckBoxShown,int selectedIndex){
-		ListView listView = (ListView)mView.findViewById(R.id.item_list_view);
-		listView.setAdapter(new ListAdapter(getActivity(),this, mItemList,isCheckBoxShown,selectedIndex));
+	public void refreshList(){
+
+		DbController controller = new DbController(getActivity(), null, DbEvent.FETCH_LIST,this);
+		controller.execute();
 	}
+	
+	
+	
 
 
 

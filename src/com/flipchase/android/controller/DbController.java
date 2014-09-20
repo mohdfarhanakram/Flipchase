@@ -60,8 +60,12 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 			case DbEvent.INSERT_IN_MASTER_TABLE:
 				response.setResponseObject(mDb.insertItemMasterTable((String)mObject));
 				break;
-				
-				
+			case DbEvent.DELETE_SELECTED_LIST:
+				response.setResponseObject(mDb.deleteSelectedListTable((String[])mObject));
+				break;
+			case DbEvent.DELETE_SELECTED_SUB_LIST:
+				response.setResponseObject(mDb.deleteSelectedSubListTable((ArrayList<Object>)mObject));
+				break;
 			default:
 				break;
 			}

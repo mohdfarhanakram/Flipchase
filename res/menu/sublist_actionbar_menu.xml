@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.flipchase.android.SearchActivity" >
+
+    <item
+        android:id="@+id/sublist_edit_btn"
+        android:icon="@drawable/ic_action_edit"
+        android:title="Edit List"
+        app:showAsAction="always"/>
+    
+</menu>

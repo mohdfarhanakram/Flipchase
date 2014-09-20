@@ -9,6 +9,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
+        
+        <CheckBox
+            android:layout_weight="0"
+            android:id="@+id/sub_list_chk_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
 
         <ImageView
             android:id="@+id/sub_list_image_view"
@@ -20,6 +27,7 @@
             android:src="@drawable/flip" />
 
         <LinearLayout
+            android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -68,6 +76,14 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_weight="0"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_edit" />
     </LinearLayout>
 
 </LinearLayout>

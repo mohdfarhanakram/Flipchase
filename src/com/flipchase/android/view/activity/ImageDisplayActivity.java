@@ -294,14 +294,14 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 		
 
 		Item item = new Item();
-		item.setQuantity(quantity);
-		item.setTitle(itemTitle);
+
+		item.setTitle(itemTitle==null?"":itemTitle);
 		item.setReminder(reminder);
-		item.setQuantity(quantity);
-		item.setSubTitle(subItem);
+		item.setQuantity(StringUtils.isNullOrEmpty(quantity)==true?"1":quantity);
+		item.setSubTitle(subItem==null?"":subItem);
 		item.setId(catalogId);
 		item.setName(catalogName);
-		item.setImageInByte(croppedImageByte);
+		item.setImageInByte(null);
 		
 		//dataList.add(item);
 

@@ -235,5 +235,13 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 			fragment.createList(listName);
 		}
 	}
-
+	
+	@Override
+	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+		if(getSupportFragmentManager()!=null && getSupportFragmentManager().getFragments()!=null && getSupportFragmentManager().getFragments().get(pagerIndex) instanceof ListFragment){
+			ListFragment fragment = (ListFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
+			fragment.refreshList();
+		}
+	}
+	
 }
