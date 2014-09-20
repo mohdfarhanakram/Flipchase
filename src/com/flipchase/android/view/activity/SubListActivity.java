@@ -6,7 +6,11 @@ package com.flipchase.android.view.activity;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +27,7 @@ import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.view.adapter.ActionBarListAdapter;
 import com.flipchase.android.view.adapter.ListAdapter;
 import com.flipchase.android.view.adapter.SubListAdapter;
 
@@ -38,6 +43,10 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	private String name;
 	private int selectedIndex = -1;
 	private ActionMode mActionMode ;
+	
+	private ActionBar mBar;
+	
+	private ArrayList<Item> itemList = new ArrayList<Item>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +55,13 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		mListView = (ListView)findViewById(R.id.subListview);
 
 		id = getIntent().getStringExtra("catalogId");
-		name = getIntent().getStringExtra("catalogName");  
-
-		showProgressDialog("Loading..");
-		DbController controller = new DbController(this, id, DbEvent.FETCH_SUB_LIST, this);
-		controller.execute();
+		name = getIntent().getStringExtra("catalogName"); 
+		itemList = (ArrayList<Item>)getIntent().getSerializableExtra("list"); 
+		mBar = getSupportActionBar();
+		
+		createActionSpinner();
+		 getDataBasedOnId(id);
+		
 	}
 
 	@Override
@@ -66,7 +77,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		getMenuInflater().inflate(R.menu.sublist_actionbar_menu, mMenu);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
-		getSupportActionBar().setTitle(name);
+		getSupportActionBar().setTitle(null);
 		getSupportActionBar().setDisplayUseLogoEnabled(true);
 		getSupportActionBar().setDisplayShowTitleEnabled(true);
 		getSupportActionBar().setSubtitle(null);
@@ -78,7 +89,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		}else if(item.getItemId() == R.id.sublist_edit_btn){
 			startActionMode();
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 
 
@@ -191,6 +202,59 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		selectedIndex = mSubItemList.indexOf(item);
 		startActionMode();
 		
+	}
+	
+	
+	/**
+	 * Create tab bar
+	 */
+	private void createActionSpinner() {
+		int index= getSelectedIndex();
+		Item item = itemList.get(index);
+		final ActionBarListAdapter listAdapter = new ActionBarListAdapter(this, itemList, name,item.getName());
+        mBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        //mBar.setListNavigationCallbacks(listAdapter,null);
+        mBar.setListNavigationCallbacks(listAdapter, new ActionBar.OnNavigationListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(int i, long l) {
+            	Log.e("clicked Index", i+"");
+            	
+            	Item item = itemList.get(i);
+            	listAdapter.setSubTitle(item.getName());
+                return true;
+            }
+        });
+        
+    }
+
+	
+	private int getSelectedIndex(){
+		int index = 0;
+		for(int i =0; i<itemList.size(); i++){
+			if(itemList.get(i).getName().equals(name)){
+				index = i;
+				break;
+			}
+		}
+		
+		return index;
+	}
+	
+	private String[] getStringArray(){
+		String tabs[] = new String[itemList.size()];
+		
+		for(int i=0; i<itemList.size(); i++){
+			tabs[i] = itemList.get(i).getName();
+		}
+		
+		return tabs;
+	}
+	
+	private void getDataBasedOnId(String id){
+		showProgressDialog("Loading..");
+		DbController controller = new DbController(this, id, DbEvent.FETCH_SUB_LIST, this);
+		controller.execute();
 	}
 
 }

@@ -98,6 +98,7 @@ public class ListAdapter extends BaseAdapter{
 				Item item = (Item)v.getTag();
 				i.putExtra("catalogId", item.getId());
 				i.putExtra("catalogName",item.getName());
+				i.putExtra("list", mItemList);
 				((BaseActivity)mContext).startActivityForResult(i, 10000);
 			}
 		});
