@@ -30,6 +30,14 @@ public class Item implements Serializable{
 	private int count;
 	private byte imageInByte[];
 	
+	private String imgUrl;
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 	public byte[] getImageInByte() {
 		return imageInByte;
 	}

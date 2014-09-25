@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.flipchase.android.R;
@@ -69,6 +70,8 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	private ArrayList<Item> itemList = new ArrayList<Item>();
 	
 	private String uId;
+	
+	private String mPid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		mBar = getSupportActionBar();
 		
 		createActionSpinner();
-		 getDataBasedOnId(cataloId);
+		getDataBasedOnId(cataloId);
 		
 	}
 
@@ -133,6 +136,8 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 			boolean success = (Boolean)response.getResponseObject();
 			if(success){
 				getDataBasedOnId(cataloId);
+			}else{
+				Toast.makeText(this, "Some thing went wrong.", Toast.LENGTH_SHORT).show();
 			}
 			break;
 		default:
@@ -266,6 +271,8 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
             }
         });
         
+        mBar.setSelectedNavigationItem(index);
+        
     }
 
 	
@@ -306,6 +313,8 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	private final Dialog createFormDialog(Item item) {
 		mActionMode.finish();
 		uId = item.getUid();
+		
+		mPid = item.getId();
 		
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mFormView = inflater.inflate(R.layout.layout_item_add_details, null);
@@ -372,7 +381,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 	
 	private void updateList() {
 
-		//ArrayList<Item> dataList = new ArrayList<Item>();
+		ArrayList<Object> dataList = new ArrayList<Object>();
 
 		ImageView itemImage = (ImageView)mFormView.findViewById(R.id.itmeImage);
 		String itemTitle = ((CustomFontEditText)mFormView.findViewById(R.id.s_item_title)).getText().toString();
@@ -393,10 +402,11 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		
 		item.setUid(uId);
 		
-		//dataList.add(item);
+		dataList.add(item);
+		dataList.add(mPid);
 
 		showProgressDialog("Loading..");
-		DbController controller = new DbController(this, item, DbEvent.UPDATE_SUB_LIST_DATA, this);
+		DbController controller = new DbController(this, dataList, DbEvent.UPDATE_SUB_LIST_DATA, this);
 		controller.execute();
 
 	}

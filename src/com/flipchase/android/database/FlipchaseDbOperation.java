@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.StringUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -204,6 +205,11 @@ public class FlipchaseDbOperation {
 			contentValue.put("list_count", 0);
 
 			database.insert("Item_List_Master", null, contentValue);
+			
+			ContentValues contentValue1 = new ContentValues();   
+			contentValue1.put("id",  id);
+			
+			database.insert("Item_List_Table", null, contentValue1);
 
 			dbHelper.close();
 
@@ -239,16 +245,28 @@ public class FlipchaseDbOperation {
 
 			database.insert("Item_List_Table", null, contentValue);
 
-			String query = "SELECT * FROM Item_List_Table  WHERE id="+item.getId();
 
-			Log.e("Sql count query",query);
-			Cursor cursor = database.rawQuery(query, null);
+			dbHelper.close();
+
+			dbHelper.openDataBase();
+			database = dbHelper.getWritableDatabase();
 
 			int count = 0;
-			if (cursor!=null && cursor.getCount() != 0) {
-				count = cursor.getCount();
-				cursor.close();
+			try{
+				String query = "SELECT * FROM Item_List_Table WHERE id="+item.getId();
+
+				Log.e("Sql count query",query);
+				Cursor cursor = database.rawQuery(query, null);
+
+				if (cursor!=null && cursor.getCount() != 0) {
+					count = cursor.getCount();
+					cursor.close();
+				}
+			}catch(Exception e){
+
 			}
+
+
 			Log.e("Count : ",count+"");
 
 			ContentValues contentMasterValue = new ContentValues(); 
@@ -336,25 +354,42 @@ public class FlipchaseDbOperation {
 	}
 
 
-	public boolean updateListTable(Item item){
+	public boolean updateListTable(ArrayList<Object> data){
 
 		try{
 
+			Item item = (Item)data.get(0);
+			String pId = (String)data.get(1);
+
 			dbHelper.openDataBase();
 			SQLiteDatabase database = dbHelper.getWritableDatabase();
-			
-			String query = "SELECT * FROM Item_List_Table  WHERE id="+item.getId();
-
-			Log.e("Sql count query",query);
-			Cursor cursor = database.rawQuery(query, null);
 
 			int count = 0;
-			if (cursor!=null && cursor.getCount() != 0) {
-				count = cursor.getCount();
-				cursor.close();
+			try{
+				String query = "SELECT * FROM Item_List_Table  WHERE id="+item.getId();
+				Log.e("Sql count query",query);
+				Cursor cursor = database.rawQuery(query, null);
+				if (cursor!=null && cursor.getCount() != 0) {
+					Log.e("Sql query cursor size",cursor.getCount()+"");
+
+					if (cursor.moveToFirst()) {
+						do {
+							String uid = cursor.getString(0);
+							if(!StringUtils.isNullOrEmpty(uid)){
+								count++;
+							}
+
+						} while (cursor.moveToNext());
+					}
+					cursor.close();
+				}
+				
+ 			}catch(Exception e){
+
 			}
+
 			Log.e("Count : ",count+"");
-			
+
 			ContentValues contentValue = new ContentValues();  
 			contentValue.put("item_title", item.getTitle());
 			contentValue.put("item", item.getSubTitle());
@@ -362,23 +397,196 @@ public class FlipchaseDbOperation {
 			contentValue.put("reminder", item.getReminder());
 			contentValue.put("expiry_date", item.getExpiry());
 			contentValue.put("image", item.getImageInByte());
-			contentValue.put("id",  item.getId());
 			
+
 			if(count==0){
 				contentValue.put("uid",  System.currentTimeMillis()+"");
-				database.insert("Item_List_Table", null, contentValue);
+				database.update("Item_List_Table", contentValue, "id="+item.getId(),null);
+				//database.insert("Item_List_Table", null, contentValue);
 			}else{
+				contentValue.put("id",  item.getId());
 				database.update("Item_List_Table", contentValue, "uid="+item.getUid(),null);
 			}
-
-			
 			
 			dbHelper.close();
+			dbHelper.openDataBase();
+			database = dbHelper.getWritableDatabase();
+
+
+			int c = 0;
+			try{
+
+
+				String query = "SELECT * FROM Item_List_Table WHERE id="+item.getId();
+
+				Log.e("Sql count query",query);
+				Cursor cursor = database.rawQuery(query, null);
+
+
+				if (cursor!=null && cursor.getCount() != 0) {
+					c = cursor.getCount();
+					cursor.close();
+				}
+
+
+			}catch(Exception e){
+
+			}
+
+			Log.e("Count : ",c+"");
+			ContentValues contentMasterValue = new ContentValues(); 
+			contentMasterValue.put("list_count", c);
+			database.update("Item_List_Master", contentMasterValue, "id="+item.getId(), null);	
+
+			int c1 = 0;
+			try{
+				String query1 = "SELECT * FROM Item_List_Table WHERE id="+pId;
+
+				Log.e("Sql count query",query1);
+				Cursor cursor1 = database.rawQuery(query1, null);
+
+
+				if (cursor1!=null && cursor1.getCount() != 0) {
+					c1 = cursor1.getCount();
+					cursor1.close();
+				}
+			}catch(Exception e){
+
+			}
+
+			Log.e("Count : ",c1+"");
+
+			ContentValues contentMasterValue1 = new ContentValues(); 
+			contentMasterValue1.put("list_count", c1);
+			database.update("Item_List_Master", contentMasterValue1, "id="+pId, null);
+
+			dbHelper.close();
 		}catch(Exception e){
-           return false;
+			return false;
 		}
 		return true;
 	}
+
+	// New
+
+	/*public boolean insertDataFromCropActivity(Item item){
+
+		try{
+
+
+			dbHelper.openDataBase();
+			SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+			ContentValues contentValue = new ContentValues();  
+			contentValue.put("uid",  System.currentTimeMillis());
+			contentValue.put("item_title", item.getTitle());
+			contentValue.put("item", item.getSubTitle());
+			contentValue.put("quantity", item.getQuantity());
+			contentValue.put("reminder", item.getReminder());
+			contentValue.put("expiry_date", item.getExpiry());
+			contentValue.put("img_url", item.getImgUrl());
+			contentValue.put("name", item.getName());
+			contentValue.put("id",  item.getId());
+
+			database.insert("Flipchase_List_Table", null, contentValue);
+
+			dbHelper.close();
+
+
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public boolean creteNewList(Item item){
+
+		try{
+
+
+			dbHelper.openDataBase();
+			SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+			ContentValues contentValue = new ContentValues();  
+			contentValue.put("uid",  "");
+			contentValue.put("item_title", "");
+			contentValue.put("item", "");
+			contentValue.put("quantity", "");
+			contentValue.put("reminder", 0);
+			contentValue.put("expiry_date", "");
+			contentValue.put("img_url", "");
+			contentValue.put("name", item.getName());
+			contentValue.put("id",  item.getId());
+
+			database.insert("Flipchase_List_Table", null, contentValue);
+
+			dbHelper.close();
+
+
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
+	}
+
+
+	public ArrayList<Item> getItemLIst(){
+
+		ArrayList<Item> savedItemList = new ArrayList<Item>();
+
+		//String query = "SELECT id,name,COUNT(*) FROM Flipchase_List_Table GROUP BY id";
+
+		String query = "SELECT id,name,uid FROM Flipchase_List_Table";
+
+		try{
+
+			dbHelper.openDataBase();
+			SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+			Log.e("Sql query",query);
+			Cursor cursor = database.rawQuery(query, null);
+
+			if (cursor!=null && cursor.getCount() != 0) {
+				Log.e("Sql query cursor size",cursor.getCount()+"");
+
+				if (cursor.moveToFirst()) {
+					do {
+						Item item = new Item();
+						item.setId(cursor.getString(0));
+						item.setName(cursor.getString(1));
+
+						if(savedItemList.indexOf(item)!= -1){
+
+							int count = savedItemList.get(savedItemList.indexOf(item)).getCount();
+							Item item = 
+
+						}else{
+							item.setCount(cursor.getInt(2));
+						}
+						item.setCount(cursor.getInt(2));
+						savedItemList.add(item);
+
+					} while (cursor.moveToNext());
+				}
+				cursor.close();
+			}
+
+			dbHelper.close();
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		return savedItemList;	
+
+	}
+	 */
 
 }
 

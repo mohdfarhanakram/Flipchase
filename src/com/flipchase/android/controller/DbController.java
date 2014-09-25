@@ -67,7 +67,7 @@ public class DbController extends AsyncTask<Void, Void, Void>{
 				response.setResponseObject(mDb.deleteSelectedSubListTable((ArrayList<Object>)mObject));
 				break;
 			case DbEvent.UPDATE_SUB_LIST_DATA:
-				response.setResponseObject(mDb.updateListTable((Item)mObject));
+				response.setResponseObject(mDb.updateListTable((ArrayList<Object>)mObject));
 				break;
 			default:
 				break;
