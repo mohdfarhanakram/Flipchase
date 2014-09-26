@@ -16,8 +16,6 @@
 
 package com.flipchase.android.network.volley.toolbox;
 
-import android.os.SystemClock;
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +29,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import android.os.SystemClock;
 
 import com.flipchase.android.network.volley.Cache;
 import com.flipchase.android.network.volley.VolleyLog;

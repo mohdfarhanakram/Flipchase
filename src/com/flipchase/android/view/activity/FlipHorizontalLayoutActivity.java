@@ -20,17 +20,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
 import com.flipchase.android.R;
+import com.flipchase.android.cache.DiskLruImageCache;
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
@@ -554,8 +554,8 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 			String id = (String)response.getResponseObject();
 			if(!StringUtils.isNullOrEmpty(id)){
 				
-				com.squareup.picasso.LruCache lcache = new LruCache(this);
-				lcache.set(id, saveImage);
+				DiskLruImageCache cache = new DiskLruImageCache(this, "flipchase");
+				cache.put(id+"farhan", saveImage);
 				
 				/*ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
 		        ImageCacher imageCacher=new ImageCacher(this, -1);

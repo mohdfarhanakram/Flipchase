@@ -1,7 +1,6 @@
 
 package com.flipchase.android.view.activity;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +28,7 @@ import android.widget.Toast;
 import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
 import com.flipchase.android.R;
+import com.flipchase.android.cache.DiskLruImageCache;
 import com.flipchase.android.controller.DbController;
 import com.flipchase.android.controller.DbEvent;
 import com.flipchase.android.domain.Catalogue;
@@ -36,13 +36,11 @@ import com.flipchase.android.domain.Store;
 import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
-import com.flipchase.android.util.ImageCacher;
 import com.flipchase.android.util.PicassoEx;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.widget.CustomFontEditText;
 import com.flipchase.android.view.widget.TouchImageView;
-import com.squareup.picasso.LruCache;
 
 import de.ankri.views.Switch;
 
@@ -395,8 +393,11 @@ public class ImageDisplayActivity extends BaseActivity implements DialogInterfac
 			String id = (String)response.getResponseObject();
 			if(!StringUtils.isNullOrEmpty(id)){
 				
-				com.squareup.picasso.LruCache lcache = new LruCache(this);
-				lcache.set(id, saveImage);
+				DiskLruImageCache cache = new DiskLruImageCache(this, "flipchase");
+				cache.put(id+"farhan", saveImage);
+				
+				/*com.squareup.picasso.LruCache lcache = new LruCache(this);
+				lcache.set(id, saveImage);*/
 				
 				/*ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
 		        ImageCacher imageCacher=new ImageCacher(this, -1);

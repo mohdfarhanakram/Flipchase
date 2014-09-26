@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.flipchase.android.network.volley.Request;
-import com.flipchase.android.network.volley.VolleyError;
 import com.flipchase.android.network.volley.Response;
+import com.flipchase.android.network.volley.VolleyError;
 
 /**
  * A Future that represents a Volley request.

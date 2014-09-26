@@ -1,16 +1,11 @@
 
 package com.flipchase.android.extlibpro;
 
-import android.view.MotionEvent;
-import android.view.View;
-
-import com.flipchase.android.extlibpro.FlipBookLog;
-import com.flipchase.android.extlibpro.TextureUtils;
-import com.flipchase.android.extlibpro.UI;
+import javax.microedition.khronos.opengles.GL10;
 
 import junit.framework.Assert;
-
-import javax.microedition.khronos.opengles.GL10;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class FlipCards {
 

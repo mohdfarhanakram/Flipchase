@@ -3,15 +3,14 @@
  */
 package com.flipchase.android.view.activity;
 
-import com.flipchase.android.R;
-import com.flipchase.android.domain.Catalogue;
-import com.flipchase.android.model.Item;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.flipchase.android.R;
+import com.flipchase.android.model.Item;
 
 /**
  * @author FARHAN

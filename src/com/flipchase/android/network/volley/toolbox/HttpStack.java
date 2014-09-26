@@ -18,13 +18,13 @@ package com.flipchase.android.network.volley.toolbox;
 
 
 
+import java.io.IOException;
+import java.util.Map;
+
 import org.apache.http.HttpResponse;
 
 import com.flipchase.android.network.volley.AuthFailureError;
 import com.flipchase.android.network.volley.Request;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * An HTTP stack abstraction.

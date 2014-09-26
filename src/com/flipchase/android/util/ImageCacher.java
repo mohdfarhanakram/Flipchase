@@ -13,14 +13,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Stack;
 
-import com.flipchase.android.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.SyncStateContract.Constants;
 import android.widget.ImageView;
+
+import com.flipchase.android.R;
 
 /**
  * @author FARHAN

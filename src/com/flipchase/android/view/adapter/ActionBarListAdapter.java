@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
-import com.flipchase.android.listener.EditButtonClickListener;
 import com.flipchase.android.model.Item;
 
 /**

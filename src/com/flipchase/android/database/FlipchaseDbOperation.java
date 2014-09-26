@@ -6,14 +6,14 @@ package com.flipchase.android.database;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.flipchase.android.model.Item;
-import com.flipchase.android.util.StringUtils;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.flipchase.android.model.Item;
+import com.flipchase.android.util.StringUtils;
 
 /**
  * @author m.farhan

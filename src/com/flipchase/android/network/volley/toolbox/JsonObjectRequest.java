@@ -23,7 +23,6 @@ import org.json.JSONObject;
 
 import com.flipchase.android.network.volley.NetworkResponse;
 import com.flipchase.android.network.volley.ParseError;
-import com.flipchase.android.network.volley.Request.Method;
 import com.flipchase.android.network.volley.Response;
 import com.flipchase.android.network.volley.Response.ErrorListener;
 import com.flipchase.android.network.volley.Response.Listener;

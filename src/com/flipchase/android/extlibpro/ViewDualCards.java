@@ -2,8 +2,10 @@
 
 package com.flipchase.android.extlibpro;
 
-import java.lang.ref.WeakReference;
 import static com.flipchase.android.extlibpro.FlipRenderer.checkError;
+
+import java.lang.ref.WeakReference;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;

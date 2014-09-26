@@ -1,13 +1,13 @@
 package com.flipchase.android.util;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Environment;
+import static android.os.Environment.MEDIA_MOUNTED;
 
 import java.io.File;
 import java.io.IOException;
 
-import static android.os.Environment.MEDIA_MOUNTED;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Environment;
 
 /**
  * Provides application storage paths

@@ -10,9 +10,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -20,15 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.cache.DiskLruImageCache;
 import com.flipchase.android.listener.EditButtonClickListener;
 import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.Item;
-import com.flipchase.android.util.ImageCacher;
 import com.flipchase.android.util.StringUtils;
-import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.ListDetailActivity;
-import com.flipchase.android.view.activity.SubListActivity;
-import com.squareup.picasso.LruCache;
 
 /**
  * @author FARHAN
@@ -45,6 +42,8 @@ public class SubListAdapter extends BaseAdapter{
 	private int mSelectedIndex;
 	private LongPressListener mListener;
 	private EditButtonClickListener mEditButtonListener;
+	
+	private DiskLruImageCache mCache;
 
 	public SubListAdapter(Context context,LongPressListener listener,EditButtonClickListener editButtonListener,ArrayList<Item> itemList,String name,boolean isCheckBoxShown,int selectedIndex){
 		mContext = context;
@@ -55,6 +54,9 @@ public class SubListAdapter extends BaseAdapter{
 		mIsCheckBoxShown = isCheckBoxShown;
 		mEditButtonListener = editButtonListener;
 		mListener = listener;
+		
+		mCache = new DiskLruImageCache(mContext, "flipchase");
+;
 	}
 
 	@Override
@@ -165,6 +167,10 @@ public class SubListAdapter extends BaseAdapter{
 		}else{
 			viewHolder.checkBox.setChecked(false);
 		}
+		
+		Bitmap bitmap = mCache.getBitmap(item.getUid()+"farhan");
+		if(bitmap!=null)
+			viewHolder.imageView.setImageBitmap(bitmap);
 
 		/*com.squareup.picasso.LruCache lcache = new LruCache(mContext);
 		Bitmap bitmap =lcache.get(item.getUid());

@@ -3,7 +3,6 @@
  */
 package com.flipchase.android.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

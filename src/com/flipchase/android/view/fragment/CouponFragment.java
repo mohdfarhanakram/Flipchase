@@ -3,12 +3,12 @@
  */
 package com.flipchase.android.view.fragment;
 
-import com.flipchase.android.R;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.flipchase.android.R;
 
 /**
  * @author m.farhan

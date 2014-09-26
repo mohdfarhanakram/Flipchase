@@ -1,9 +1,9 @@
 
 package com.flipchase.android.extlibpro;
 
-import android.util.Log;
-
 import java.util.Formatter;
+
+import android.util.Log;
 
 public class FlipBookLog {
 

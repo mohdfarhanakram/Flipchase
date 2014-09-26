@@ -16,14 +16,14 @@
 
 package com.flipchase.android.network.volley.toolbox;
 
-import com.flipchase.android.network.volley.AuthFailureError;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.flipchase.android.network.volley.AuthFailureError;
 
 /**
  * An Authenticator that uses {@link AccountManager} to get auth

@@ -3,8 +3,6 @@
  */
 package com.flipchase.android.location;
 
-import com.flipchase.android.listener.FlipchaseLocationListener;
-
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -17,7 +15,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
+
+import com.flipchase.android.listener.FlipchaseLocationListener;
 
 /**
  * @author m.farhan

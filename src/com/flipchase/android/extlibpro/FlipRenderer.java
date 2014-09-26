@@ -1,14 +1,5 @@
 package com.flipchase.android.extlibpro;
 
-import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
-import android.view.View;
-
-import java.util.LinkedList;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import static javax.microedition.khronos.opengles.GL10.GL_AMBIENT;
 import static javax.microedition.khronos.opengles.GL10.GL_COLOR_BUFFER_BIT;
 import static javax.microedition.khronos.opengles.GL10.GL_DEPTH_BUFFER_BIT;
@@ -22,6 +13,15 @@ import static javax.microedition.khronos.opengles.GL10.GL_PERSPECTIVE_CORRECTION
 import static javax.microedition.khronos.opengles.GL10.GL_POSITION;
 import static javax.microedition.khronos.opengles.GL10.GL_PROJECTION;
 import static javax.microedition.khronos.opengles.GL10.GL_SMOOTH;
+
+import java.util.LinkedList;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
+import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
+import android.view.View;
 
 /*
 Copyright 2012 Aphid Mobile
