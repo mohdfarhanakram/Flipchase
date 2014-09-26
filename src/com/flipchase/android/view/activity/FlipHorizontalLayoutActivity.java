@@ -557,13 +557,7 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 				DiskLruImageCache cache = new DiskLruImageCache(this, "flipchase");
 				cache.put(id+"farhan", saveImage);
 				
-				/*ImageView imgView = (ImageView)mFormView.findViewById(R.id.itmeImage);
-		        ImageCacher imageCacher=new ImageCacher(this, -1);
-		        imageCacher.loadImage("farhan", imgView);*/
-				
-				//addBitmapToMemoryCache(id, saveImage);
-				
-				
+			
 				Toast.makeText(this, "List is Created Successfully", Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(FlipHorizontalLayoutActivity.this, HomeActivity.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -23,7 +23,7 @@ import com.jakewharton.disklrucache.DiskLruCache;
  */
 public class DiskLruImageCache  {
 	
-	private int DISK_CACHE_SIZE = (1024 * 1024 * 10);
+	private int DISK_CACHE_SIZE = (1024 * 1024 * 5);
 	
 	//diskCacheSize = DISK_CACHE_SIZE;
 
