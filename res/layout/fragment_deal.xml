@@ -4,35 +4,81 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <GridView
-        android:id="@+id/catalog_grid_view"
+    <RelativeLayout
+        android:id="@+id/loader_view"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="2" >
-    </GridView>
-    
+        android:layout_height="fill_parent"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" >
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/progress"
+                android:layout_gravity="center_vertical"
+                android:text="Loading.." />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:background="@color/white"
+        android:id="@+id/no_connection"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/no_connection" />
+    </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/main_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <GridView
+            android:id="@+id/catalog_grid_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:numColumns="2" >
+        </GridView>
+
+        <LinearLayout
             android:id="@+id/refineLayout"
-            android:gravity="center"
-            android:visibility="visible"
-            android:clickable="false"
-            android:background="@drawable/catalog_footer_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            >
+            android:background="@drawable/catalog_footer_bg"
+            android:clickable="false"
+            android:gravity="center"
+            android:visibility="visible" >
 
-        <com.flipchase.android.view.widget.CustomFontTextView
-
+            <com.flipchase.android.view.widget.CustomFontTextView
                 android:id="@+id/filterButton"
                 android:layout_width="@dimen/catalog_page_refine_button_width"
                 android:layout_height="@dimen/catalog_page_refine_button_height"
-                android:textSize="@dimen/catalog_page_refine_button_text_size"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:clickable="true"
                 android:background="@drawable/bg_btn_refine"
-                android:text="@string/filter_txt" />
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/filter_txt"
+                android:textColor="@color/white"
+                android:textSize="@dimen/catalog_page_refine_button_text_size" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

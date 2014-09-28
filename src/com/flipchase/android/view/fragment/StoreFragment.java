@@ -25,6 +25,7 @@ import com.flipchase.android.domain.Retailer;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.volley.toolbox.ImageLoader;
 import com.flipchase.android.parcels.StoreCatalogue;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.activity.HomeActivity;
 import com.flipchase.android.view.activity.RetailerStoresActivity;
 import com.flipchase.android.view.adapter.RetailerAdapter;
@@ -57,10 +58,11 @@ public class StoreFragment extends BaseFragment {
     private int mPrevSelectedCatIndex =0;
     private String mCatUrl;
     private String mSelectedSubCatName;
+    private View view;
 	    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_items_grid, container, false);
+		view = inflater.inflate(R.layout.fragment_items_grid, container, false);
 		mRefineLayout = (LinearLayout) (view.findViewById(R.id.retailerRefineLayout));
         //initializeImageWidthHeight();
         mShowMoreLayout = (LinearLayout) view.findViewById(R.id.retailerLayoutShowMore);
@@ -122,7 +124,14 @@ public class StoreFragment extends BaseFragment {
         mStoreData = ((HomeActivity) getActivity()).getCatalogDataIfDataIsExist();  //orientation of device is changed then get the exist data.
 
         if (mStoreData == null) {
-           ((HomeActivity) getActivity()).updateRetailerCatalogData("");
+        	if(Utils.isInternetAvailable(getActivity())){
+        		((HomeActivity) getActivity()).updateRetailerCatalogData("");
+        	}else{
+        		view.findViewById(R.id.no_connection).setVisibility(View.VISIBLE);
+    			view.findViewById(R.id.loader_view).setVisibility(View.GONE);
+    			view.findViewById(R.id.main_view).setVisibility(View.GONE);
+        	}
+           
         } else {
             //drawCatalogData();
         }
@@ -145,8 +154,10 @@ public class StoreFragment extends BaseFragment {
 	@Override
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
+		view.findViewById(R.id.loader_view).setVisibility(View.GONE);
 		switch (response.getEventType()) {
 		case FlipchaseApi.GET_ALL_RETAILERS:
+			view.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
 			List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
 			 ((RetailerAdapter) mItemsListView.getAdapter()).setItems(retailers);
 			 mItemsListAdapter.notifyDataSetChanged();

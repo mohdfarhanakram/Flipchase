@@ -1,70 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:id="@+id/storeFragment"
-                android:focusableInTouchMode="false"
-                android:descendantFocusability="beforeDescendants"
-                android:layout_height="match_parent">
+    android:id="@+id/storeFragment"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="false" >
 
-    <com.flipchase.android.view.widget.RetailerListView
-            android:background="#ffffff"
+    <RelativeLayout
+        android:id="@+id/loader_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" >
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/progress"
+                android:layout_gravity="center_vertical"
+                android:text="Loading.." />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/no_connection"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:visibility="gone" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/no_connection" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/main_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <com.flipchase.android.view.widget.RetailerListView
             android:id="@+id/retailerListItems"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:background="#ffffff"
             android:numColumns="auto_fit"
-            android:stretchMode="spacingWidth"
             android:scrollbarStyle="outsideOverlay"
             android:scrollingCache="false"
-            />
+            android:stretchMode="spacingWidth" />
 
-    <LinearLayout
+        <LinearLayout
             android:id="@+id/retailerLayoutShowMore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:visibility="gone"
             android:background="@drawable/catalog_footer_bg"
-            >
-        <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@android:style/Widget.ProgressBar.Small"/>
-        
-        <com.flipchase.android.view.widget.CustomFontTextView
+            android:gravity="center"
+            android:visibility="gone" >
 
+            <ProgressBar
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.flipchase.android.view.widget.CustomFontTextView
                 android:id="@+id/retailerFilterButton"
                 android:layout_width="@dimen/catalog_page_refine_button_width"
                 android:layout_height="@dimen/catalog_page_refine_button_height"
-                android:textSize="@dimen/catalog_page_refine_button_text_size"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:clickable="true"
                 android:background="@drawable/bg_btn_refine"
-                android:text="@string/filter_txt" />
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/filter_txt"
+                android:textColor="@color/white"
+                android:textSize="@dimen/catalog_page_refine_button_text_size" />
+        </LinearLayout>
 
-
-    </LinearLayout>
-
-    <LinearLayout
+        <LinearLayout
+            android:id="@+id/retailerRefineLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/retailerRefineLayout"
-            android:gravity="center"
-            android:visibility="gone"
-            android:background="@drawable/catalog_footer_bg"
             android:layout_alignParentBottom="true"
-            >
-        <com.flipchase.android.view.widget.CustomFontTextView
+            android:background="@drawable/catalog_footer_bg"
+            android:gravity="center"
+            android:visibility="gone" >
+
+            <com.flipchase.android.view.widget.CustomFontTextView
                 android:id="@+id/retailerRefineButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/catalog_page_refine_button_text_size"
-                android:textColor="@color/white"
                 android:background="@drawable/refine_btn_bg"
                 android:gravity="center"
-                android:text="@string/filter_txt"/>
-
+                android:text="@string/filter_txt"
+                android:textColor="@color/white"
+                android:textSize="@dimen/catalog_page_refine_button_text_size" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

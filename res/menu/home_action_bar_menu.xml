@@ -10,11 +10,6 @@
         android:title="@string/search"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/flipchase_notification"
-        android:icon="@drawable/bells"
-        android:title="@string/sort"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/flipchase_location"
         android:icon="@drawable/ic_action_location_found"
         android:title="@string/location"

@@ -199,5 +199,7 @@ public class BaseFragment extends Fragment implements IScreenView, SearchView.On
 	public void updateUi(ServiceResponse response) {
 		
 	}
+	
+	
 
 }

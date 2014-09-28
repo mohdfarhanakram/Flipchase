@@ -22,6 +22,7 @@ import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.parcels.CatalogueChunk;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.activity.BaseActivity;
 import com.flipchase.android.view.activity.FilterActivity;
 import com.flipchase.android.view.activity.HomeActivity;
@@ -40,9 +41,11 @@ public class DealsFragment extends BaseFragment {
 	
 	private CatalogueChunk catalogueChunk;
 	
+	private View view;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_deal, container, false);
+		view = inflater.inflate(R.layout.fragment_deal, container, false);
 		
 		catalogGridView = (GridView)view.findViewById(R.id.catalog_grid_view);
 		catalogueAdapter = new CatalogueAdapter(getActivity(), Collections.EMPTY_LIST);
@@ -60,17 +63,27 @@ public class DealsFragment extends BaseFragment {
 				
 			}
 		});
-		((HomeActivity) getActivity()).updateDealsCatalogueData("refinedURLWithPageIds");
+		
+		if(Utils.isInternetAvailable(getActivity())){
+			((HomeActivity) getActivity()).updateDealsCatalogueData("refinedURLWithPageIds");
+		}else{
+			view.findViewById(R.id.no_connection).setVisibility(View.VISIBLE);
+			view.findViewById(R.id.loader_view).setVisibility(View.GONE);
+			view.findViewById(R.id.main_view).setVisibility(View.GONE);
+		}
+		
 		return view;
 	}
 
 	@Override
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
+		view.findViewById(R.id.loader_view).setVisibility(View.GONE);
 		switch (response.getEventType()) {
 		case FlipchaseApi.GET_LATEST_CATALOGUES:
 			catalogueChunk = (CatalogueChunk)response.getResponseObject();
 			if(catalogueChunk != null) {
+				view.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
 				List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
 				catalogueAdapter.setItems(latestCatalogues);
 			}
