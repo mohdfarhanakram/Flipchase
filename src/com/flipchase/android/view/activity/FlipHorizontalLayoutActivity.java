@@ -213,6 +213,9 @@ public class FlipHorizontalLayoutActivity extends BaseActivity implements ViewFl
 				case FlipchaseApi.SAVE_MOBILE_ALERT:
 					removeProgressDialog();
 					showMessageDialog("Alert saved successfully.");
+					Intent i = new Intent(FlipHorizontalLayoutActivity.this, HomeActivity.class);
+					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(i);
 					break;
 				default:
 					break;
