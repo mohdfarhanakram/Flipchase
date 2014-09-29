@@ -1,6 +1,9 @@
 package com.flipchase.android.view.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +20,7 @@ import com.flipchase.android.location.FlipchaseLocationTracker;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.util.StringUtils;
+import com.flipchase.android.util.Utils;
 
 public class SplashActivity extends BaseActivity implements
 FlipchaseLocationListener {
@@ -47,9 +51,9 @@ FlipchaseLocationListener {
 			CityLocationWrapper cityLocationWrapper = (CityLocationWrapper) response.getResponseObject();
 
 			if(cityLocationWrapper!=null && cityLocationWrapper.getCities()!=null && cityLocationWrapper.getCities().size()>0){
-                // To cache the city json
+				// To cache the city json
 				AppSharedPreference.putString(AppConstants.GET_ALL_CITIES_AND_LOCATIONS, response.getJsonResponse().toString(), this);
-				
+
 				String city = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_CITY, "",SplashActivity.this);
 				String location = AppSharedPreference.getString(AppSharedPreference.USER_SELECTED_LOCATION, "",SplashActivity.this);
 				if (StringUtils.isNullOrEmpty(city) || StringUtils.isNullOrEmpty(location)) {
@@ -65,7 +69,7 @@ FlipchaseLocationListener {
 
 			}else{
 				// Move to home screen as discussed with Deepak
-				
+
 				Intent i = new Intent(SplashActivity.this,HomeActivity.class);
 				startActivity(i);
 				finish();
@@ -73,9 +77,44 @@ FlipchaseLocationListener {
 
 
 		}else{
-			showCommonError("Some thing went wrong.");
+			openAlertDialog("Some thing went wrong.");
+
 		}
 
+	}
+
+	private void openAlertDialog(String title){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(title);
+		builder.setCancelable(false);
+		
+		builder.setTitle("Flipchase");
+
+		builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				getCityList();
+			}
+		});
+
+		builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				finish();
+			}
+		});
+		
+		builder.create().show();
 	}
 
 	@Override
@@ -119,6 +158,15 @@ FlipchaseLocationListener {
 	public void onLocationError(String errorMsg) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	
+	private void getCityList(){
+		if(Utils.isInternetAvailable(this)){
+		    fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
+		}else{
+			openAlertDialog("Network connection is not available.");
+		}
 	}
 
 }
