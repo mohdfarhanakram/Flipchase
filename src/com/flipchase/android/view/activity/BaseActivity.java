@@ -398,7 +398,7 @@ Response.Listener, Response.ErrorListener, IScreenView {
 			removeProgressDialog();
 			showCommonError("Common Error Message");
 			//DK: Depending upon Screen we can update the UI
-			//updateUi(resp);
+			updateUi(resp);
 		} else {
 			updateUi(resp);
 		}

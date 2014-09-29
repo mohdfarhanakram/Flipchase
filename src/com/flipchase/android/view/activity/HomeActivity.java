@@ -142,14 +142,15 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	@Override
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
-		removeProgressDialog();
+		homeFragmentAdapter.updateFragmentUI(response);
+		/*removeProgressDialog();
 		if (response.getErrorCode() == ServiceResponse.EXCEPTION) {
             showCommonError("Error Occured...");
         } else if (response.getErrorCode() == ServiceResponse.SUCCESS) {
             if (response.getFlipChaseBaseModel().isSuccess()) {
             	homeFragmentAdapter.updateFragmentUI(response);
             }
-        }
+        }*/
 	}
 	
 	@Override

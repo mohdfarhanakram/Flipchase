@@ -37,7 +37,7 @@ FlipchaseLocationListener {
 			@Override
 			public void run() {
 
-				fetchData(URLConstants.GET_ALL_CITIES_AND_LOCATIONS_URL, FlipchaseApi.GET_ALL_CITIES_AND_LOCATIONS, null);
+				 getCityList();
 
 			}
 		}, AppConstants.SPLASH_WAITING_TIME);
@@ -150,13 +150,11 @@ FlipchaseLocationListener {
 
 	@Override
 	public void onLocationChanged(double latitude, double longitude) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onLocationError(String errorMsg) {
-		// TODO Auto-generated method stub
 
 	}
 	
