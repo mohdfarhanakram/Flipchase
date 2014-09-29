@@ -23,6 +23,7 @@ import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
 import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.model.ServiceResponse;
+import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.parcels.StoreCatalogue;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;
 import com.flipchase.android.view.fragment.BaseFragment;
@@ -129,7 +130,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	
 	public void updateDealsCatalogueData(String refineUrl) {
 		//showProgressDialog("Loading Deals Data...");
-		fetchData(URLConstants.GET_LATEST_CATEGORY_URL, FlipchaseApi.GET_LATEST_CATALOGUES, null);
+		postData(URLConstants.GET_LATEST_CATEGORY_URL, FlipchaseApi.GET_LATEST_CATALOGUES, null, VolleyGenericRequest.ContentType.JSON, null);
+		//fetchData(URLConstants.GET_LATEST_CATEGORY_URL, FlipchaseApi.GET_LATEST_CATALOGUES, null);
 	}
 	
 	public void updateRetailerCatalogData(String refineUrl) {
