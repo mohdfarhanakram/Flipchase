@@ -6,6 +6,7 @@ package com.flipchase.android.view.fragment;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -211,6 +212,10 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 
 		DbController controller = new DbController(getActivity(), null, DbEvent.FETCH_LIST,this);
 		controller.execute();
+	}
+	
+	public void onActivityResult(int arg0, int arg1, Intent arg2) {
+		refreshList();
 	}
 	
 	
