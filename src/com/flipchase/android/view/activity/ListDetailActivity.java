@@ -7,12 +7,15 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
 import com.flipchase.android.cache.DiskLruImageCache;
 import com.flipchase.android.model.Item;
+import com.flipchase.android.util.Utils;
 
 /**
  * @author FARHAN
@@ -35,6 +38,16 @@ public class ListDetailActivity extends BaseActivity{
 		Bitmap bitmap = cache.getBitmap(item.getUid()+"farhan");
 		if(bitmap!=null)
 			imageView.setImageBitmap(bitmap);
+		
+		
+		findViewById(R.id.share_btn).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Utils.navigateToSharedScreen(ListDetailActivity.this, "Flipchase", "", "");
+				
+			}
+		});
 	}
 	
 	@Override

@@ -22,13 +22,13 @@ public class AlertsFragment extends BaseFragment {
 
 	private GridView catalogGridView;
 	private CatalogueAdapter catalogueAdapter;
-	
+
 	View mView;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		mView = inflater.inflate(R.layout.fragment_alerts_layout, container, false);
-		
+
 		catalogGridView = (GridView)mView.findViewById(R.id.alerts_grid_view);
 		catalogueAdapter = new CatalogueAdapter(getActivity(), Collections.EMPTY_LIST);
 		catalogGridView.setAdapter(catalogueAdapter);
@@ -39,24 +39,27 @@ public class AlertsFragment extends BaseFragment {
 			mView.findViewById(R.id.loader_view).setVisibility(View.GONE);
 			mView.findViewById(R.id.main_view).setVisibility(View.GONE);
 		}
-		
+
 		return mView;
 	}
-	
+
 	@Override
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
 		mView.findViewById(R.id.loader_view).setVisibility(View.GONE);
-		switch (response.getEventType()) {
-		case FlipchaseApi.GET_MOBILE_ALERTS_CATALOGUES:
-			CatalogueChunk catalogueChunk = (CatalogueChunk)response.getResponseObject();
-			if(catalogueChunk != null) {
-				mView.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
-				List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
-				catalogueAdapter.setItems(latestCatalogues);
+		if(response!=null){
+			switch (response.getEventType()) {
+			case FlipchaseApi.GET_MOBILE_ALERTS_CATALOGUES:
+				CatalogueChunk catalogueChunk = (CatalogueChunk)response.getResponseObject();
+				if(catalogueChunk != null) {
+					mView.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
+					List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
+					catalogueAdapter.setItems(latestCatalogues);
+				}
+			default:
+				break;
 			}
-		default:
-			break;
 		}
+
 	}
 }

@@ -155,24 +155,27 @@ public class StoreFragment extends BaseFragment {
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
 		view.findViewById(R.id.loader_view).setVisibility(View.GONE);
-		switch (response.getEventType()) {
-		case FlipchaseApi.GET_ALL_RETAILERS:
-			view.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
-			List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
-			 ((RetailerAdapter) mItemsListView.getAdapter()).setItems(retailers);
-			 mItemsListAdapter.notifyDataSetChanged();
-			break;
-		case FlipchaseApi.GET_STORES_FOR_RETAILER:
-			/* DK: WHEN SHOULD WE DOWNLOAD THE DATA
-			List<Store> stores = (List<Store>)response.getResponseObject();
-			Intent i = new Intent(getActivity(),
-					RetailerStoresActivity.class);
-			startActivity(i);
-			*/
-			break;
-		default:
-			break;
+		if(response!=null){
+			switch (response.getEventType()) {
+			case FlipchaseApi.GET_ALL_RETAILERS:
+				view.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
+				List<Retailer> retailers = (List<Retailer>)response.getResponseObject();
+				 ((RetailerAdapter) mItemsListView.getAdapter()).setItems(retailers);
+				 mItemsListAdapter.notifyDataSetChanged();
+				break;
+			case FlipchaseApi.GET_STORES_FOR_RETAILER:
+				/* DK: WHEN SHOULD WE DOWNLOAD THE DATA
+				List<Store> stores = (List<Store>)response.getResponseObject();
+				Intent i = new Intent(getActivity(),
+						RetailerStoresActivity.class);
+				startActivity(i);
+				*/
+				break;
+			default:
+				break;
+			}
 		}
+		
 	}
 	
 	/**

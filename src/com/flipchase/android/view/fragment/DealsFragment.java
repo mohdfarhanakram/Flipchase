@@ -79,18 +79,28 @@ public class DealsFragment extends BaseFragment {
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
 		view.findViewById(R.id.loader_view).setVisibility(View.GONE);
-		switch (response.getEventType()) {
-		case FlipchaseApi.GET_LATEST_CATALOGUES:
-			catalogueChunk = (CatalogueChunk)response.getResponseObject();
-			if(catalogueChunk != null) {
-				view.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
-				List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
-				catalogueAdapter.setItems(latestCatalogues);
+		view.findViewById(R.id.no_connection).setVisibility(View.GONE);
+		if(response!=null){
+			switch (response.getEventType()) {
+			case FlipchaseApi.GET_LATEST_CATALOGUES:
+				catalogueChunk = (CatalogueChunk)response.getResponseObject();
+				if(catalogueChunk != null) {
+					
+					List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
+					if(latestCatalogues.size()>0){
+						view.findViewById(R.id.main_view).setVisibility(View.VISIBLE);
+						catalogueAdapter.setItems(latestCatalogues);
+					}
+					
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		default:
-			break;
 		}
+		
+		
+		
 	}
 	
 	@Override

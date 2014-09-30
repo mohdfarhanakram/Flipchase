@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -223,6 +224,21 @@ public class Utils {
             }
         }
         catch(Exception ex){}
+    }
+    
+    
+    
+    /**
+     * this method is used to navigate the user to the native sharing apps on the device
+     * so that user can shared the data on the various social sites
+     *  success : opens the sharing apps list on the device
+     */
+
+    public static void navigateToSharedScreen(Context context,String title,String shareText,String url) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, title + " " +  shareText + " " + url);
+        context.startActivity(Intent.createChooser(intent, "Share"));
     }
 	
     
