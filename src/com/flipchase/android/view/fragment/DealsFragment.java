@@ -83,8 +83,10 @@ public class DealsFragment extends BaseFragment {
 		if(response!=null){
 			switch (response.getEventType()) {
 			case FlipchaseApi.GET_LATEST_CATALOGUES:
-				catalogueChunk = (CatalogueChunk)response.getResponseObject();
-				if(catalogueChunk != null) {
+				
+				if((CatalogueChunk)response.getResponseObject() != null) {
+					
+					catalogueChunk = (CatalogueChunk)response.getResponseObject();
 					
 					List<CatalogueDisplay> latestCatalogues = catalogueChunk.getItems();
 					if(latestCatalogues.size()>0){
