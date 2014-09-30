@@ -23,12 +23,14 @@ import android.widget.Toast;
 import com.flipchase.android.R;
 import com.flipchase.android.controller.DbController;
 import com.flipchase.android.controller.DbEvent;
+import com.flipchase.android.listener.ClickOfListRow;
 import com.flipchase.android.listener.DbListener;
 import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.DbControllerResponse;
 import com.flipchase.android.model.Item;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.view.activity.BaseActivity;
+import com.flipchase.android.view.activity.SubListActivity;
 import com.flipchase.android.view.adapter.ListAdapter;
 
 /**
@@ -36,13 +38,15 @@ import com.flipchase.android.view.adapter.ListAdapter;
  *
  */
 @SuppressLint("NewApi")
-public class ListFragment extends BaseFragment implements DbListener,LongPressListener{
+public class ListFragment extends BaseFragment implements DbListener,LongPressListener,ClickOfListRow{
 
 	private View mView;
 	private ArrayList<Item> mItemList = new ArrayList<Item>();
 	private ListView mListView;
 	private ActionMode mActionMode ;
 	private int selectedIndex = -1;
+	
+	private int LIST_ACTIVITY_REQUEST_CODE = 10000;
 	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -174,7 +178,7 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 	}
 
 	private void drawListView(boolean isCheckBoxShown,int selectedIndex){
-		mListView.setAdapter(new ListAdapter(getActivity(),this, mItemList,isCheckBoxShown,selectedIndex));
+		mListView.setAdapter(new ListAdapter(getActivity(),this,this, mItemList,isCheckBoxShown,selectedIndex));
 	}
 
 
@@ -213,14 +217,26 @@ public class ListFragment extends BaseFragment implements DbListener,LongPressLi
 		DbController controller = new DbController(getActivity(), null, DbEvent.FETCH_LIST,this);
 		controller.execute();
 	}
-	
-	public void onActivityResult(int arg0, int arg1, Intent arg2) {
-		refreshList();
+
+
+	@Override
+	public void onClickOfListRow(Item item) {
+		Intent i = new Intent(getActivity(),SubListActivity.class);
+		i.putExtra("catalogId", item.getId());
+		i.putExtra("catalogName",item.getName());
+		i.putExtra("list", mItemList);
+		startActivityForResult(i, LIST_ACTIVITY_REQUEST_CODE);
+		
 	}
 	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode==LIST_ACTIVITY_REQUEST_CODE){
+			refreshList();
+		}
+	}
 	
-	
-
-
 
 }

@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flipchase.android.R;
+import com.flipchase.android.listener.ClickOfListRow;
 import com.flipchase.android.listener.LongPressListener;
 import com.flipchase.android.model.Item;
 import com.flipchase.android.view.activity.BaseActivity;
@@ -38,13 +39,17 @@ public class ListAdapter extends BaseAdapter{
 	private LongPressListener mListener;
 	private boolean mIsCheckBoxShown;
 	private int mSelectedIndex;
+	private ClickOfListRow mCListener;
 	
-	public ListAdapter(Context context,LongPressListener listener,ArrayList<Item> itemList,boolean isCheckBoxShown,int selectedIndex){
+
+	
+	public ListAdapter(Context context,LongPressListener listener,ClickOfListRow cListener,ArrayList<Item> itemList,boolean isCheckBoxShown,int selectedIndex){
 		mContext = context;
 		mItemList = itemList;
 		mListener = listener;
 		mSelectedIndex = selectedIndex;
 		mIsCheckBoxShown = isCheckBoxShown;
+		mCListener= cListener;
 		mInflater = LayoutInflater.from(mContext);
 	}
 
@@ -93,12 +98,8 @@ public class ListAdapter extends BaseAdapter{
 			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(mContext,SubListActivity.class);
 				Item item = (Item)v.getTag();
-				i.putExtra("catalogId", item.getId());
-				i.putExtra("catalogName",item.getName());
-				i.putExtra("list", mItemList);
-				((BaseActivity)mContext).startActivityForResult(i, 10000);
+				mCListener.onClickOfListRow(item);
 			}
 		});
 		

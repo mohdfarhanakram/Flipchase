@@ -46,6 +46,9 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	
 	private int pagerIndex=0;
 	
+	private int FILTER_URL_REQUEST_CODE = 1000;
+	private int LIST_ACTIVITY_REQUEST_CODE = 10000;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -238,12 +241,21 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 		}
 	}
 	
-	//@Override
-	/*protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		if(getSupportFragmentManager()!=null && getSupportFragmentManager().getFragments()!=null && getSupportFragmentManager().getFragments().get(pagerIndex) instanceof ListFragment){
-			ListFragment fragment = (ListFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
-			fragment.refreshList();
+	/*@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if(requestCode == FILTER_URL_REQUEST_CODE){
+			if(resultCode == RESULT_OK){
+				String jsonString = data.getStringExtra(AppConstants.FILTER_URL);
+				postData(URLConstants.GET_LATEST_CATEGORY_URL, FlipchaseApi.GET_LATEST_CATALOGUES, jsonString, VolleyGenericRequest.ContentType.JSON, null);
+			}
 		}
+
+	  if(getSupportFragmentManager()!=null && getSupportFragmentManager().getFragments()!=null && getSupportFragmentManager().getFragments().get(pagerIndex) instanceof ListFragment){
+				ListFragment fragment = (ListFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
+				fragment.refreshList();
+	   }
+		
 	}*/
 	
 }

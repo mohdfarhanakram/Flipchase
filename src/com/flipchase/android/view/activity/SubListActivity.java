@@ -110,7 +110,7 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-			finish();
+			onBackPressed();
 		}else if(item.getItemId() == R.id.sublist_edit_btn){
 			startActionMode();
 		}
@@ -405,6 +405,11 @@ public class SubListActivity extends BaseActivity implements DbListener,LongPres
 		controller.execute();
 
 	}
-
-
+	
+	@Override
+	public void onBackPressed() {
+		setResult(RESULT_OK);
+		finish();
+	}
+	
 }
