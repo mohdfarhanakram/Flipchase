@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.flipchase.android.domain.CatalogueDisplay;
 import com.flipchase.android.domain.City;
 import com.flipchase.android.domain.CityLocationWrapper;
 import com.flipchase.android.domain.Location;
@@ -247,6 +248,42 @@ public class FlipChaseJsonParser {
     	
     	
     	return suggestionList;
+    }
+    
+    
+    
+    public static ArrayList<CatalogueDisplay> parseSearchCatalogueResult(JSONObject jsonObjectData) throws JSONException {
+    	
+    	ArrayList<CatalogueDisplay> list = new ArrayList<CatalogueDisplay>();
+    	try{
+    		JSONArray itemsJsonArray = jsonObjectData.getJSONArray("response");
+    		
+    		if(itemsJsonArray!=null){
+    			for(int i=0; i<itemsJsonArray.length(); i++){
+    				try{
+    					 String json = itemsJsonArray.getJSONObject(i).toString();
+    					 JsonFactory jsonFactory = new JsonFactory();
+    					 JsonParser jp = jsonFactory.createJsonParser(json);
+    					 
+    					 CatalogueDisplay catalogueDisplay = objectMapper.readValue(jp, CatalogueDisplay.class);
+    					 
+    					 if(catalogueDisplay!=null){
+    						 list.add(catalogueDisplay);
+    					 }
+    					 
+    					
+    				}catch(Exception e){
+    					
+    				}
+    			}
+    		}
+    		
+    		
+    	}catch(Exception e){
+    		
+    	}
+    	
+    	return list;
     }
     
     

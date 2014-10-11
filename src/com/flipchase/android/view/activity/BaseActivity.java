@@ -28,6 +28,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -306,7 +307,7 @@ Response.Listener, Response.ErrorListener, IScreenView {
 			req.setParser(parser == null ? new BaseParser() : parser);
 
 			VolleyHelper.getInstance(this).addRequestInQueue(req);
-			//   Log.d("URL:  ", url);
+			Log.d("URL:  ", url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

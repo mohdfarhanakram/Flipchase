@@ -16,8 +16,7 @@ public interface FlipchaseApi {
 	public static final String GET_CATALOG_FOR_CATEGORY       = BASE_URL + "getCataloguesForCategory/";    // getCataloguesForCategory/<cityId>
 	public static final String GET_LOCATION_FOR_CITY          = BASE_URL + "getLocationsForCity/";         // getLocationsForCity/<cityId>
 	
-	public static final String GET_SUGGESTION_API = "http://54.179.169.97/solr/mysuggest?q=(";
-	public static final String GET_SUGGESTION_SUFFIX_API = ")&wt=json";
+	
 	
 	
 	 public static final int INIT_REQUEST = 1;
@@ -40,5 +39,6 @@ public interface FlipchaseApi {
 	 public static final int API_STORE_SHOW_MORE = 20;
 	 
 	 public static final int API_SEARCH_SUGGESTIONS = 21;
+	 public static final int API_SEARCH_RESULT = 22;
 
 }

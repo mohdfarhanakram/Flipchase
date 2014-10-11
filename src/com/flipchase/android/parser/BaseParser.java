@@ -144,6 +144,9 @@ public class BaseParser implements IParser {
             case FlipchaseApi.API_SEARCH_SUGGESTIONS:
             	response.setResponseObject(FlipChaseJsonParser.parseSearchSuggestion(jsonObjectData));
             	break;
+            case FlipchaseApi.API_SEARCH_RESULT:
+            	response.setResponseObject(FlipChaseJsonParser.parseSearchCatalogueResult(jsonObjectData));
+            	break;
             default:
                 break;
         }

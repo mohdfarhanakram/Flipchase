@@ -43,4 +43,10 @@ public final class URLConstants {
 	
 	public static final String EXTRA_URL = "url";
 	public static final String INTENT_SOURCE_ACTIVITY = "source_activity";
+	
+	
+	public static final String GET_SUGGESTION_API = "http://54.179.169.97/solr/mysuggest?q=(";
+	public static final String GET_SUGGESTION_SUFFIX_API = ")&wt=json";
+	
+	public static final String GET_SEARCH_URL = "http://flipchase.in/search/";
 }

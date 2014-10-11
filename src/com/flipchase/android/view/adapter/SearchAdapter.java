@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.flipchase.android.constants.AppConstants;
 import com.flipchase.android.constants.FlipchaseApi;
+import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.view.activity.BaseActivity;
 
 import android.content.Context;
@@ -75,7 +76,7 @@ public class SearchAdapter extends ArrayAdapter<String> implements Filterable {
                             e.printStackTrace();
                         }
                         
-                        String url = FlipchaseApi.GET_SUGGESTION_API + query + FlipchaseApi.GET_SUGGESTION_SUFFIX_API;
+                        String url = URLConstants.GET_SUGGESTION_API + query + URLConstants.GET_SUGGESTION_SUFFIX_API;
                         
                         ((BaseActivity)context).fetchData(url, FlipchaseApi.API_SEARCH_SUGGESTIONS, null);
                         filterResults.values = resultList;
