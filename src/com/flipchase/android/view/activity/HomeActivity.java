@@ -3,6 +3,7 @@
  */
 package com.flipchase.android.view.activity;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import android.content.Intent;
@@ -25,7 +26,9 @@ import com.flipchase.android.constants.URLConstants;
 import com.flipchase.android.model.ServiceResponse;
 import com.flipchase.android.network.VolleyGenericRequest;
 import com.flipchase.android.parcels.StoreCatalogue;
+import com.flipchase.android.util.Utils;
 import com.flipchase.android.view.adapter.HomeFragmentAdapter;
+import com.flipchase.android.view.adapter.SearchAdapter;
 import com.flipchase.android.view.fragment.BaseFragment;
 import com.flipchase.android.view.fragment.DealsFragment;
 import com.flipchase.android.view.fragment.ListFragment;
@@ -146,6 +149,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	public void updateUi(ServiceResponse response) {
 		super.updateUi(response);
 		homeFragmentAdapter.updateFragmentUI(response);
+		
+		
 		/*removeProgressDialog();
 		if (response.getErrorCode() == ServiceResponse.EXCEPTION) {
             showCommonError("Error Occured...");
@@ -175,18 +180,6 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public boolean onSuggestionClick(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSuggestionSelect(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	
@@ -226,6 +219,7 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 	
 	
 	public void doSearch(String searchKey){
+		
 		BaseFragment baseFragment = (BaseFragment)getSupportFragmentManager().getFragments().get(pagerIndex);
 		if(baseFragment instanceof DealsFragment || baseFragment instanceof StoreFragment){
 			Intent i = new Intent(this,SearchActivity.class);
@@ -240,6 +234,8 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener 
 			fragment.createList(listName);
 		}
 	}
+	
+ 
 	
 	/*@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

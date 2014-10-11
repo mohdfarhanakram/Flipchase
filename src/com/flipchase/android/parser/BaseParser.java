@@ -24,7 +24,7 @@ public class BaseParser implements IParser {
     protected FlipChaseBaseModel parseBaseData(JSONObject jsonObject)
             throws JSONException {
     	FlipChaseBaseModel baseModel = new FlipChaseBaseModel();
-        baseModel.setSuccess(jsonObject.getBoolean(JsonKey.SUCCESS));
+        baseModel.setSuccess(jsonObject.optBoolean(JsonKey.SUCCESS));
         return baseModel;
     }
 
@@ -32,6 +32,9 @@ public class BaseParser implements IParser {
         ServiceResponse response = new ServiceResponse();
         try {
             FlipChaseBaseModel responseModel = parseBaseData(jsonObject);
+            if(eventType==FlipchaseApi.API_SEARCH_SUGGESTIONS){
+            	responseModel.setSuccess(true);
+            }
             response.setFlipChaseBaseModel(responseModel);
             response.setEventType(eventType);
             response.setJsonResponse(jsonObject);
@@ -137,6 +140,9 @@ public class BaseParser implements IParser {
             	break;
             case FlipchaseApi.GET_MOBILE_ALERTS_CATALOGUES:
             	response.setResponseObject(FlipChaseJsonParser.parseAlertsCatalogues(jsonObjectData));
+            	break;
+            case FlipchaseApi.API_SEARCH_SUGGESTIONS:
+            	response.setResponseObject(FlipChaseJsonParser.parseSearchSuggestion(jsonObjectData));
             	break;
             default:
                 break;

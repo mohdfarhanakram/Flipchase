@@ -4,6 +4,7 @@
 package com.flipchase.android.view.activity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -14,6 +15,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -56,6 +59,7 @@ import com.flipchase.android.parser.IParser;
 import com.flipchase.android.persistance.AppSharedPreference;
 import com.flipchase.android.util.StringUtils;
 import com.flipchase.android.util.Utils;
+import com.flipchase.android.view.adapter.SearchAdapter;
 import com.flipchase.android.view.widget.CustomFontEditText;
 import com.flipchase.android.view.widget.FlipdchaseSearchView;
 import com.flipchase.android.view.widget.FlipdchaseSearchView.OnSearchViewCollapsedEventListener;
@@ -528,7 +532,7 @@ Response.Listener, Response.ErrorListener, IScreenView {
 				}else if(actionId == EditorInfo.IME_ACTION_SEARCH){
 					doSearch(v.getText().toString());
 				}
-				
+
 				return false;
 			}
 		});
@@ -563,11 +567,14 @@ Response.Listener, Response.ErrorListener, IScreenView {
 			searchText.setImeActionLabel("Create", EditorInfo.IME_ACTION_DONE);
 			searchIcon.setVisibility(View.GONE);
 		}
-		/* if (showSuggestions) {
-            SearchBoxApadter searchBoxApadter = new SearchBoxApadter(this, R.layout.textview);
-            searchText.setAdapter(searchBoxApadter);
-        }**/
+		if (showSuggestions) {
+			SearchAdapter searchBoxApadter = new SearchAdapter(this, R.layout.suggestion_drop_down);
+			searchText.setAdapter(searchBoxApadter);
+		}
 		mSearchView.setOnSuggestionListener(suggestionListener);
+
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 	}
 
 
@@ -656,15 +663,21 @@ Response.Listener, Response.ErrorListener, IScreenView {
 	}
 
 	@Override
-	public boolean onSuggestionClick(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean onSuggestionClick(int i) {
+		onSuggestionSelect(i);
+		return true;
 	}
 
 	@Override
-	public boolean onSuggestionSelect(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean onSuggestionSelect(int i) {
+		SearchView.SearchAutoComplete editText = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+		SearchAdapter sAdapter = (SearchAdapter) editText.getAdapter();
+		String s = (String) sAdapter.getItem(i);
+		Utils.hideKeyboard(this);
+		
+		doSearch(s);
+
+		return true;
 	}
 
 	public void restoreAdapter() {
@@ -724,6 +737,10 @@ Response.Listener, Response.ErrorListener, IScreenView {
 				break;
 			}
 		}
+
+		if (response.getResponseObject() instanceof ArrayList<?> && response.getEventType()==FlipchaseApi.API_SEARCH_SUGGESTIONS) {
+			buildSuggestionUI((ArrayList<String>)response.getResponseObject());
+		}
 	}
 
 	private String getScreenName() {
@@ -767,6 +784,19 @@ Response.Listener, Response.ErrorListener, IScreenView {
 
 	public void createList(String listName){
 
+	}
+
+
+
+	public void buildSuggestionUI(ArrayList<String> suggestions) {
+		if (mSearchView == null)
+			return;
+		AutoCompleteTextView editText = (AutoCompleteTextView) mSearchView.findViewById(R.id.search_src_text);
+		//SearchView.SearchAutoComplete editText = (SearchView.SearchAutoComplete) mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+		SearchAdapter searchBoxApadter = (SearchAdapter) editText.getAdapter();
+		if (null != searchBoxApadter) {
+			searchBoxApadter.setResultList(suggestions);
+		}
 	}
 
 	/*public void loadBitmap(int resId, ImageView imageView) {

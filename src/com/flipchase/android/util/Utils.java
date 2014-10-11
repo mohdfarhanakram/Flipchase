@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class Utils {
@@ -239,6 +241,20 @@ public class Utils {
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, title + " " +  shareText + " " + url);
         context.startActivity(Intent.createChooser(intent, "Share"));
+    }
+    
+    public static void hideKeyboard(Context context) {
+        try {
+            InputMethodManager imm = (InputMethodManager) context
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(((Activity) context)
+                        .getCurrentFocus().getWindowToken(), 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 	
     

@@ -222,4 +222,33 @@ public class FlipChaseJsonParser {
         }
     	return catalogues;
     }
+    
+    
+    public static ArrayList<String> parseSearchSuggestion(JSONObject jsonObjectData) throws JSONException{
+    	ArrayList<String> suggestionList = new ArrayList<String>();
+    	try{
+    		
+    		JSONObject jObj = jsonObjectData.optJSONObject("spellcheck");
+    		JSONArray suggestionJArray = jObj.optJSONArray("suggestions");
+    		if(suggestionJArray!=null && suggestionJArray.length()>1){
+    			JSONObject jsObj = suggestionJArray.optJSONObject(1);
+    			
+    			JSONArray sugJArry = jsObj.optJSONArray("suggestion");
+    			
+    			if(sugJArry!=null){
+    				for(int i=0; i<sugJArry.length(); i++){
+    					suggestionList.add(sugJArry.optString(i));
+    				}
+    			}
+    		}
+    		
+    		
+    	}catch(Exception e){}
+    	
+    	
+    	return suggestionList;
+    }
+    
+    
+    
 }
